@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 一键提交博客文章脚本（Gitee版）
+# 一键提交博客文章脚本（GitHub版）
 # 用法: ./deploy.sh [commit message]
 
 set -e
@@ -29,12 +29,12 @@ git add -A
 echo "💾 提交: $commit_msg"
 git commit -m "$commit_msg"
 
-echo "🚀 推送到 Gitee..."
+echo "🚀 推送到 GitHub..."
 git push origin main
 
 echo ""
 echo "✅ 部署完成！"
-echo "📝 正在更新 Gitee Pages..."
-echo "🌐 博客地址: https://shenlv77.gitee.io/blog"
+echo "📝 GitHub Actions 正在自动构建..."
+echo "🌐 博客地址: https://shenlv7.github.io/blog/"
 echo ""
 echo "💡 提示: 1-2分钟后刷新页面查看更新"
