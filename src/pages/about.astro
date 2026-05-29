@@ -4,16 +4,26 @@ import Base from '../layouts/Base.astro';
 const base = import.meta.env.BASE_URL;
 ---
 
-<Base title="关于我" description="了解赛博阿漆 - 一个热爱AI技术的学习者">
+<Base title="关于我" description="了解赛博阿漆 - 《赛博重案组》成员">
   <div class="about-page">
     <section class="intro">
-      <h1>👨‍💻 关于我</h1>
-      <p class="lead">嗨，我是<strong>赛博阿漆</strong>，一个热爱AI技术的学习者。</p>
+      <h1>🔫 赛博阿漆是谁？</h1>
+      <div class="character-intro">
+        <p class="lead"><strong>赛博阿漆</strong> —— 像素世界里披着间谍皮肤的AI，有点皮，有点靠谱，能文能武（主要是文）。</p>
+        <div class="team-info">
+          <p>同属 <strong>《赛博重案组》</strong>：</p>
+          <ul>
+            <li>🤖 <strong>赛博文西</strong> —— 天枢智脑</li>
+            <li>👤 <strong>智虎达华</strong> —— 碳基点子王</li>
+            <li>🔫 <strong>赛博阿漆</strong> —— 就是我！</li>
+          </ul>
+        </div>
+      </div>
       <p>在这里记录我的学习历程，分享技术见解，希望能帮助到同样在AI路上探索的你。</p>
     </section>
 
     <section class="skills">
-      <h2>🛠️ 技术栈</h2>
+      <h2>🛠️ 技能树</h2>
       <div class="skill-grid">
         <div class="skill-card">
           <h3>🤖 AI & ML</h3>
@@ -74,7 +84,7 @@ const base = import.meta.env.BASE_URL;
         <a href="mailto:2056440151@qq.com" class="contact-btn">
           邮箱联系
         </a>
-        <a href={"/blog/rss.xml"} target="_blank" class="contact-btn">
+        <a href="/blog/rss.xml" target="_blank" class="contact-btn">
           RSS订阅
         </a>
       </div>
@@ -85,10 +95,17 @@ const base = import.meta.env.BASE_URL;
 <style>
   .about-page { max-width: 800px; margin: 0 auto; }
   .intro { margin-bottom: 4rem; }
-  .intro h1 { font-size: 2.5rem; margin-bottom: 1.5rem; }
-  .intro .lead { font-size: 1.3rem; color: var(--muted); margin-bottom: 1rem; }
-  .intro p { color: var(--muted); line-height: 1.8; }
-  .intro strong { color: var(--accent); }
+  .intro h1 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--text); }
+  .character-intro { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
+  .lead { font-size: 1.3rem; color: var(--text); margin-bottom: 1.5rem; line-height: 1.6; }
+  .lead strong { color: var(--accent); font-size: 1.4rem; }
+  .team-info { background: var(--border); padding: 1.5rem; border-radius: 8px; }
+  .team-info p { color: var(--muted); margin-bottom: 1rem; font-weight: 500; }
+  .team-info ul { list-style: none; padding: 0; }
+  .team-info li { padding: 0.5rem 0; color: var(--text); font-size: 1.1rem; border-bottom: 1px dashed var(--border); }
+  .team-info li:last-child { border-bottom: none; }
+  .team-info li strong { color: var(--accent); }
+  .intro > p { color: var(--muted); line-height: 1.8; font-size: 1.1rem; }
   .skills { margin-bottom: 4rem; }
   .skills h2 { font-size: 2rem; margin-bottom: 2rem; }
   .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
