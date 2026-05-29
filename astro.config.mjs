@@ -3,7 +3,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://yourusername.github.io',
+  site: 'https://shenlv77.gitee.io/blog',
   integrations: [mdx(), sitemap()],
   markdown: {
     shikiConfig: {
