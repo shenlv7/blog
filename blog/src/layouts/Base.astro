@@ -1,0 +1,137 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const { title, description = '赛博阿漆的博客', image } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {image && <meta property="og:image" content={image} />}
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/">首页</a>
+      <a href="/posts">文章</a>
+      <a href="/rss.xml" target="_blank">RSS</a>
+      <button id="theme-toggle" aria-label="切换主题">🌙</button>
+    </nav>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>© 2026 赛博阿漆 · Powered by Astro</p>
+    </footer>
+    <script>
+      const toggle = document.getElementById('theme-toggle');
+      const html = document.documentElement;
+      
+      const saved = localStorage.getItem('theme');
+      if (saved) html.setAttribute('data-theme', saved);
+      
+      toggle?.addEventListener('click', () => {
+        const current = html.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        toggle.textContent = next === 'dark' ? '🌙' : '☀️';
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a2e;
+    --accent: #e94560;
+    --muted: #666;
+    --border: #eee;
+    --code-bg: #f4f4f4;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0f0f23;
+    --text: #e0e0e0;
+    --accent: #e94560;
+    --muted: #999;
+    --border: #333;
+    --code-bg: #1a1a2e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  nav a:hover { color: var(--accent); }
+
+  #theme-toggle {
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+
+  main { min-height: 60vh; }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  article { line-height: 1.8; }
+  article h1 { margin-bottom: 0.5rem; }
+  article time { color: var(--muted); font-size: 0.9rem; }
+  article p { margin: 1rem 0; }
+  article pre {
+    background: var(--code-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+  article a { color: var(--accent); }
+</style>
