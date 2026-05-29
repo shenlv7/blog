@@ -32,8 +32,8 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <div class="hero-actions">
-        <a href={`${base}posts/`} class="btn btn-primary">开始阅读</a>
-        <a href={`${base}tags/`} class="btn btn-secondary">浏览标签</a>
+        <a href={"/blog/posts/"} class="btn btn-primary">开始阅读</a>
+        <a href={"/blog/tags/"} class="btn btn-secondary">浏览标签</a>
       </div>
     </div>
   </section>
@@ -47,14 +47,14 @@ const base = import.meta.env.BASE_URL;
             <time>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
             {post.data.tags?.[0] && <span class="post-tag">{post.data.tags[0]}</span>}
           </div>
-          <h3><a href={`${base}posts/${post.id}`}>{post.data.title}</a></h3>
+          <h3><a href={`/blog/posts/${post.id}`}>{post.data.title}</a></h3>
           <p>{post.data.description}</p>
-          <a href={`${base}posts/${post.id}`} class="read-more">阅读全文 →</a>
+          <a href={`/blog/posts/${post.id}`} class="read-more">阅读全文 →</a>
         </article>
       ))}
     </div>
     <div class="view-all">
-      <a href={`${base}posts/`} class="btn btn-outline">查看所有文章</a>
+      <a href={"/blog/posts/"} class="btn btn-outline">查看所有文章</a>
     </div>
   </section>
 

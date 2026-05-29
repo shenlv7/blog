@@ -20,7 +20,7 @@ const base = import.meta.env.BASE_URL;
     
     <div class="tags-cloud">
       {tags.map(([tag, count]) => (
-        <a href={`${base}tags#${tag}`} class="tag-item" style={`font-size: ${1 + count * 0.2}rem`}>
+        <a href={"/blog/tags#${tag}"} class="tag-item" style={`font-size: ${1 + count * 0.2}rem`}>
           #{tag}
           <span class="tag-count">{count}</span>
         </a>
@@ -35,7 +35,7 @@ const base = import.meta.env.BASE_URL;
             <h2>#{tag} <span class="count">({count}篇)</span></h2>
             <div class="tag-posts">
               {tagPosts.map(post => (
-                <a href={`${base}posts/${post.id}`} class="tag-post-item">
+                <a href={`/blog/posts/${post.id}`} class="tag-post-item">
                   <h3>{post.data.title}</h3>
                   <time>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
                 </a>

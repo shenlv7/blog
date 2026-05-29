@@ -36,7 +36,7 @@ const readingTime = Math.max(1, Math.ceil(contentLength / 300));
       {post.data.tags && post.data.tags.length > 0 && (
         <div class="post-tags">
           {post.data.tags.map(tag => (
-            <a href={`${base}tags#${tag}`} class="post-tag">#{tag}</a>
+            <a href={"/blog/tags#${tag}"} class="post-tag">#{tag}</a>
           ))}
         </div>
       )}
@@ -48,7 +48,7 @@ const readingTime = Math.max(1, Math.ceil(contentLength / 300));
 
     <footer class="post-footer">
       <div class="post-nav">
-        <a href={`${base}posts/`} class="back-link">← 返回文章列表</a>
+        <a href={"/blog/posts/"} class="back-link">← 返回文章列表</a>
       </div>
 
       {relatedPosts.length > 0 && (
@@ -56,7 +56,7 @@ const readingTime = Math.max(1, Math.ceil(contentLength / 300));
           <h3>📖 相关文章</h3>
           <div class="related-grid">
             {relatedPosts.map(related => (
-              <a href={`${base}posts/${related.id}`} class="related-item">
+              <a href={"/blog/posts/${related.id}"} class="related-item">
                 <h4>{related.data.title}</h4>
                 <p>{related.data.description}</p>
               </a>

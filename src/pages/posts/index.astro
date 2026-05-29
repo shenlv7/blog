@@ -20,14 +20,14 @@ const base = import.meta.env.BASE_URL;
             <time>{post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             <div class="post-tags">
               {post.data.tags?.map(tag => (
-                <a href={`${base}tags#${tag}`} class="tag">{tag}</a>
+                <a href={"/blog/tags#${tag}"} class="tag">{tag}</a>
               ))}
             </div>
           </div>
           <div class="post-content">
-            <h2><a href={`${base}posts/${post.id}`}>{post.data.title}</a></h2>
+            <h2><a href={`/blog/posts/${post.id}`}>{post.data.title}</a></h2>
             <p>{post.data.description}</p>
-            <a href={`${base}posts/${post.id}`} class="read-more">阅读全文 →</a>
+            <a href={`/blog/posts/${post.id}`} class="read-more">阅读全文 →</a>
           </div>
         </article>
       ))}
