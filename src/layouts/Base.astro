@@ -8,7 +8,7 @@ export interface Props {
 
 const { title, description = '赛博阿漆的博客 - AI学习与技术分享', image, type = 'website' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL || '/';
 ---
 
 <!doctype html>
@@ -42,13 +42,13 @@ const base = import.meta.env.BASE_URL;
     <header>
       <nav>
         <div class="nav-brand">
-          <a href={base}>🔫 赛博阿漆</a>
+          <a href={`${base}`}>🔫 赛博阿漆</a>
         </div>
         <div class="nav-links">
-          <a href={base}>首页</a>
-          <a href={`${base}posts`}>文章</a>
-          <a href={`${base}tags`}>标签</a>
-          <a href={`${base}about`}>关于</a>
+          <a href={`${base}`}>首页</a>
+          <a href={`${base}posts/`}>文章</a>
+          <a href={`${base}tags/`}>标签</a>
+          <a href={`${base}about/`}>关于</a>
           <a href={`${base}rss.xml`} target="_blank" rel="noopener">RSS</a>
         </div>
         <div class="nav-actions">
