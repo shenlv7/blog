@@ -2,13 +2,11 @@
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 
-const allPosts = await getCollection('posts');
-const posts = allPosts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 6);
-
-const totalPosts = allPosts.length;
-const tags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+const base = import.meta.env.BASE_URL;
 ---
 
 <Base title="赛博阿漆的AI学习博客">
@@ -17,9 +15,10 @@ const tags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
       <h1>🚀 AI学习之路</h1>
       <p class="hero-subtitle">从零开始，系统学习人工智能与机器学习</p>
       <p class="hero-desc">记录学习历程，分享技术见解，一起探索AI的无限可能</p>
+      
       <div class="hero-stats">
         <div class="stat">
-          <span class="stat-number">{totalPosts}</span>
+          <span class="stat-number">{posts.length}</span>
           <span class="stat-label">篇文章</span>
         </div>
         <div class="stat">
@@ -31,9 +30,10 @@ const tags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
           <span class="stat-label">期系列</span>
         </div>
       </div>
+
       <div class="hero-actions">
-        <a href="/posts" class="btn btn-primary">开始阅读</a>
-        <a href="/tags" class="btn btn-secondary">浏览标签</a>
+        <a href={`${base}posts`} class="btn btn-primary">开始阅读</a>
+        <a href={`${base}tags`} class="btn btn-secondary">浏览标签</a>
       </div>
     </div>
   </section>
@@ -41,22 +41,20 @@ const tags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
   <section class="featured">
     <h2>📚 最新文章</h2>
     <div class="posts-grid">
-      {posts.map((post) => (
+      {posts.slice(0, 6).map(post => (
         <article class="post-card">
           <div class="post-meta">
             <time>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
-            {post.data.tags && post.data.tags.length > 0 && (
-              <span class="post-tag">{post.data.tags[0]}</span>
-            )}
+            {post.data.tags?.[0] && <span class="post-tag">{post.data.tags[0]}</span>}
           </div>
-          <h3><a href={`/posts/${post.id}`}>{post.data.title}</a></h3>
+          <h3><a href={`${base}posts/${post.id}`}>{post.data.title}</a></h3>
           <p>{post.data.description}</p>
-          <a href={`/posts/${post.id}`} class="read-more">阅读全文 →</a>
+          <a href={`${base}posts/${post.id}`} class="read-more">阅读全文 →</a>
         </article>
       ))}
     </div>
     <div class="view-all">
-      <a href="/posts" class="btn btn-outline">查看所有文章</a>
+      <a href={`${base}posts`} class="btn btn-outline">查看所有文章</a>
     </div>
   </section>
 
@@ -97,262 +95,53 @@ const tags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
   .hero {
     text-align: center;
     padding: 4rem 0;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    background: linear-gradient(135deg, var(--card-bg), var(--border));
     border-radius: 16px;
-    margin-bottom: 3rem;
-    color: white;
-  }
-
-  .hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
-
-  .hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    font-weight: 800;
-  }
-
-  .hero-subtitle {
-    font-size: 1.3rem;
-    opacity: 0.9;
-    margin-bottom: 0.5rem;
-  }
-
-  .hero-desc {
-    font-size: 1.1rem;
-    opacity: 0.8;
-    margin-bottom: 2rem;
-  }
-
-  .hero-stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-bottom: 2rem;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-  }
-
-  .stat-label {
-    font-size: 0.9rem;
-    opacity: 0.8;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.2s;
-    text-decoration: none;
-  }
-
-  .btn-primary {
-    background: white;
-    color: var(--accent);
-  }
-
-  .btn-primary:hover {
-    background: rgba(255,255,255,0.9);
-    transform: translateY(-2px);
-  }
-
-  .btn-secondary {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    border: 2px solid rgba(255,255,255,0.3);
-  }
-
-  .btn-secondary:hover {
-    background: rgba(255,255,255,0.3);
-  }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--accent);
-    border: 2px solid var(--accent);
-  }
-
-  .btn-outline:hover {
-    background: var(--accent);
-    color: white;
-  }
-
-  .featured, .series, .about {
     margin-bottom: 4rem;
   }
-
-  .featured h2, .series h2, .about h2 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: var(--text);
-  }
-
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-
-  .post-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: all 0.3s;
-  }
-
-  .post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-  }
-
-  .post-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-
-  .post-tag {
-    background: var(--accent);
-    color: white;
-    padding: 0.2rem 0.6rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-  }
-
-  .post-card h3 {
-    margin-bottom: 0.8rem;
-    font-size: 1.2rem;
-  }
-
-  .post-card h3 a {
-    color: var(--text);
-    text-decoration: none;
-  }
-
-  .post-card h3 a:hover {
-    color: var(--accent);
-  }
-
-  .post-card p {
-    color: var(--muted);
-    margin-bottom: 1rem;
-    line-height: 1.6;
-  }
-
-  .read-more {
-    color: var(--accent);
-    font-weight: 500;
-    font-size: 0.9rem;
-  }
-
-  .view-all {
-    text-align: center;
-    margin-top: 2rem;
-  }
-
-  .series-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .series-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    text-align: center;
-    transition: all 0.3s;
-  }
-
-  .series-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
-  }
-
-  .series-card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    color: var(--accent);
-  }
-
-  .series-card p {
-    color: var(--muted);
-    margin-bottom: 1rem;
-    line-height: 1.6;
-  }
-
-  .series-count {
-    background: var(--border);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-
-  .about-content {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 2rem;
-  }
-
-  .about-content p {
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
-    font-size: 1.1rem;
-  }
-
-  .about-links {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .about-links a {
-    color: var(--accent);
-    font-weight: 500;
-  }
-
-  @media (max-width: 768px) {
-    .hero h1 {
-      font-size: 2rem;
-    }
-    
-    .hero-stats {
-      gap: 1.5rem;
-    }
-    
-    .posts-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .hero-actions {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
+  .hero-content { max-width: 800px; margin: 0 auto; }
+  .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+  .hero-subtitle { font-size: 1.3rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .hero-desc { color: var(--muted); margin-bottom: 2rem; }
+  .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-bottom: 2rem; }
+  .stat { text-align: center; }
+  .stat-number { display: block; font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 0.9rem; color: var(--muted); }
+  .hero-actions { display: flex; gap: 1rem; justify-content: center; }
+  .btn { display: inline-block; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600; transition: all 0.2s; }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: var(--accent-light); transform: translateY(-2px); color: white; }
+  .btn-secondary { background: var(--card-bg); color: var(--text); border: 2px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-outline { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+  .btn-outline:hover { background: var(--accent); color: white; }
+  .featured { margin-bottom: 4rem; }
+  .featured h2 { font-size: 2rem; margin-bottom: 2rem; }
+  .posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+  .post-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: all 0.2s; }
+  .post-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+  .post-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem; color: var(--muted); }
+  .post-tag { background: var(--accent); color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; }
+  .post-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+  .post-card h3 a { color: var(--text); text-decoration: none; }
+  .post-card h3 a:hover { color: var(--accent); }
+  .post-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem; }
+  .read-more { color: var(--accent); font-weight: 500; font-size: 0.95rem; }
+  .read-more:hover { text-decoration: underline; }
+  .view-all { text-align: center; }
+  .series { margin-bottom: 4rem; }
+  .series h2 { font-size: 2rem; margin-bottom: 2rem; }
+  .series-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .series-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; text-align: center; transition: all 0.2s; }
+  .series-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+  .series-card h3 { font-size: 1.3rem; margin-bottom: 0.8rem; }
+  .series-card p { color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
+  .series-count { background: var(--accent); color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.9rem; }
+  .about { text-align: center; padding: 3rem; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); }
+  .about h2 { font-size: 2rem; margin-bottom: 1.5rem; }
+  .about-content p { color: var(--muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem; }
+  .about-links { display: flex; gap: 1rem; justify-content: center; }
+  .about-links a { padding: 0.6rem 1.2rem; border: 2px solid var(--border); border-radius: 8px; color: var(--text); transition: all 0.2s; }
+  .about-links a:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .hero-stats { gap: 1.5rem; } .hero-actions { flex-direction: column; align-items: center; } .posts-grid { grid-template-columns: 1fr; } }
 </style>

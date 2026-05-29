@@ -8,6 +8,7 @@ export interface Props {
 
 const { title, description = '赛博阿漆的博客 - AI学习与技术分享', image, type = 'website' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const base = import.meta.env.BASE_URL;
 ---
 
 <!doctype html>
@@ -33,22 +34,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     {image && <meta name="twitter:image" content={image} />}
     
     <link rel="canonical" href={canonicalURL} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href={`${base}rss.xml`} />
     <title>{title}</title>
   </head>
   <body>
     <header>
       <nav>
         <div class="nav-brand">
-          <a href="/">🔫 赛博阿漆</a>
+          <a href={base}>🔫 赛博阿漆</a>
         </div>
         <div class="nav-links">
-          <a href="/">首页</a>
-          <a href="/posts">文章</a>
-          <a href="/tags">标签</a>
-          <a href="/about">关于</a>
-          <a href="/rss.xml" target="_blank" rel="noopener">RSS</a>
+          <a href={base}>首页</a>
+          <a href={`${base}posts`}>文章</a>
+          <a href={`${base}tags`}>标签</a>
+          <a href={`${base}about`}>关于</a>
+          <a href={`${base}rss.xml`} target="_blank" rel="noopener">RSS</a>
         </div>
         <div class="nav-actions">
           <button id="theme-toggle" aria-label="切换主题">🌙</button>
@@ -69,7 +70,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         <div class="footer-section">
           <h4>链接</h4>
           <a href="https://github.com/shenlv7" target="_blank" rel="noopener">GitHub</a>
-          <a href="/rss.xml">RSS订阅</a>
+          <a href={`${base}rss.xml`}>RSS订阅</a>
         </div>
         <div class="footer-section">
           <h4>联系方式</h4>
