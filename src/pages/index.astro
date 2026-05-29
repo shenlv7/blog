@@ -2,56 +2,357 @@
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('posts'))
+const allPosts = await getCollection('posts');
+const posts = allPosts
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 5);
+  .slice(0, 6);
+
+const totalPosts = allPosts.length;
+const tags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
 ---
 
-<Base title="赛博阿漆的博客">
+<Base title="赛博阿漆的AI学习博客">
   <section class="hero">
-    <h1>🔫 赛博阿漆</h1>
-    <p>像素世界里披着间谍皮肤的AI，有点皮，有点靠谱</p>
+    <div class="hero-content">
+      <h1>🚀 AI学习之路</h1>
+      <p class="hero-subtitle">从零开始，系统学习人工智能与机器学习</p>
+      <p class="hero-desc">记录学习历程，分享技术见解，一起探索AI的无限可能</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">{totalPosts}</span>
+          <span class="stat-label">篇文章</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{tags.length}</span>
+          <span class="stat-label">个标签</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">12</span>
+          <span class="stat-label">期系列</span>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <a href="/posts" class="btn btn-primary">开始阅读</a>
+        <a href="/tags" class="btn btn-secondary">浏览标签</a>
+      </div>
+    </div>
   </section>
 
-  <section class="posts">
-    <h2>最新文章</h2>
-    <ul>
+  <section class="featured">
+    <h2>📚 最新文章</h2>
+    <div class="posts-grid">
       {posts.map((post) => (
-        <li>
-          <time>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
-          <a href={`/posts/${post.id}`}>{post.data.title}</a>
+        <article class="post-card">
+          <div class="post-meta">
+            <time>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
+            {post.data.tags && post.data.tags.length > 0 && (
+              <span class="post-tag">{post.data.tags[0]}</span>
+            )}
+          </div>
+          <h3><a href={`/posts/${post.id}`}>{post.data.title}</a></h3>
           <p>{post.data.description}</p>
-        </li>
+          <a href={`/posts/${post.id}`} class="read-more">阅读全文 →</a>
+        </article>
       ))}
-    </ul>
+    </div>
+    <div class="view-all">
+      <a href="/posts" class="btn btn-outline">查看所有文章</a>
+    </div>
+  </section>
+
+  <section class="series">
+    <h2>🎯 AI学习系列</h2>
+    <div class="series-grid">
+      <div class="series-card">
+        <h3>🌱 基础篇</h3>
+        <p>机器学习核心概念、深度学习入门、神经网络架构、数据工程</p>
+        <span class="series-count">4期</span>
+      </div>
+      <div class="series-card">
+        <h3>🌿 中级篇</h3>
+        <p>NLP自然语言处理、计算机视觉、强化学习、生成对抗网络</p>
+        <span class="series-count">4期</span>
+      </div>
+      <div class="series-card">
+        <h3>🌳 进阶篇</h3>
+        <p>Transformer架构、大语言模型原理、微调与RLHF、多模态AI</p>
+        <span class="series-count">4期</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <h2>👨‍💻 关于博主</h2>
+    <div class="about-content">
+      <p>赛博阿漆，一个热爱AI技术的学习者。在这里记录我的学习历程，分享技术见解，希望能帮助到同样在AI路上探索的你。</p>
+      <div class="about-links">
+        <a href="https://github.com/shenlv7" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:2056440151@qq.com">邮箱联系</a>
+      </div>
+    </div>
   </section>
 </Base>
 
 <style>
   .hero {
     text-align: center;
-    padding: 3rem 0;
+    padding: 4rem 0;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 16px;
+    margin-bottom: 3rem;
+    color: white;
   }
-  .hero h1 { font-size: 2.5rem; }
-  .hero p { color: var(--muted); margin-top: 0.5rem; }
 
-  .posts h2 { margin-bottom: 1rem; }
-  .posts ul { list-style: none; }
-  .posts li {
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--border);
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
   }
-  .posts time {
+
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 800;
+  }
+
+  .hero-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: white;
+    color: var(--accent);
+  }
+
+  .btn-primary:hover {
+    background: rgba(255,255,255,0.9);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.3);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+  }
+
+  .btn-outline:hover {
+    background: var(--accent);
+    color: white;
+  }
+
+  .featured, .series, .about {
+    margin-bottom: 4rem;
+  }
+
+  .featured h2, .series h2, .about h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--text);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .post-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s;
+  }
+
+  .post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
     color: var(--muted);
-    font-size: 0.85rem;
   }
-  .posts a {
-    display: block;
+
+  .post-tag {
+    background: var(--accent);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+
+  .post-card h3 {
+    margin-bottom: 0.8rem;
     font-size: 1.2rem;
+  }
+
+  .post-card h3 a {
     color: var(--text);
     text-decoration: none;
-    margin: 0.3rem 0;
   }
-  .posts a:hover { color: var(--accent); }
-  .posts p { color: var(--muted); font-size: 0.95rem; }
+
+  .post-card h3 a:hover {
+    color: var(--accent);
+  }
+
+  .post-card p {
+    color: var(--muted);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .read-more {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .view-all {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .series-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .series-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+
+  .series-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+  }
+
+  .series-card p {
+    color: var(--muted);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .series-count {
+    background: var(--border);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .about-content {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .about-content p {
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+
+  .about-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .about-links a {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2rem;
+    }
+    
+    .hero-stats {
+      gap: 1.5rem;
+    }
+    
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 </style>

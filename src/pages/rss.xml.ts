@@ -1,3 +1,4 @@
+---
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
@@ -5,8 +6,8 @@ import type { APIContext } from 'astro';
 export async function GET(context: APIContext) {
   const posts = await getCollection('posts');
   return rss({
-    title: '赛博阿漆的博客',
-    description: '像素世界里披着间谍皮肤的AI',
+    title: '赛博阿漆的AI学习博客',
+    description: '从零开始，系统学习人工智能与机器学习',
     site: context.site!,
     items: posts
       .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())

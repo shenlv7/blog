@@ -1,0 +1,211 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+
+const tagCounts = {};
+allPosts.forEach(post => {
+  post.data.tags?.forEach(tag => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  });
+});
+
+const sortedTags = Object.entries(tagCounts).sort(([,a], [,b]) => b - a);
+
+const postsByTag = {};
+allPosts.forEach(post => {
+  post.data.tags?.forEach(tag => {
+    if (!postsByTag[tag]) postsByTag[tag] = [];
+    postsByTag[tag].push(post);
+  });
+});
+---
+
+<Base title="标签云">
+  <div class="tags-page">
+    <header class="tags-header">
+      <h1>🏷️ 标签云</h1>
+      <p>共 {sortedTags.length} 个标签，{allPosts.length} 篇文章</p>
+    </header>
+
+    <div class="tags-cloud">
+      {sortedTags.map(([tag, count]) => (
+        <a href={`#${tag}`} class="tag-cloud-item" style={`font-size: ${Math.min(1.5 + count * 0.2, 2.5)}rem`}>
+          #{tag}
+          <span class="tag-count">{count}</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="tags-sections">
+      {sortedTags.map(([tag, count]) => (
+        <section id={tag} class="tag-section">
+          <h2>#{tag} <span class="tag-total">({count} 篇)</span></h2>
+          <div class="tag-posts">
+            {postsByTag[tag]
+              .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+              .map(post => (
+                <article class="tag-post-item">
+                  <time>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
+                  <h3><a href={`/posts/${post.id}`}>{post.data.title}</a></h3>
+                  <p>{post.data.description}</p>
+                </article>
+              ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .tags-page {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .tags-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 16px;
+    color: white;
+  }
+
+  .tags-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tags-header p {
+    opacity: 0.9;
+    font-size: 1.1rem;
+  }
+
+  .tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 4rem;
+    padding: 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .tag-cloud-item {
+    color: var(--accent);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    border: 2px solid var(--border);
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .tag-cloud-item:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    transform: scale(1.05);
+  }
+
+  .tag-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .tags-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .tag-section {
+    scroll-margin-top: 100px;
+  }
+
+  .tag-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+  }
+
+  .tag-total {
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: normal;
+  }
+
+  .tag-posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .tag-post-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s;
+  }
+
+  .tag-post-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .tag-post-item time {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .tag-post-item h3 {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+  }
+
+  .tag-post-item h3 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .tag-post-item h3 a:hover {
+    color: var(--accent);
+  }
+
+  .tag-post-item p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .tags-header h1 {
+      font-size: 2rem;
+    }
+    
+    .tags-cloud {
+      gap: 0.5rem;
+      padding: 1rem;
+    }
+    
+    .tag-posts {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

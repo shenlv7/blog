@@ -1,0 +1,241 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="关于我 - 赛博阿漆">
+  <div class="about-page">
+    <header class="about-hero">
+      <div class="avatar">🔫</div>
+      <h1>赛博阿漆</h1>
+      <p class="tagline">AI学习者 · 技术分享者 · 终身成长者</p>
+    </header>
+
+    <section class="about-content">
+      <div class="about-section">
+        <h2>👋 关于我</h2>
+        <p>你好，我是赛博阿漆，一个热爱AI技术的学习者。</p>
+        <p>在这个博客里，我会记录我的AI学习历程，分享技术见解和实践经验。希望能帮助到同样在AI路上探索的你。</p>
+        <p>我相信：<strong>学习最好的方式是教别人</strong>。所以我会尽量把复杂的概念用通俗易懂的方式讲清楚。</p>
+      </div>
+
+      <div class="about-section">
+        <h2>🎯 博客目标</h2>
+        <ul>
+          <li>📚 <strong>系统学习</strong>：从基础到进阶，构建完整的AI知识体系</li>
+          <li>💻 <strong>实践导向</strong>：每个概念都配有代码示例和实践建议</li>
+          <li>📝 <strong>持续输出</strong>：每周至少更新一篇高质量技术文章</li>
+          <li>🤝 <strong>共同成长</strong>：欢迎交流讨论，一起进步</li>
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h2>📚 学习路线</h2>
+        <div class="roadmap">
+          <div class="roadmap-item completed">
+            <span class="roadmap-icon">✅</span>
+            <div>
+              <h4>基础篇</h4>
+              <p>机器学习核心概念、深度学习入门、神经网络架构、数据工程</p>
+            </div>
+          </div>
+          <div class="roadmap-item current">
+            <span class="roadmap-icon">🔄</span>
+            <div>
+              <h4>中级篇</h4>
+              <p>NLP自然语言处理、计算机视觉、强化学习、生成对抗网络</p>
+            </div>
+          </div>
+          <div class="roadmap-item upcoming">
+            <span class="roadmap-icon">⏳</span>
+            <div>
+              <h4>进阶篇</h4>
+              <p>Transformer架构、大语言模型原理、微调与RLHF、多模态AI</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-section">
+        <h2>📬 联系我</h2>
+        <div class="contact-links">
+          <a href="https://github.com/shenlv7" target="_blank" rel="noopener" class="contact-btn">
+            <span>📦</span> GitHub
+          </a>
+          <a href="mailto:2056440151@qq.com" class="contact-btn">
+            <span>📧</span> 邮箱
+          </a>
+          <a href="/rss.xml" target="_blank" class="contact-btn">
+            <span>📡</span> RSS订阅
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .about-page {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .about-hero {
+    text-align: center;
+    padding: 3rem;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 16px;
+    color: white;
+    margin-bottom: 3rem;
+  }
+
+  .avatar {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .about-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    font-size: 1.2rem;
+    opacity: 0.9;
+  }
+
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .about-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .about-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+  }
+
+  .about-section p {
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .about-section ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .about-section li {
+    color: var(--muted);
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .about-section li:last-child {
+    border-bottom: none;
+  }
+
+  .roadmap {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .roadmap-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--border);
+  }
+
+  .roadmap-item.completed {
+    background: #f0fff4;
+    border-left-color: #38a169;
+  }
+
+  .roadmap-item.current {
+    background: #fffaf0;
+    border-left-color: #dd6b20;
+  }
+
+  .roadmap-item.upcoming {
+    background: #f7fafc;
+    border-left-color: #a0aec0;
+  }
+
+  [data-theme="dark"] .roadmap-item.completed {
+    background: #1a2e1a;
+  }
+
+  [data-theme="dark"] .roadmap-item.current {
+    background: #2d2a1a;
+  }
+
+  [data-theme="dark"] .roadmap-item.upcoming {
+    background: #1a1a2e;
+  }
+
+  .roadmap-icon {
+    font-size: 1.5rem;
+  }
+
+  .roadmap-item h4 {
+    margin-bottom: 0.3rem;
+    color: var(--text);
+  }
+
+  .roadmap-item p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .contact-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .contact-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .contact-btn span {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 768px) {
+    .about-hero h1 {
+      font-size: 2rem;
+    }
+
+    .contact-links {
+      flex-direction: column;
+    }
+  }
+</style>
