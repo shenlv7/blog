@@ -47,9 +47,9 @@ const base = import.meta.env.BASE_URL;
             <time>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
             {post.data.tags?.[0] && <span class="post-tag">{post.data.tags[0]}</span>}
           </div>
-          <h3><a href={`/blog/posts/${post.id}`}>{post.data.title}</a></h3>
+          <h3><a href={`/blog/posts/${post.id.replace(/\.md$/, '')}/`}>{post.data.title}</a></h3>
           <p>{post.data.description}</p>
-          <a href={`/blog/posts/${post.id}`} class="read-more">阅读全文 →</a>
+          <a href={`/blog/posts/${post.id.replace(/\.md$/, '')}/`} class="read-more">阅读全文 →</a>
         </article>
       ))}
     </div>
