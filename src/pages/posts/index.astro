@@ -9,7 +9,6 @@ const posts = (await getCollection('posts')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 <<<<<<< HEAD
-const base = import.meta.env.BASE_URL;
 
 // 难度映射
 const difficultyMap: Record<number, 'beginner' | 'intermediate' | 'advanced'> = {
