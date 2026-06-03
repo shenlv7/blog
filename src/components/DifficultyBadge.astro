@@ -1,0 +1,39 @@
+---
+// DifficultyBadge.astro - 难度标签
+interface Props {
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+}
+
+const { difficulty } = Astro.props;
+
+const levels = {
+  beginner: { label: '入门', emoji: '🌱', color: '#10b981' },
+  intermediate: { label: '中级', emoji: '🌿', color: '#f59e0b' },
+  advanced: { label: '进阶', emoji: '🌳', color: '#e94560' },
+};
+
+const level = levels[difficulty];
+---
+
+<span 
+  class="difficulty-badge" 
+  style={`--badge-color: ${level.color}`}
+  title={`难度: ${level.label}`}
+>
+  {level.emoji} {level.label}
+</span>
+
+<style>
+  .difficulty-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: color-mix(in srgb, var(--badge-color) 15%, transparent);
+    color: var(--badge-color);
+    border: 1px solid color-mix(in srgb, var(--badge-color) 30%, transparent);
+  }
+</style>

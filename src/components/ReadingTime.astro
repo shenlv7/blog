@@ -1,0 +1,33 @@
+---
+// ReadingTime.astro - 阅读时间估算
+interface Props {
+  content: string;
+  showIcon?: boolean;
+}
+
+const { content, showIcon = true } = Astro.props;
+
+// 中文阅读速度约 400-500 字/分钟，英文约 200 词/分钟
+const chineseChars = (content.match(/[\u4e00-\u9fff]/g) || []).length;
+const englishWords = (content.replace(/[\u4e00-\u9fff]/g, '').match(/\b\w+\b/g) || []).length;
+const totalMinutes = Math.ceil(chineseChars / 450 + englishWords / 200);
+const readingTime = totalMinutes < 1 ? '不到 1 分钟' : `${totalMinutes} 分钟`;
+---
+
+<span class="reading-time" title={`预计阅读时间 ${readingTime}`}>
+  {showIcon && <span class="rt-icon">📖</span>}
+  <span class="rt-text">{readingTime}阅读</span>
+</span>
+
+<style>
+  .reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .rt-icon {
+    font-size: 0.9rem;
+  }
+</style>

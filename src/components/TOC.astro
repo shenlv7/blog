@@ -1,0 +1,120 @@
+---
+// TOC.astro - 文章目录导航
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+
+{filteredHeadings.length > 0 && (
+  <nav class="toc" aria-label="文章目录">
+    <details open>
+      <summary class="toc-title">
+        <span>📑 目录</span>
+        <svg class="toc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </summary>
+      <ul class="toc-list">
+        {filteredHeadings.map(h => (
+          <li class={`toc-item depth-${h.depth}`}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  </nav>
+)}
+
+<script>
+  // 高亮当前阅读位置
+  function initTOC() {
+    const headings = document.querySelectorAll('h2[id], h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-item a');
+    
+    if (!headings.length || !tocLinks.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(link => link.classList.remove('active'));
+          const activeLink = document.querySelector(`.toc-item a[href="#${entry.target.id}"]`);
+          activeLink?.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+
+    headings.forEach(h => observer.observe(h));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTOC);
+  } else {
+    initTOC();
+  }
+  document.addEventListener('astro:after-swap', initTOC);
+</script>
+
+<style>
+  .toc {
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .toc-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    list-style: none;
+  }
+  .toc-title::-webkit-details-marker { display: none; }
+  .toc-chevron {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s;
+  }
+  details[open] .toc-chevron {
+    transform: rotate(180deg);
+  }
+  .toc-list {
+    list-style: none;
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+  }
+  .toc-item {
+    margin: 0;
+  }
+  .toc-item a {
+    display: block;
+    padding: 0.35rem 0.5rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .toc-item a:hover,
+  .toc-item a.active {
+    color: var(--accent);
+    background: rgba(233, 69, 96, 0.05);
+    border-left-color: var(--accent);
+  }
+  .toc-item.depth-3 a {
+    padding-left: 1.5rem;
+    font-size: 0.8rem;
+  }
+</style>

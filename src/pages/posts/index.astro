@@ -1,11 +1,27 @@
 ---
 import Base from '../../layouts/Base.astro';
+import SearchBox from '../../components/SearchBox.astro';
+import TagBadge from '../../components/TagBadge.astro';
+import DifficultyBadge from '../../components/DifficultyBadge.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('posts')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 const base = import.meta.env.BASE_URL;
+
+// 难度映射
+const difficultyMap: Record<number, 'beginner' | 'intermediate' | 'advanced'> = {
+  1: 'beginner', 2: 'beginner', 3: 'beginner', 4: 'beginner',
+  5: 'intermediate', 6: 'intermediate', 7: 'intermediate', 8: 'intermediate',
+  9: 'advanced', 10: 'advanced', 11: 'advanced', 12: 'advanced',
+};
+
+function estimateReadingTime(content: string): number {
+  const chineseChars = (content.match(/[\u4e00-\u9fff]/g) || []).length;
+  const englishWords = content.replace(/[\u4e00-\u9fff]/g, '').match(/\b\w+\b/g)?.length || 0;
+  return Math.ceil(chineseChars / 450 + englishWords / 200);
+}
 ---
 
 <Base title="所有文章">
@@ -13,23 +29,38 @@ const base = import.meta.env.BASE_URL;
     <h1>📝 所有文章</h1>
     <p class="subtitle">共 {posts.length} 篇文章</p>
     
+    <SearchBox />
+
     <div class="posts-list">
       {posts.map(post => {
         const slug = post.id.replace(/\.md$/, '');
+        const seriesNum = post.data.seriesOrder;
+        const difficulty = seriesNum ? difficultyMap[seriesNum] : undefined;
         return (
         <article class="post-item">
+          {post.data.cover && (
+            <div class="post-cover-small">
+              <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+            </div>
+          )}
           <div class="post-info">
             <time>{post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             <div class="post-tags">
               {post.data.tags?.map(tag => (
-                <a href={`/blog/tags#${tag}`} class="tag">{tag}</a>
+                <TagBadge tag={tag} size="sm" />
               ))}
             </div>
           </div>
           <div class="post-content">
-            <h2><a href={`/blog/posts/${slug}/`}>{post.data.title}</a></h2>
+            <div class="post-title-row">
+              <h2><a href={`${base}posts/${slug}/`}>{post.data.title}</a></h2>
+              {difficulty && <DifficultyBadge difficulty={difficulty} />}
+            </div>
             <p>{post.data.description}</p>
-            <a href={`/blog/posts/${slug}/`} class="read-more">阅读全文 →</a>
+            <div class="post-meta-row">
+              <span class="read-time">📖 {estimateReadingTime(post.body || '')}分钟阅读</span>
+              <a href={`${base}posts/${slug}/`} class="read-more">阅读全文 →</a>
+            </div>
           </div>
         </article>
       )})}
@@ -40,21 +71,29 @@ const base = import.meta.env.BASE_URL;
 <style>
   .posts-page { max-width: 900px; margin: 0 auto; }
   h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-  .subtitle { color: var(--muted); margin-bottom: 3rem; font-size: 1.1rem; }
+  .subtitle { color: var(--muted); margin-bottom: 2rem; font-size: 1.1rem; }
   .posts-list { display: flex; flex-direction: column; gap: 2rem; }
   .post-item { display: flex; gap: 2rem; padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; transition: all 0.2s; }
   .post-item:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .post-cover-small { width: 120px; height: 80px; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+  .post-cover-small img { width: 100%; height: 100%; object-fit: cover; }
   .post-info { min-width: 180px; text-align: right; }
   .post-info time { display: block; color: var(--muted); font-size: 0.95rem; margin-bottom: 0.8rem; }
   .post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: flex-end; }
-  .tag { background: var(--accent); color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; text-decoration: none; }
-  .tag:hover { background: var(--accent-light); color: white; }
   .post-content { flex: 1; }
-  .post-content h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .post-title-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .post-content h2 { font-size: 1.4rem; }
   .post-content h2 a { color: var(--text); text-decoration: none; }
   .post-content h2 a:hover { color: var(--accent); }
   .post-content p { color: var(--muted); line-height: 1.6; margin-bottom: 0.8rem; }
+  .post-meta-row { display: flex; justify-content: space-between; align-items: center; }
+  .read-time { font-size: 0.85rem; color: var(--muted); }
   .read-more { color: var(--accent); font-weight: 500; }
   .read-more:hover { text-decoration: underline; }
-  @media (max-width: 768px) { .post-item { flex-direction: column; gap: 1rem; } .post-info { text-align: left; min-width: auto; } .post-tags { justify-content: flex-start; } }
+  @media (max-width: 768px) { 
+    .post-item { flex-direction: column; gap: 1rem; } 
+    .post-info { text-align: left; min-width: auto; } 
+    .post-tags { justify-content: flex-start; } 
+    .post-cover-small { width: 100%; height: 160px; }
+  }
 </style>

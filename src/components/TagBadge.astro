@@ -1,0 +1,60 @@
+---
+// TagBadge.astro - 彩色标签徽章
+interface Props {
+  tag: string;
+  size?: 'sm' | 'md';
+}
+
+const { tag, size = 'sm' } = Astro.props;
+
+// 根据标签名生成一致的颜色
+const colors = [
+  { bg: '#e94560', text: '#fff' },
+  { bg: '#0ea5e9', text: '#fff' },
+  { bg: '#10b981', text: '#fff' },
+  { bg: '#f59e0b', text: '#fff' },
+  { bg: '#8b5cf6', text: '#fff' },
+  { bg: '#ec4899', text: '#fff' },
+  { bg: '#06b6d4', text: '#fff' },
+  { bg: '#84cc16', text: '#fff' },
+];
+
+let hash = 0;
+for (let i = 0; i < tag.length; i++) {
+  hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+}
+const color = colors[Math.abs(hash) % colors.length];
+---
+
+<a 
+  href={`/blog/tags/#${tag}`} 
+  class={`tag-badge ${size}`}
+  style={`background: ${color.bg}; color: ${color.text};`}
+>
+  {tag}
+</a>
+
+<style>
+  .tag-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tag-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    color: white;
+  }
+  .tag-badge.sm {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+  }
+  .tag-badge.md {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.75rem;
+  }
+</style>
