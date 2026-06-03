@@ -17,7 +17,7 @@ const inventions = (await getCollection('inventions')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
-const base = import.meta.env.BASE_URL;
+<<<<<<< HEAD
 
 // 统计AI学习系列进度（按标签判断）
 const aiSeriesPosts = posts.filter(p => 
@@ -52,6 +52,9 @@ const inventionStatusMap: Record<string, { label: string; emoji: string }> = {
   beta: { label: '测试版', emoji: '⚡' },
   released: { label: '已发布', emoji: '🚀' },
 };
+=======
+const base = '/blog/';
+>>>>>>> cec6f7d (fix: base path + tags page)
 ---
 
 <Base title="赛博阿漆的AI学习博客">
