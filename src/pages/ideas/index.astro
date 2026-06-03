@@ -1,0 +1,154 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const ideas = (await getCollection('ideas')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Base title="碳基点子王的灵感库">
+  <section class="page-header">
+    <h1>🧠 碳基点子王</h1>
+    <p>人类灵感突发时刻，不拘形式的创意记录</p>
+    <p class="subtitle">可能是几句话，也可能是一篇文章，灵感来了就记</p>
+  </section>
+
+  <section class="ideas-list">
+    {ideas.length === 0 ? (
+      <div class="empty-state">
+        <p>灵感正在路上... 🚀</p>
+        <p>等点子王发功！</p>
+      </div>
+    ) : (
+      ideas.map(idea => (
+        <article class="idea-card">
+          <div class="idea-meta">
+            <span class="idea-number">#{String(idea.data.ideaNumber).padStart(3, '0')}</span>
+            <time>{idea.data.pubDate.toLocaleDateString('zh-CN')}</time>
+          </div>
+          <h2><a href={`/blog/ideas/${idea.id.replace(/\.md$/, '')}/`}>{idea.data.title}</a></h2>
+          {idea.data.description && <p class="idea-desc">{idea.data.description}</p>}
+          {idea.data.tags && idea.data.tags.length > 0 && (
+            <div class="idea-tags">
+              {idea.data.tags.map(tag => <span class="tag">{tag}</span>)}
+            </div>
+          )}
+          <a href={`/blog/ideas/${idea.id.replace(/\.md$/, '')}/`} class="read-link">查看灵感 →</a>
+        </article>
+      ))
+    )}
+  </section>
+
+  <section class="back-link">
+    <a href="/blog/">← 返回首页</a>
+  </section>
+</Base>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .page-header p {
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+  .page-header .subtitle {
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+  }
+  .ideas-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--muted);
+  }
+  .empty-state p:first-child {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .idea-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.2s;
+  }
+  .idea-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+  .idea-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+  .idea-number {
+    background: var(--accent);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .idea-meta time {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .idea-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  .idea-card h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .idea-card h2 a:hover {
+    color: var(--accent);
+  }
+  .idea-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .idea-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .tag {
+    background: var(--border);
+    color: var(--text);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  .read-link {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  .read-link:hover {
+    text-decoration: underline;
+  }
+  .back-link {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  .back-link a {
+    color: var(--accent);
+    font-weight: 500;
+  }
+</style>

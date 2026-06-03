@@ -7,8 +7,30 @@ const posts = defineCollection({
     description: z.string(),
     pubDate: z.coerce.date(),
     tags: z.array(z.string()).optional(),
-    draft: z.boolean().default(false),
   }),
 });
 
-export const collections = { posts };
+const ideas = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    pubDate: z.coerce.date(),
+    tags: z.array(z.string()).optional(),
+    ideaNumber: z.number(),
+  }),
+});
+
+const inventions = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    tags: z.array(z.string()).optional(),
+    ideaId: z.string().optional(),
+    inventionNumber: z.number(),
+  }),
+});
+
+export const collections = { posts, ideas, inventions };

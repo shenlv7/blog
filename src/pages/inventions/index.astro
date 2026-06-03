@@ -1,0 +1,177 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const inventions = (await getCollection('inventions')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Base title="文西的发明记录">
+  <section class="page-header">
+    <h1>🔧 文西的发明记录</h1>
+    <p>把点子变成现实，半技术半故事的奇妙旅程</p>
+    <p class="subtitle">碳基点子王出想法，赛博文西来实现</p>
+  </section>
+
+  <section class="inventions-list">
+    {inventions.length === 0 ? (
+      <div class="empty-state">
+        <p>发明实验室筹备中... 🔬</p>
+        <p>等点子王先发功！</p>
+      </div>
+    ) : (
+      inventions.map(inv => (
+        <article class="invention-card">
+          <div class="invention-meta">
+            <span class="invention-number">发明 #{String(inv.data.inventionNumber).padStart(3, '0')}</span>
+            <time>{inv.data.pubDate.toLocaleDateString('zh-CN')}</time>
+          </div>
+          <h2><a href={`/blog/inventions/${inv.id.replace(/\.md$/, '')}/`}>{inv.data.title}</a></h2>
+          <p class="invention-desc">{inv.data.description}</p>
+          <div class="invention-footer">
+            {inv.data.ideaId && (
+              <a href={`/blog/ideas/idea-${inv.data.ideaId}/`} class="idea-link">
+                💡 点子 #{inv.data.ideaId}
+              </a>
+            )}
+            {inv.data.tags && inv.data.tags.length > 0 && (
+              <div class="invention-tags">
+                {inv.data.tags.slice(0, 3).map(tag => <span class="tag">{tag}</span>)}
+              </div>
+            )}
+          </div>
+          <a href={`/blog/inventions/${inv.id.replace(/\.md$/, '')}/`} class="read-link">查看发明 →</a>
+        </article>
+      ))
+    )}
+  </section>
+
+  <section class="back-link">
+    <a href="/blog/">← 返回首页</a>
+  </section>
+</Base>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .page-header p {
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+  .page-header .subtitle {
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+  }
+  .inventions-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--muted);
+  }
+  .empty-state p:first-child {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .invention-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.2s;
+  }
+  .invention-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+  .invention-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+  .invention-number {
+    background: #10b981;
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .invention-meta time {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .invention-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  .invention-card h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .invention-card h2 a:hover {
+    color: var(--accent);
+  }
+  .invention-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .invention-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .idea-link {
+    background: var(--accent);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .idea-link:hover {
+    background: var(--accent-light);
+  }
+  .invention-tags {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .tag {
+    background: var(--border);
+    color: var(--text);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  .read-link {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  .read-link:hover {
+    text-decoration: underline;
+  }
+  .back-link {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  .back-link a {
+    color: var(--accent);
+    font-weight: 500;
+  }
+</style>
