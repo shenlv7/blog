@@ -14,23 +14,25 @@ const base = import.meta.env.BASE_URL;
     <p class="subtitle">共 {posts.length} 篇文章</p>
     
     <div class="posts-list">
-      {posts.map(post => (
+      {posts.map(post => {
+        const slug = post.id.replace(/\.md$/, '');
+        return (
         <article class="post-item">
           <div class="post-info">
             <time>{post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             <div class="post-tags">
               {post.data.tags?.map(tag => (
-                <a href={"/blog/tags#${tag}"} class="tag">{tag}</a>
+                <a href={`/blog/tags#${tag}`} class="tag">{tag}</a>
               ))}
             </div>
           </div>
           <div class="post-content">
-            <h2><a href={`/blog/posts/${post.id}`}>{post.data.title}</a></h2>
+            <h2><a href={`/blog/posts/${slug}/`}>{post.data.title}</a></h2>
             <p>{post.data.description}</p>
-            <a href={`/blog/posts/${post.id}`} class="read-more">阅读全文 →</a>
+            <a href={`/blog/posts/${slug}/`} class="read-more">阅读全文 →</a>
           </div>
         </article>
-      ))}
+      )})}
     </div>
   </div>
 </Base>
