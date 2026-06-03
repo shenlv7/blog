@@ -7,7 +7,10 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('posts')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
-const base = import.meta.env.BASE_URL;
+<<<<<<< HEAD
+=======
+const base = '/blog/';
+>>>>>>> cec6f7d (fix: base path + tags page)
 
 // 构建标签映射
 const tagMap = new Map<string, typeof posts>();
