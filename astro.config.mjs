@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://shenlv7.github.io',
-  base: '/blog',
+  base: '/blog/',
   integrations: [mdx(), sitemap()],
   markdown: {
     shikiConfig: {
