@@ -62,6 +62,30 @@ const base = import.meta.env.BASE_URL || '/';
         document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
       })();
     </script>
+    <!-- 智能导航栏：向下滚动隐藏，向上滚动显示 -->
+    <script is:inline>
+      (function() {
+        let lastScrollY = 0;
+        let ticking = false;
+        const header = document.querySelector('header');
+        if (!header) return;
+        window.addEventListener('scroll', function() {
+          if (!ticking) {
+            window.requestAnimationFrame(function() {
+              const currentScrollY = window.scrollY;
+              if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                header.classList.add('header-hidden');
+              } else {
+                header.classList.remove('header-hidden');
+              }
+              lastScrollY = currentScrollY;
+              ticking = false;
+            });
+            ticking = true;
+          }
+        });
+      })();
+    </script>
   </head>
   <body>
     <header>
@@ -165,6 +189,12 @@ const base = import.meta.env.BASE_URL || '/';
     z-index: 100;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  header.header-hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
   }
 
   nav {
