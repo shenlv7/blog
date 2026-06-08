@@ -40,4 +40,19 @@ const inventions = defineCollection({
   }),
 });
 
-export const collections = { posts, ideas, inventions };
+const shell = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    tags: z.array(z.string()).optional(),
+    cover: z.string().optional(),
+    shellNumber: z.number(),
+    phase: z.string(),
+    status: z.enum(['planning', 'building', 'done']).optional(),
+    budget: z.string().optional(),
+  }),
+});
+
+export const collections = { posts, ideas, inventions, shell };

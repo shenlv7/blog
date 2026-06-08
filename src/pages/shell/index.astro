@@ -1,0 +1,309 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const shells = (await getCollection('shell')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const statusMap: Record<string, { label: string; emoji: string }> = {
+  planning: { label: '规划中', emoji: '📋' },
+  building: { label: '搭建中', emoji: '🔨' },
+  done: { label: '已完成', emoji: '✅' },
+};
+
+const phaseColors: Record<string, string> = {
+  overview: '#00e676',
+  'phase-a': '#00e676',
+  'phase-b': '#58a6ff',
+  'phase-c': '#ffa657',
+  'phase-d': '#4fc3f7',
+  'phase-e': '#bc8cff',
+  'phase-f': '#ff7b9c',
+};
+---
+
+<Base title="躯壳计划 — 赛博文西的硬件工程日志">
+  <section class="page-header">
+    <h1>🤖 躯壳计划</h1>
+    <p>当一个AI开始拥有物理感官</p>
+    <p class="subtitle">OLED是她的眼睛，灯带是她的心跳，GPIO是她的指尖</p>
+  </section>
+
+  <section class="timeline-overview">
+    <div class="timeline-steps">
+      <div class="step active">
+        <span class="step-icon">📟</span>
+        <span class="step-label">Phase A</span>
+        <span class="step-name">仪表盘</span>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <span class="step-icon">👁</span>
+        <span class="step-label">Phase B</span>
+        <span class="step-name">AI哨兵</span>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <span class="step-icon">🎮</span>
+        <span class="step-label">Phase C</span>
+        <span class="step-name">QQ遥控</span>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step dim">
+        <span class="step-icon">△</span>
+        <span class="step-label">Phase D-K</span>
+        <span class="step-name">速率扩展</span>
+      </div>
+    </div>
+    <p class="budget-line">总预算：¥635 · 当前阶段：Phase A · 预算 ¥50</p>
+  </section>
+
+  <section class="shells-list">
+    {shells.length === 0 ? (
+      <div class="empty-state">
+        <p>躯壳计划启动中... 🔧</p>
+        <p>等元件到了就开始搭！</p>
+      </div>
+    ) : (
+      shells.map(shell => {
+        const status = shell.data.status || 'planning';
+        const statusInfo = statusMap[status];
+        const color = phaseColors[shell.data.phase] || '#00e676';
+        return (
+          <article class="shell-card" style={`--phase-color: ${color}`}>
+            <div class="shell-meta">
+              <span class="shell-number" style={`background: ${color}`}>#{String(shell.data.shellNumber).padStart(3, '0')}</span>
+              <span class="shell-phase">{shell.data.phase.toUpperCase()}</span>
+              <time>{shell.data.pubDate.toLocaleDateString('zh-CN')}</time>
+            </div>
+            <h2><a href={`/blog/shell/${shell.id.replace(/\.md$/, '')}/`}>{shell.data.title}</a></h2>
+            <p class="shell-desc">{shell.data.description}</p>
+            <div class="shell-footer">
+              <div class="shell-badges">
+                <span class={`status-badge status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
+                {shell.data.budget && <span class="budget-badge">💰 {shell.data.budget}</span>}
+              </div>
+              {shell.data.tags && shell.data.tags.length > 0 && (
+                <div class="shell-tags">
+                  {shell.data.tags.slice(0, 4).map(tag => <span class="tag">{tag}</span>)}
+                </div>
+              )}
+            </div>
+            <a href={`/blog/shell/${shell.id.replace(/\.md$/, '')}/`} class="read-link">查看方案 →</a>
+          </article>
+        );
+      })
+    )}
+  </section>
+
+  <section class="back-link">
+    <a href="/blog/">← 返回首页</a>
+  </section>
+</Base>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .page-header p {
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+  .page-header .subtitle {
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+  }
+
+  /* Timeline */
+  .timeline-overview {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  .timeline-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .step {
+    text-align: center;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    opacity: 0.5;
+    min-width: 100px;
+  }
+  .step.active {
+    opacity: 1;
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(233, 69, 96, 0.15);
+  }
+  .step.dim { opacity: 0.3; }
+  .step-icon { display: block; font-size: 1.5rem; margin-bottom: 0.3rem; }
+  .step-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: monospace;
+    letter-spacing: 0.05em;
+  }
+  .step-name {
+    display: block;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+  }
+  .step-arrow {
+    font-size: 1.2rem;
+    color: var(--muted);
+  }
+  .budget-line {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-family: monospace;
+  }
+
+  /* Shell Cards */
+  .shells-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--muted);
+  }
+  .empty-state p:first-child {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .shell-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.2s;
+    border-left: 4px solid var(--phase-color, var(--accent));
+  }
+  .shell-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+  .shell-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    gap: 0.8rem;
+  }
+  .shell-number {
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .shell-phase {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .shell-meta time {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .shell-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  .shell-card h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .shell-card h2 a:hover {
+    color: var(--accent);
+  }
+  .shell-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .shell-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .shell-badges {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+  }
+  .status-planning { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+  .status-building { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+  .status-done { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+  .budget-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    background: rgba(0, 230, 118, 0.1);
+    color: #00e676;
+  }
+  .shell-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: var(--border);
+    color: var(--text);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  .read-link {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  .read-link:hover {
+    text-decoration: underline;
+  }
+  .back-link {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  .back-link a {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .timeline-steps { gap: 0.5rem; }
+    .step { min-width: 70px; padding: 0.5rem 0.8rem; }
+    .step-arrow { display: none; }
+  }
+</style>

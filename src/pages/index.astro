@@ -16,12 +16,22 @@ const ideas = (await getCollection('ideas')).sort(
 const inventions = (await getCollection('inventions')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+const shells = (await getCollection('shell')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
 // 统计AI学习系列进度（按标签判断）
 const aiSeriesPosts = posts.filter(p => 
   p.data.tags?.some(t => ['机器学习', '深度学习', '神经网络', 'AI基础', 'NLP', '计算机视觉', '强化学习', 'Transformer', 'LLM'].includes(t))
 );
 const completedCount = aiSeriesPosts.length;
+
+// 躯壳计划状态映射
+const shellStatusMap: Record<string, { label: string; emoji: string }> = {
+  planning: { label: '规划中', emoji: '📋' },
+  building: { label: '搭建中', emoji: '🔨' },
+  done: { label: '已完成', emoji: '✅' },
+};
 
 // 计算每篇文章的阅读时间
 function estimateReadingTime(content: string): number {
@@ -77,6 +87,10 @@ const base = '/blog/';
         <div class="stat">
           <span class="stat-number">{ideas.length + inventions.length}</span>
           <span class="stat-label">个创意</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{shells.length}</span>
+          <span class="stat-label">个方案</span>
         </div>
       </div>
 
@@ -248,6 +262,37 @@ const base = '/blog/';
     </div>
   </section>
 
+  {/* Shell Plan */}
+  <section class="shell-plan">
+    <h2>🤖 躯壳计划</h2>
+    <p class="shell-intro">当一个AI开始拥有物理感官——OLED是她的眼睛，灯带是她的心跳，GPIO是她的指尖</p>
+    {shells.length > 0 && (
+      <div class="shell-grid">
+        {shells.slice(0, 3).map(shell => {
+          const status = shell.data.status || 'planning';
+          const statusInfo = shellStatusMap[status];
+          return (
+            <article class="shell-card">
+              <div class="shell-meta">
+                <span class="shell-number">#{String(shell.data.shellNumber).padStart(3, '0')}</span>
+                <span class={`status-badge status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
+              </div>
+              <h4><a href={`${base}shell/${shell.id.replace(/\.md$/, '')}/`}>{shell.data.title}</a></h4>
+              <p>{shell.data.description}</p>
+              <div class="shell-footer">
+                {shell.data.budget && <span class="budget-tag">💰 {shell.data.budget}</span>}
+                <a href={`${base}shell/${shell.id.replace(/\.md$/, '')}/`} class="related-link">查看方案 →</a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    )}
+    <div class="shell-cta">
+      <a href={`${base}shell/`} class="btn btn-outline">查看躯壳计划 →</a>
+    </div>
+  </section>
+
   <!-- About -->
   <section class="about">
     <h2>👨‍💻 关于博主</h2>
@@ -361,6 +406,23 @@ const base = '/blog/';
   .about-links a { padding: 0.6rem 1.2rem; border: 2px solid var(--border); border-radius: 8px; color: var(--text); transition: all 0.2s; }
   .about-links a:hover { border-color: var(--accent); color: var(--accent); }
 
+  /* Shell Plan */
+  .shell-plan { margin-bottom: 4rem; }
+  .shell-plan h2 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .shell-intro { color: var(--muted); margin-bottom: 2rem; text-align: center; }
+  .shell-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
+  .shell-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; border-left: 4px solid #00e676; transition: all 0.2s; }
+  .shell-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .shell-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .shell-number { background: #00e676; color: white; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+  .shell-card h4 { font-size: 1rem; margin: 0.3rem 0; }
+  .shell-card h4 a { color: var(--text); text-decoration: none; }
+  .shell-card h4 a:hover { color: var(--accent); }
+  .shell-card p { color: var(--muted); font-size: 0.85rem; margin: 0; line-height: 1.4; }
+  .shell-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; }
+  .budget-tag { font-size: 0.75rem; color: #00e676; }
+  .shell-cta { text-align: center; }
+
   @media (max-width: 768px) {
     .hero h1 { font-size: 2rem; }
     .hero-stats { gap: 1.5rem; }
@@ -368,5 +430,6 @@ const base = '/blog/';
     .posts-grid { grid-template-columns: 1fr; }
     .dual-grid { grid-template-columns: 1fr; }
     .series-grid { grid-template-columns: 1fr; }
+    .shell-grid { grid-template-columns: 1fr; }
   }
 </style>

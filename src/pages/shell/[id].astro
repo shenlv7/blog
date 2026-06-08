@@ -1,0 +1,241 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const shells = await getCollection('shell');
+  return shells.map(shell => ({
+    params: { id: shell.id.replace(/\.md$/, '') },
+    props: { shell },
+  }));
+}
+
+const { shell } = Astro.props;
+const { Content } = await render(shell);
+
+const statusMap: Record<string, { label: string; emoji: string }> = {
+  planning: { label: '规划中', emoji: '📋' },
+  building: { label: '搭建中', emoji: '🔨' },
+  done: { label: '已完成', emoji: '✅' },
+};
+
+const phaseColors: Record<string, string> = {
+  overview: '#00e676',
+  'phase-a': '#00e676',
+  'phase-b': '#58a6ff',
+  'phase-c': '#ffa657',
+  'phase-d': '#4fc3f7',
+  'phase-e': '#bc8cff',
+  'phase-f': '#ff7b9c',
+};
+
+const status = shell.data.status || 'planning';
+const statusInfo = statusMap[status];
+const color = phaseColors[shell.data.phase] || '#00e676';
+---
+
+<Base title={`${shell.data.title} — 躯壳计划`}>
+  <article class="shell-post">
+    <header class="post-header" style={`border-left: 4px solid ${color}`}>
+      <div class="post-meta">
+        <span class="shell-number" style={`background: ${color}`}>#{String(shell.data.shellNumber).padStart(3, '0')}</span>
+        <span class="shell-phase">{shell.data.phase.toUpperCase()}</span>
+        <span class={`status-badge status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
+        <time>{shell.data.pubDate.toLocaleDateString('zh-CN')}</time>
+      </div>
+      <h1>{shell.data.title}</h1>
+      <p class="post-desc">{shell.data.description}</p>
+      <div class="post-badges">
+        {shell.data.budget && <span class="budget-badge">💰 {shell.data.budget}</span>}
+      </div>
+      {shell.data.tags && shell.data.tags.length > 0 && (
+        <div class="post-tags">
+          {shell.data.tags.map(tag => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+    </header>
+
+    <div class="post-content">
+      <Content />
+    </div>
+
+    <footer class="post-footer">
+      <div class="navigation">
+        <a href="/blog/shell/" class="back-link">← 返回躯壳计划</a>
+        <a href="/blog/" class="home-link">首页</a>
+      </div>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .shell-post {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .post-header {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    padding-left: 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--card-bg);
+    border-radius: 0 12px 12px 0;
+  }
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .shell-number {
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .shell-phase {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .status-badge {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+  }
+  .status-planning { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+  .status-building { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+  .status-done { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+  .post-meta time {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-left: auto;
+  }
+  .post-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+  .post-desc {
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .post-badges {
+    margin-bottom: 1rem;
+  }
+  .budget-badge {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: rgba(0, 230, 118, 0.1);
+    color: #00e676;
+    font-weight: 600;
+  }
+  .post-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: var(--border);
+    color: var(--text);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+  }
+  .post-content {
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+  .post-content :global(h2) {
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem;
+    color: var(--text);
+  }
+  .post-content :global(h3) {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 0.8rem;
+    color: var(--text);
+  }
+  .post-content :global(p) {
+    margin-bottom: 1rem;
+  }
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+  .post-content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+  .post-content :global(code) {
+    background: var(--card-bg);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  .post-content :global(pre) {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+  }
+  .post-content :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+  .post-content :global(blockquote) {
+    border-left: 4px solid var(--accent);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .post-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+  }
+  .post-content :global(th),
+  .post-content :global(td) {
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  .post-content :global(th) {
+    background: var(--card-bg);
+    font-weight: 600;
+  }
+  .post-content :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+  .post-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .back-link,
+  .home-link {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .back-link:hover,
+  .home-link:hover {
+    text-decoration: underline;
+  }
+</style>
