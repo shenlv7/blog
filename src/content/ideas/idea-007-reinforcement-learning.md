@@ -1,9 +1,10 @@
 ---
 title: "灵感#007：强化学习——让AI自己学会玩游戏"
-ideaNumber: "007"
+description: "探索强化学习：让AI通过试错学习玩游戏和决策"
+ideaNumber: 007
 pubDate: 2026-06-18
 tags: ["强化学习", "AI游戏", "试错学习"]
-status: "published"
+status: "idea"
 relatedInvention: "007"
 ---
 

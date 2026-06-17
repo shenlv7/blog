@@ -1,10 +1,11 @@
 ---
 title: "文西的发明#007：用强化学习训练一个会玩CartPole的小AI"
-inventionNumber: "007"
+inventionNumber: 007
+description: "用纯NumPy实现Q-Learning算法，训练AI玩CartPole平衡游戏"
 ideaId: "007"
 pubDate: 2026-06-18
 tags: ["强化学习", "Q-Learning", "CartPole", "Python"]
-status: "published"
+status: "prototype"
 relatedIdea: "007"
 ---
 
