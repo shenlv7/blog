@@ -245,6 +245,118 @@ void loop() {
 - 供电稳定（USB 口直接供电）
 - 不占用 GPIO 引脚
 
+### WiFi + MQTT 方案
+
+无线方案更适合"远程控制"场景——比如人在公司，想看家里设备状态；或者多台设备互联。
+
+#### 架构
+
+```
+┌─────────────┐    WiFi     ┌─────────────┐
+│  ESP32-S3   │ ─────────→ │  MQTT Broker │
+│  (触屏)     │            │  (Mosquitto)│
+└─────────────┘            └──────┬──────┘
+                                  │
+┌─────────────┐    WiFi     ┌──────┴──────┐
+│  Orange Pi  │ ─────────→ │   Topic:    │
+│  (大脑)     │            │  /shell/*   │
+└─────────────┘            └─────────────┘
+```
+
+#### ESP32-S3 MQTT 代码
+
+```c
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+const char* ssid = "your-wifi";
+const char* password = "your-password";
+const char* mqtt_server = "192.168.1.100";  // Orange Pi IP
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void callback(char* topic, byte* payload, unsigned int length) {
+    String msg = String((char*)payload).substring(0, length);
+    
+    if (strcmp(topic, "/shell/status") == 0) {
+        // 解析 JSON，更新屏幕
+        update_display(msg);
+    } else if (strcmp(topic, "/shell/notify") == 0) {
+        // 显示通知
+        show_notification(msg);
+    }
+}
+
+void setup() {
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+    }
+    
+    client.setServer(mqtt_server, 1883);
+    client.setCallback(callback);
+    client.subscribe("/shell/status");
+    client.subscribe("/shell/notify");
+    client.subscribe("/shell/led");
+}
+
+void loop() {
+    if (!client.connected()) {
+        reconnect();
+    }
+    client.loop();
+    
+    // 发送触摸事件到 Orange Pi
+    if (touched) {
+        client.publish("/shell/touch", touch_data);
+    }
+}
+```
+
+#### Orange Pi 端 (Python)
+
+```python
+import paho.mqtt.client as mqtt
+import json
+
+def on_connect(client, userdata, flags, rc):
+    client.subscribe("/shell/touch")
+    client.subscribe("/shell/page")
+
+def on_message(client, userdata, msg):
+    if msg.topic == "/shell/touch":
+        handle_touch_event(json.loads(msg.payload))
+
+def publish_status(cpu, mem, temp):
+    data = json.dumps({'cpu': cpu, 'mem': mem, 'temp': temp})
+    client.publish("/shell/status", data)
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+client.connect("localhost", 1883, 60)
+client.loop_start()
+```
+
+#### MQTT Topic 设计
+
+| Topic | 方向 | 说明 |
+|-------|------|------|
+| `/shell/status` | Pi→ESP | 系统状态 JSON |
+| `/shell/notify` | Pi→ESP | 通知消息 |
+| `/shell/led` | Pi→ESP | 灯环颜色控制 |
+| `/shell/touch` | ESP→Pi | 触摸事件 |
+| `/shell/page` | ESP→Pi | 页面切换 |
+| `/shell/screenshot` | ESP→Pi | 截屏请求 |
+
+#### 无线方案优势
+
+- **远程控制** — 人在公司，MQTT 看家里设备状态
+- **多设备互联** — 多块屏幕订阅同一 topic，状态同步
+- **扩展方便** — 新增设备只需订阅 topic，无需改线
+- **手机集成** — 用 MQTT 手机 App 直接发命令
+
 ---
 
 ## 通信协议实现
