@@ -196,9 +196,60 @@ static void tab_click_cb(lv_event_t *e) {
 
 ---
 
-## UART 通信协议
+## 通信协议选择
 
-ESP32 和 Orange Pi 之间通过 UART 串口通信，波特率 115200。协议很简单：
+ESP32-S3 和 Orange Pi 之间有多种连接方式，各有优劣：
+
+| 协议 | 速度 | 接线 | 优点 | 缺点 |
+|------|------|------|------|------|
+| **UART** | 115200-921600 | 2线 | 简单可靠，调试方便 | 速度有限 |
+| **USB CDC** | 12Mbps | USB线 | 高速免驱，ESP32原生支持 | 需要USB口 |
+| **SPI** | 10-80MHz | 4线 | 极高刷新率 | 接线复杂 |
+| **I2C** | 100-400kHz | 2线 | 总线挂多设备 | 速度慢 |
+| **WiFi (MQTT)** | ~Mbps | 无线 | 远程控制，多设备互联 | 依赖网络 |
+| **BLE** | 2Mbps | 无线 | 低功耗，手机可直连 | 配对复杂 |
+
+### 推荐方案
+
+- **首选：USB CDC** — ESP32-S3 原生 USB，一根线搞定供电+数据，12Mbps 足够
+- **备选：UART** — 调试阶段方便，稳定可靠
+- **进阶：MQTT** — 想远程控制或多设备联动时用
+
+### USB CDC 优势
+
+ESP32-S3 内置 USB OTG，可以模拟成串口设备（CDC），Orange Pi 插上就能识别为 `/dev/ttyACM0`：
+
+```c
+// ESP32-S3 USB CDC 初始化
+#include "USB.h"
+#include "USB_CDC.h"
+
+USBCDC USBSerial;
+
+void setup() {
+    USB.begin();
+    USBSerial.begin(115200);
+}
+
+void loop() {
+    if (USBSerial.available()) {
+        String cmd = USBSerial.readString();
+        // 处理命令...
+    }
+}
+```
+
+好处是：
+- 免驱（Linux/macOS/Windows 自带）
+- 速度快（12Mbps Full Speed）
+- 供电稳定（USB 口直接供电）
+- 不占用 GPIO 引脚
+
+---
+
+## 通信协议实现
+
+以 **UART** 为例（USB CDC 代码基本一样，换个端口即可），波特率 115200。协议很简单：
 
 ```
 ┌──────┬──────┬────────┬──────┐
