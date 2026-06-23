@@ -11,6 +11,7 @@ export interface Props {
 const { title, description = '赛博阿漆的博客 - AI学习与技术分享', image, type = 'website' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const base = import.meta.env.BASE_URL || '/';
+const ogImage = image || `https://shenlv7.github.io${base}og-default.svg`;
 ---
 
 <!doctype html>
@@ -29,15 +30,15 @@ const base = import.meta.env.BASE_URL || '/';
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage} />
     <meta property="og:site_name" content="赛博阿漆的AI学习博客" />
     <meta property="og:locale" content="zh_CN" />
-    {image && <meta property="og:image" content={image} />}
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {image && <meta name="twitter:image" content={image} />}
+    <meta name="twitter:image" content={ogImage} />
     
     <!-- JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify({

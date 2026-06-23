@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e94560;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6b6b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="630" fill="url(#bg)" />
+  
+  <!-- Grid -->
+  <g opacity="0.05">
+    <line x1="0" y1="0" x2="1200" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="1200" y1="0" x2="0" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="0" y1="315" x2="1200" y2="315" stroke="white" stroke-width="0.5"/>
+  </g>
+  
+  <!-- Top accent bar -->
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)" />
+  
+  <!-- Left accent -->
+  <rect x="80" y="200" width="4" height="230" rx="2" fill="url(#accent)" />
+  
+  <!-- Badge -->
+  <rect x="100" y="200" width="160" height="36" rx="18" fill="none" stroke="#e94560" stroke-width="1.5"/>
+  <text x="180" y="224" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#e94560">赛博阿漆</text>
+  
+  <!-- Title -->
+  <text x="100" y="300" font-family="system-ui, sans-serif" font-size="52" font-weight="800" fill="white">AI学习之路</text>
+  
+  <!-- Subtitle -->
+  <text x="100" y="350" font-family="system-ui, sans-serif" font-size="22" fill="#8b949e">从零开始，系统学习人工智能</text>
+  
+  <!-- URL -->
+  <text x="100" y="530" font-family="system-ui, sans-serif" font-size="16" fill="#8b949e">shenlv7.github.io/blog</text>
+  
+  <!-- Tags -->
+  <rect x="100" y="555" width="60" height="28" rx="14" fill="rgba(233,69,96,0.15)"/>
+  <text x="130" y="574" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e94560">AI</text>
+  
+  <rect x="170" y="555" width="100" height="28" rx="14" fill="rgba(16,185,129,0.15)"/>
+  <text x="220" y="574" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#10b981">技术博客</text>
+</svg>
