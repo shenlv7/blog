@@ -26,6 +26,10 @@ const aiSeriesPosts = posts.filter(p =>
 );
 const completedCount = aiSeriesPosts.length;
 
+// AI核心概念系列
+const conceptPosts = posts.filter(p => p.data.series === 'ai-concepts');
+const publishedCount = conceptPosts.length;
+
 // 躯壳计划状态映射
 const shellStatusMap: Record<string, { label: string; emoji: string }> = {
   planning: { label: '规划中', emoji: '📋' },
@@ -164,36 +168,36 @@ const base = '/blog/';
   <section class="series">
     <h2>🎯 AI学习系列</h2>
     <div class="series-grid">
-      <div class="series-card">
-        <h3>🌱 基础篇</h3>
-        <p>机器学习核心概念、深度学习入门、神经网络架构、数据工程</p>
+      <a href={`${base}concepts/`} class="series-card">
+        <h3>🧠 AI核心概念（新）</h3>
+        <p>43个核心概念，每个配可运行代码Demo</p>
         <div class="series-progress">
           <div class="mini-bar">
-            <div class="mini-fill" style={`width: ${Math.min(100, (completedCount / 4) * 100)}%`}></div>
+            <div class="mini-fill" style={`width: ${Math.round((publishedCount / 43) * 100)}%`}></div>
           </div>
-          <span class="series-count">{Math.min(4, completedCount)}/4期</span>
+          <span class="series-count">{publishedCount}/43期</span>
         </div>
-      </div>
-      <div class="series-card">
-        <h3>🌿 中级篇</h3>
-        <p>NLP自然语言处理、计算机视觉、强化学习、生成对抗网络</p>
+      </a>
+      <a href={`${base}posts/`} class="series-card">
+        <h3>📚 AI学习系列</h3>
+        <p>机器学习、深度学习、NLP、计算机视觉全覆盖</p>
         <div class="series-progress">
           <div class="mini-bar">
-            <div class="mini-fill" style={`width: ${Math.min(100, Math.max(0, (completedCount - 4) / 4) * 100)}%`}></div>
+            <div class="mini-fill" style={`width: ${Math.min(100, (completedCount / 12) * 100)}%`}></div>
           </div>
-          <span class="series-count">{Math.min(4, Math.max(0, completedCount - 4))}/4期</span>
+          <span class="series-count">{completedCount}/12期</span>
         </div>
-      </div>
-      <div class="series-card">
-        <h3>🌳 进阶篇</h3>
-        <p>Transformer架构、大语言模型原理、微调与RLHF、多模态AI</p>
+      </a>
+      <a href={`${base}posts/`} class="series-card">
+        <h3>🔧 动手实践</h3>
+        <p>每篇文章都配有可运行的Python代码Demo</p>
         <div class="series-progress">
           <div class="mini-bar">
-            <div class="mini-fill" style={`width: ${Math.min(100, Math.max(0, (completedCount - 8) / 4) * 100)}%`}></div>
+            <div class="mini-fill" style="width: 100%"></div>
           </div>
-          <span class="series-count">{Math.min(4, Math.max(0, completedCount - 8))}/4期</span>
+          <span class="series-count">持续更新</span>
         </div>
-      </div>
+      </a>
     </div>
   </section>
 
@@ -392,7 +396,17 @@ const base = '/blog/';
   .series { margin-bottom: 4rem; }
   .series h2 { font-size: 2rem; margin-bottom: 2rem; }
   .series-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-  .series-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; text-align: center; transition: all 0.2s; }
+  .series-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: block;
+    color: var(--text);
+  }
   .series-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
   .series-card h3 { font-size: 1.3rem; margin-bottom: 0.8rem; }
   .series-card p { color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
