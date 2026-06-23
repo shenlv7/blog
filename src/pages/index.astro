@@ -150,6 +150,16 @@ const base = '/blog/';
     </div>
   </section>
 
+  <!-- AI Core Concepts -->
+  <section class="concepts-cta">
+    <div class="concepts-cta-content">
+      <span class="concepts-badge">🔬 新系列</span>
+      <h2>AI核心概念</h2>
+      <p>43个核心概念，每个配可运行代码Demo。不只是"是什么"，更要理解"怎么实现的"。</p>
+      <a href={`${base}concepts/`} class="btn btn-primary">探索概念 →</a>
+    </div>
+  </section>
+
   <!-- Series Overview -->
   <section class="series">
     <h2>🎯 AI学习系列</h2>
@@ -355,6 +365,28 @@ const base = '/blog/';
   .read-more { color: var(--accent); font-weight: 500; font-size: 0.95rem; }
   .read-more:hover { text-decoration: underline; }
   .view-all { text-align: center; }
+
+  /* Concepts CTA */
+  .concepts-cta {
+    margin-bottom: 3rem;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+    border: 2px solid rgba(99, 102, 241, 0.2);
+    border-radius: 16px;
+    text-align: center;
+  }
+  .concepts-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .concepts-cta h2 { font-size: 2rem; margin-bottom: 0.8rem; }
+  .concepts-cta p { color: var(--muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
 
   /* Series */
   .series { margin-bottom: 4rem; }
