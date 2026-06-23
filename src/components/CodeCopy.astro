@@ -1,0 +1,107 @@
+---
+// CodeCopy.astro - 代码块复制按钮（全局注入）
+---
+
+<script is:inline>
+  (function() {
+    function addCopyButtons() {
+      document.querySelectorAll('.post-content pre, article pre, main pre').forEach(pre => {
+        if (pre.querySelector('.code-copy-btn')) return;
+        
+        const btn = document.createElement('button');
+        btn.className = 'code-copy-btn';
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>复制</span>
+        `;
+        btn.setAttribute('aria-label', '复制代码');
+        
+        btn.addEventListener('click', async () => {
+          const code = pre.querySelector('code');
+          if (!code) return;
+          
+          try {
+            await navigator.clipboard.writeText(code.textContent || '');
+            btn.classList.add('copied');
+            btn.querySelector('span').textContent = '已复制!';
+            setTimeout(() => {
+              btn.classList.remove('copied');
+              btn.querySelector('span').textContent = '复制';
+            }, 2000);
+          } catch (err) {
+            // fallback
+            const textarea = document.createElement('textarea');
+            textarea.value = code.textContent || '';
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            btn.classList.add('copied');
+            btn.querySelector('span').textContent = '已复制!';
+            setTimeout(() => {
+              btn.classList.remove('copied');
+              btn.querySelector('span').textContent = '复制';
+            }, 2000);
+          }
+        });
+        
+        // make pre relative for positioning
+        pre.style.position = 'relative';
+        pre.appendChild(btn);
+      });
+    }
+    
+    // run on load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', addCopyButtons);
+    } else {
+      addCopyButtons();
+    }
+    
+    // run on Astro page transitions
+    document.addEventListener('astro:after-swap', addCopyButtons);
+    
+    // also observe for dynamic content
+    const observer = new MutationObserver(addCopyButtons);
+    observer.observe(document.body, { childList: true, subtree: true });
+  })();
+</script>
+
+<style is:global>
+  .code-copy-btn {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-family: inherit;
+    transition: all 0.2s;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+  }
+  .code-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .code-copy-btn.copied {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #10b981;
+  }
+  .code-copy-btn svg {
+    flex-shrink: 0;
+  }
+</style>

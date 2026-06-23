@@ -1,0 +1,135 @@
+---
+// PostNav.astro - 文章导航（上一篇/下一篇 + 系列进度）
+import { getCollection } from 'astro:content';
+
+interface Props {
+  currentSlug: string;
+  series?: string;
+  seriesOrder?: number;
+}
+
+const { currentSlug, series, seriesOrder } = Astro.props;
+const base = '/blog/';
+
+const allPosts = (await getCollection('posts')).sort(
+  (a, b) => (a.data.seriesOrder || 999) - (b.data.seriesOrder || 999)
+);
+
+// 系列内的上一篇/下一篇
+let prevPost = null;
+let nextPost = null;
+let seriesPosts: typeof allPosts = [];
+let seriesMeta: { name: string; total: number; current: number } | null = null;
+
+if (series && seriesOrder) {
+  seriesPosts = allPosts.filter(p => p.data.series === series);
+  const idx = seriesPosts.findIndex(p => p.id.replace(/\.md$/, '') === currentSlug);
+  
+  if (idx > 0) prevPost = seriesPosts[idx - 1];
+  if (idx < seriesPosts.length - 1) nextPost = seriesPosts[idx + 1];
+  
+  const seriesNames: Record<string, string> = {
+    'ai-concepts': 'AI核心概念',
+    'ai-learning-01': 'AI学习之路',
+  };
+  seriesMeta = {
+    name: seriesNames[series] || series,
+    total: series.length,
+    current: seriesOrder,
+  };
+} else {
+  // 非系列文章：按时间排序
+  const sorted = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  const idx = sorted.findIndex(p => p.id.replace(/\.md$/, '') === currentSlug);
+  if (idx > 0) prevPost = sorted[idx - 1];
+  if (idx < sorted.length - 1) nextPost = sorted[idx + 1];
+}
+---
+
+{(prevPost || nextPost || seriesMeta) && (
+  <nav class="post-nav-bar">
+    {seriesMeta && (
+      <div class="series-indicator">
+        <div class="series-info">
+          <span class="series-name">{seriesMeta.name}</span>
+          <span class="series-count">第 {seriesMeta.current} 期 / 共 {seriesMeta.total} 期</span>
+        </div>
+        <div class="series-progress-track">
+          <div class="series-progress-fill" style={`width: ${(seriesMeta.current / seriesMeta.total) * 100}%`}></div>
+        </div>
+      </div>
+    )}
+    
+    <div class="post-nav-links">
+      {prevPost ? (
+        <a href={`${base}posts/${prevPost.id.replace(/\.md$/, '')}/`} class="nav-link nav-prev">
+          <span class="nav-label">← 上一篇</span>
+          <span class="nav-title">{prevPost.data.title.replace(/^\d+\s*\|\s*/, '')}</span>
+        </a>
+      ) : <div />}
+      
+      {nextPost ? (
+        <a href={`${base}posts/${nextPost.id.replace(/\.md$/, '')}/`} class="nav-link nav-next">
+          <span class="nav-label">下一篇 →</span>
+          <span class="nav-title">{nextPost.data.title.replace(/^\d+\s*\|\s*/, '')}</span>
+        </a>
+      ) : <div />}
+    </div>
+  </nav>
+)}
+
+<style>
+  .post-nav-bar {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  
+  .series-indicator {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: color-mix(in srgb, var(--accent) 5%, var(--card-bg));
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, var(--border));
+    border-radius: 10px;
+  }
+  .series-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+  .series-name { font-weight: 600; font-size: 0.9rem; }
+  .series-count { font-size: 0.8rem; color: var(--accent); font-weight: 500; }
+  .series-progress-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .series-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+  
+  .post-nav-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .nav-link:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .nav-next { text-align: right; }
+  .nav-label { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+  .nav-title { font-size: 0.9rem; font-weight: 600; line-height: 1.3; }
+  
+  @media (max-width: 640px) {
+    .post-nav-links { grid-template-columns: 1fr; }
+    .nav-next { text-align: left; }
+  }
+</style>
