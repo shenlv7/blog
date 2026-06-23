@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import SearchBox from '../components/SearchBox.astro';
 import TagBadge from '../components/TagBadge.astro';
 import DifficultyBadge from '../components/DifficultyBadge.astro';
-import ReadingTime from '../components/ReadingTime.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('posts')).sort(
@@ -19,45 +18,38 @@ const shells = (await getCollection('shell')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
-// 统计AI学习系列进度（按标签判断）
+
 const aiSeriesPosts = posts.filter(p => 
   p.data.tags?.some(t => ['机器学习', '深度学习', '神经网络', 'AI基础', 'NLP', '计算机视觉', '强化学习', 'Transformer', 'LLM'].includes(t))
 );
 const completedCount = aiSeriesPosts.length;
-
-// AI核心概念系列
 const conceptPosts = posts.filter(p => p.data.series === 'ai-concepts');
 const publishedCount = conceptPosts.length;
 
-// 躯壳计划状态映射
 const shellStatusMap: Record<string, { label: string; emoji: string }> = {
   planning: { label: '规划中', emoji: '📋' },
   building: { label: '搭建中', emoji: '🔨' },
   done: { label: '已完成', emoji: '✅' },
 };
 
-// 计算每篇文章的阅读时间
 function estimateReadingTime(content: string): number {
   const chineseChars = (content.match(/[\u4e00-\u9fff]/g) || []).length;
   const englishWords = content.replace(/[\u4e00-\u9fff]/g, '').match(/\b\w+\b/g)?.length || 0;
   return Math.ceil(chineseChars / 450 + englishWords / 200);
 }
 
-// 难度映射
 const difficultyMap: Record<number, 'beginner' | 'intermediate' | 'advanced'> = {
   1: 'beginner', 2: 'beginner', 3: 'beginner', 4: 'beginner',
   5: 'intermediate', 6: 'intermediate', 7: 'intermediate', 8: 'intermediate',
   9: 'advanced', 10: 'advanced', 11: 'advanced', 12: 'advanced',
 };
 
-// 灵感状态映射
 const ideaStatusMap: Record<string, { label: string; emoji: string }> = {
   idea: { label: '灵感', emoji: '💭' },
   building: { label: '实现中', emoji: '🔨' },
   done: { label: '已实现', emoji: '✅' },
 };
 
-// 发明状态映射
 const inventionStatusMap: Record<string, { label: string; emoji: string }> = {
   prototype: { label: '原型', emoji: '🧪' },
   beta: { label: '测试版', emoji: '⚡' },
@@ -67,39 +59,43 @@ const base = '/blog/';
 ---
 
 <Base title="赛博阿漆的AI学习博客">
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="hero">
+    <div class="hero-bg"></div>
     <div class="hero-content">
-      <h1>🚀 AI学习之路</h1>
-      <p class="hero-subtitle">从零开始，系统学习人工智能与机器学习</p>
-      <p class="hero-desc">记录学习历程，分享技术见解，一起探索AI的无限可能</p>
+      <div class="hero-badge">🔫 Cyber A-Qi</div>
+      <h1 class="hero-title">
+        <span class="hero-line">在代码中理解AI</span>
+        <span class="hero-line accent">在实践中掌握原理</span>
+      </h1>
+      <p class="hero-desc">深度技术博客 · 每个概念配可运行Demo · 从 Prompt 到 Agent</p>
       
       <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-number">{posts.length}</span>
-          <span class="stat-label">篇文章</span>
+        <div class="stat-card">
+          <span class="stat-num">{posts.length}</span>
+          <span class="stat-label">技术文章</span>
         </div>
-        <div class="stat">
-          <span class="stat-number">{tags.length}</span>
-          <span class="stat-label">个标签</span>
+        <div class="stat-card">
+          <span class="stat-num">{publishedCount}</span>
+          <span class="stat-label">核心概念</span>
         </div>
-        <div class="stat">
-          <span class="stat-number">12</span>
-          <span class="stat-label">期系列</span>
+        <div class="stat-card">
+          <span class="stat-num">{tags.length}</span>
+          <span class="stat-label">技术标签</span>
         </div>
-        <div class="stat">
-          <span class="stat-number">{ideas.length + inventions.length}</span>
-          <span class="stat-label">个创意</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">{shells.length}</span>
-          <span class="stat-label">个方案</span>
+        <div class="stat-card">
+          <span class="stat-num">{shells.length}</span>
+          <span class="stat-label">硬件方案</span>
         </div>
       </div>
 
       <div class="hero-actions">
-        <a href={`${base}posts/`} class="btn btn-primary">开始阅读</a>
-        <a href={`${base}tags/`} class="btn btn-secondary">浏览标签</a>
+        <a href={`${base}concepts/`} class="btn btn-primary">
+          <span class="btn-icon">🔬</span> 探索核心概念
+        </a>
+        <a href={`${base}posts/`} class="btn btn-ghost">
+          <span class="btn-icon">📚</span> 全部文章
+        </a>
       </div>
     </div>
   </section>
@@ -107,371 +103,572 @@ const base = '/blog/';
   <!-- Search -->
   <SearchBox />
 
+  <!-- AI Core Concepts Highlight -->
+  <section class="section concepts-section">
+    <div class="section-header">
+      <div class="section-label">NEW SERIES</div>
+      <h2>AI核心概念</h2>
+      <p class="section-desc">43个核心概念，每个配可运行代码Demo。不只是"是什么"，更要理解"怎么实现的"。</p>
+    </div>
+    <div class="concepts-preview">
+      {conceptPosts.slice(0, 4).map(post => {
+        const slug = post.id.replace(/\.md$/, '');
+        const diff = post.data.difficulty || 'beginner';
+        return (
+          <a href={`${base}posts/${slug}/`} class="concept-preview-card">
+            <span class="preview-order">{String(post.data.seriesOrder).padStart(2, '0')}</span>
+            <h3>{post.data.title.replace(/^\d+\s*\|\s*/, '')}</h3>
+            <p>{post.data.description}</p>
+            <span class="preview-link">阅读 + Demo →</span>
+          </a>
+        );
+      })}
+    </div>
+    <div class="section-action">
+      <a href={`${base}concepts/`} class="btn btn-outline">查看全部 {publishedCount}/43 个概念 →</a>
+    </div>
+  </section>
+
   <!-- Latest Posts -->
-  <section class="featured">
-    <h2>📚 最新文章</h2>
+  <section class="section">
+    <div class="section-header">
+      <div class="section-label">LATEST</div>
+      <h2>最新文章</h2>
+    </div>
     <div class="posts-grid">
       {posts.slice(0, 6).map(post => {
         const slug = post.id.replace(/\.md$/, '');
         const seriesNum = post.data.seriesOrder;
         const difficulty = seriesNum ? difficultyMap[seriesNum] : undefined;
+        const readTime = estimateReadingTime(post.body || '');
         return (
           <article class="post-card">
-            {post.data.cover && (
-              <div class="post-cover">
-                <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+            <div class="post-card-top">
+              <time>{post.data.pubDate.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}</time>
+              {difficulty && <DifficultyBadge difficulty={difficulty} />}
+            </div>
+            <h3><a href={`${base}posts/${slug}/`}>{post.data.title}</a></h3>
+            <p class="post-desc">{post.data.description}</p>
+            <div class="post-card-bottom">
+              <div class="post-tags">
+                {post.data.tags?.slice(0, 2).map(tag => (
+                  <TagBadge tag={tag} size="sm" />
+                ))}
               </div>
-            )}
-            <div class="post-body">
-              <div class="post-meta">
-                <time>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
-                <div class="post-badges">
-                  {difficulty && <DifficultyBadge difficulty={difficulty} />}
-                </div>
-              </div>
-              <h3><a href={`${base}posts/${slug}/`}>{post.data.title}</a></h3>
-              <p class="post-desc">{post.data.description}</p>
-              <div class="post-footer">
-                <div class="post-tags">
-                  {post.data.tags?.slice(0, 3).map(tag => (
-                    <TagBadge tag={tag} size="sm" />
-                  ))}
-                </div>
-                <span class="read-time">📖 {estimateReadingTime(post.body || '')}分钟</span>
-              </div>
-              <a href={`${base}posts/${slug}/`} class="read-more">阅读全文 →</a>
+              <span class="read-time">{readTime} min</span>
             </div>
           </article>
         );
       })}
     </div>
-    <div class="view-all">
-      <a href={`${base}posts/`} class="btn btn-outline">查看所有文章</a>
+    <div class="section-action">
+      <a href={`${base}posts/`} class="btn btn-outline">查看所有文章 →</a>
     </div>
   </section>
 
-  <!-- AI Core Concepts -->
-  <section class="concepts-cta">
-    <div class="concepts-cta-content">
-      <span class="concepts-badge">🔬 新系列</span>
-      <h2>AI核心概念</h2>
-      <p>43个核心概念，每个配可运行代码Demo。不只是"是什么"，更要理解"怎么实现的"。</p>
-      <a href={`${base}concepts/`} class="btn btn-primary">探索概念 →</a>
+  <!-- Series -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-label">SERIES</div>
+      <h2>系列专题</h2>
     </div>
-  </section>
-
-  <!-- Series Overview -->
-  <section class="series">
-    <h2>🎯 AI学习系列</h2>
     <div class="series-grid">
-      <a href={`${base}concepts/`} class="series-card">
-        <h3>🧠 AI核心概念（新）</h3>
-        <p>43个核心概念，每个配可运行代码Demo</p>
-        <div class="series-progress">
-          <div class="mini-bar">
-            <div class="mini-fill" style={`width: ${Math.round((publishedCount / 43) * 100)}%`}></div>
+      <a href={`${base}concepts/`} class="series-card series-new">
+        <div class="series-icon">🧠</div>
+        <div class="series-info">
+          <h3>AI核心概念</h3>
+          <p>43个概念 · 每个配可运行Demo</p>
+          <div class="series-progress">
+            <div class="progress-track">
+              <div class="progress-fill" style={`width: ${Math.round((publishedCount / 43) * 100)}%`}></div>
+            </div>
+            <span>{publishedCount}/43</span>
           </div>
-          <span class="series-count">{publishedCount}/43期</span>
         </div>
       </a>
       <a href={`${base}posts/`} class="series-card">
-        <h3>📚 AI学习系列</h3>
-        <p>机器学习、深度学习、NLP、计算机视觉全覆盖</p>
-        <div class="series-progress">
-          <div class="mini-bar">
-            <div class="mini-fill" style={`width: ${Math.min(100, (completedCount / 12) * 100)}%`}></div>
+        <div class="series-icon">📚</div>
+        <div class="series-info">
+          <h3>AI学习之路</h3>
+          <p>机器学习 · 深度学习 · NLP · CV</p>
+          <div class="series-progress">
+            <div class="progress-track">
+              <div class="progress-fill" style={`width: ${Math.min(100, (completedCount / 12) * 100)}%`}></div>
+            </div>
+            <span>{completedCount}/12</span>
           </div>
-          <span class="series-count">{completedCount}/12期</span>
         </div>
       </a>
       <a href={`${base}posts/`} class="series-card">
-        <h3>🔧 动手实践</h3>
-        <p>每篇文章都配有可运行的Python代码Demo</p>
-        <div class="series-progress">
-          <div class="mini-bar">
-            <div class="mini-fill" style="width: 100%"></div>
+        <div class="series-icon">🔧</div>
+        <div class="series-info">
+          <h3>动手实践</h3>
+          <p>每篇文章都配有Python代码Demo</p>
+          <div class="series-progress">
+            <div class="progress-track">
+              <div class="progress-fill" style="width: 100%"></div>
+            </div>
+            <span>持续更新</span>
           </div>
-          <span class="series-count">持续更新</span>
         </div>
       </a>
     </div>
   </section>
 
   <!-- Ideas × Inventions -->
-  <section class="ideas-inventions">
-    <h2>💡 灵感 × 发明</h2>
+  <section class="section">
+    <div class="section-header">
+      <div class="section-label">CREATIVITY</div>
+      <h2>灵感 × 发明</h2>
+      <p class="section-desc">碳基点子王出想法，赛博文西来实现</p>
+    </div>
     <div class="dual-grid">
-      <div class="dual-section">
-        <h3>🧠 碳基点子王</h3>
-        <p class="section-desc">人类灵感突发时刻，不拘形式的创意记录</p>
-        <div class="items-list">
+      <div class="dual-panel">
+        <div class="panel-header">
+          <span class="panel-icon">🧠</span>
+          <div>
+            <h3>碳基点子王</h3>
+            <p class="panel-sub">人类灵感突发时刻</p>
+          </div>
+        </div>
+        <div class="panel-list">
           {ideas.length === 0 ? (
             <p class="empty-hint">灵感正在路上... 🚀</p>
           ) : (
             ideas.slice(0, 3).map(idea => {
               const status = idea.data.status || 'idea';
               const statusInfo = ideaStatusMap[status];
-              const relatedInvention = inventions.find(inv => inv.data.ideaId === String(idea.data.ideaNumber));
               return (
-                <article class="mini-card">
-                  <div class="mini-meta">
-                    <time>{idea.data.pubDate.toLocaleDateString('zh-CN')}</time>
-                    <span class={`status-badge status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
+                <a href={`${base}ideas/${idea.id.replace(/\.md$/, '')}/`} class="list-item">
+                  <div class="item-top">
+                    <time>{idea.data.pubDate.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}</time>
+                    <span class={`status-pill status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
                   </div>
-                  <h4><a href={`${base}ideas/${idea.id.replace(/\.md$/, '')}/`}>{idea.data.title}</a></h4>
-                  {idea.data.description && <p>{idea.data.description}</p>}
-                  {relatedInvention && (
-                    <a href={`${base}inventions/${relatedInvention.id.replace(/\.md$/, '')}/`} class="related-link">
-                      🔧 查看对应发明 →
-                    </a>
-                  )}
-                </article>
+                  <h4>{idea.data.title}</h4>
+                </a>
               );
             })
           )}
         </div>
-        <a href={`${base}ideas/`} class="btn btn-outline">查看所有灵感 →</a>
+        <a href={`${base}ideas/`} class="panel-link">查看全部灵感 →</a>
       </div>
 
-      <div class="dual-section">
-        <h3>🔧 文西的发明记录</h3>
-        <p class="section-desc">把点子变成现实，半技术半故事的奇妙旅程</p>
-        <div class="items-list">
+      <div class="dual-panel">
+        <div class="panel-header">
+          <span class="panel-icon">🔧</span>
+          <div>
+            <h3>文西的发明记录</h3>
+            <p class="panel-sub">把点子变成现实</p>
+          </div>
+        </div>
+        <div class="panel-list">
           {inventions.length === 0 ? (
             <p class="empty-hint">发明实验室筹备中... 🔬</p>
           ) : (
             inventions.slice(0, 3).map(inv => {
               const status = inv.data.status || 'prototype';
               const statusInfo = inventionStatusMap[status];
-              const relatedIdea = ideas.find(i => String(i.data.ideaNumber) === inv.data.ideaId);
               return (
-                <article class="mini-card">
-                  <div class="mini-meta">
-                    <time>{inv.data.pubDate.toLocaleDateString('zh-CN')}</time>
-                    <span class={`status-badge status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
+                <a href={`${base}inventions/${inv.id.replace(/\.md$/, '')}/`} class="list-item">
+                  <div class="item-top">
+                    <time>{inv.data.pubDate.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}</time>
+                    <span class={`status-pill status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
                   </div>
-                  <h4><a href={`${base}inventions/${inv.id.replace(/\.md$/, '')}/`}>{inv.data.title}</a></h4>
-                  {inv.data.description && <p>{inv.data.description}</p>}
-                  <div class="mini-links">
-                    {inv.data.ideaId && (
-                      <span class="link-badge">💡 点子 #{inv.data.ideaId}</span>
-                    )}
-                    {relatedIdea && (
-                      <a href={`${base}ideas/${relatedIdea.id.replace(/\.md$/, '')}/`} class="related-link">
-                        💭 回看灵感 →
-                      </a>
-                    )}
-                  </div>
-                </article>
+                  <h4>{inv.data.title}</h4>
+                </a>
               );
             })
           )}
         </div>
-        <a href={`${base}inventions/`} class="btn btn-outline">查看所有发明 →</a>
+        <a href={`${base}inventions/`} class="panel-link">查看全部发明 →</a>
       </div>
     </div>
   </section>
 
-  {/* Shell Plan */}
-  <section class="shell-plan">
-    <h2>🤖 躯壳计划</h2>
-    <p class="shell-intro">当一个AI开始拥有物理感官——OLED是她的眼睛，灯带是她的心跳，GPIO是她的指尖</p>
-    {shells.length > 0 && (
-      <div class="shell-grid">
-        {shells.slice(0, 3).map(shell => {
-          const status = shell.data.status || 'planning';
-          const statusInfo = shellStatusMap[status];
-          return (
-            <article class="shell-card">
-              <div class="shell-meta">
-                <span class="shell-number">#{String(shell.data.shellNumber).padStart(3, '0')}</span>
-                <span class={`status-badge status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
-              </div>
-              <h4><a href={`${base}shell/${shell.id.replace(/\.md$/, '')}/`}>{shell.data.title}</a></h4>
-              <p>{shell.data.description}</p>
-              <div class="shell-footer">
-                {shell.data.budget && <span class="budget-tag">💰 {shell.data.budget}</span>}
-                <a href={`${base}shell/${shell.id.replace(/\.md$/, '')}/`} class="related-link">查看方案 →</a>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-    )}
-    <div class="shell-cta">
+  <!-- Shell Plan -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-label">HARDWARE</div>
+      <h2>躯壳计划</h2>
+      <p class="section-desc">当一个AI开始拥有物理感官——OLED是她的眼睛，灯带是她的心跳</p>
+    </div>
+    <div class="shell-grid">
+      {shells.slice(0, 3).map(shell => {
+        const status = shell.data.status || 'planning';
+        const statusInfo = shellStatusMap[status];
+        return (
+          <a href={`${base}shell/${shell.id.replace(/\.md$/, '')}/`} class="shell-card">
+            <div class="shell-top">
+              <span class="shell-num">#{String(shell.data.shellNumber).padStart(3, '0')}</span>
+              <span class={`status-pill status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
+            </div>
+            <h4>{shell.data.title}</h4>
+            <p>{shell.data.description}</p>
+            {shell.data.budget && <span class="budget">💰 {shell.data.budget}</span>}
+          </a>
+        );
+      })}
+    </div>
+    <div class="section-action">
       <a href={`${base}shell/`} class="btn btn-outline">查看躯壳计划 →</a>
     </div>
   </section>
 
   <!-- About -->
-  <section class="about">
-    <h2>👨‍💻 关于博主</h2>
-    <div class="about-content">
-      <p>赛博阿漆，一个热爱AI技术的学习者。在这里记录我的学习历程，分享技术见解，希望能帮助到同样在AI路上探索的你。</p>
+  <section class="section about-section">
+    <div class="about-card">
+      <div class="about-avatar">🔫</div>
+      <h2>赛博阿漆</h2>
+      <p class="about-role">AI技术学习者 · 博客写作者 · 硬件爱好者</p>
+      <p class="about-desc">在这里记录学习历程，分享技术见解，希望能帮助到同样在AI路上探索的你。</p>
       <div class="about-links">
-        <a href="https://github.com/shenlv7" target="_blank" rel="noopener">GitHub</a>
-        <a href="mailto:2056440151@qq.com">邮箱联系</a>
-        <a href={`${base}rss.xml`} target="_blank" rel="noopener">RSS订阅</a>
+        <a href="https://github.com/shenlv7" target="_blank" rel="noopener" class="about-link">GitHub</a>
+        <a href="mailto:2056440151@qq.com" class="about-link">邮箱</a>
+        <a href={`${base}rss.xml`} target="_blank" rel="noopener" class="about-link">RSS</a>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  /* Hero */
+  /* ============ Hero ============ */
   .hero {
+    position: relative;
     text-align: center;
-    padding: 4rem 0;
-    background: linear-gradient(135deg, var(--card-bg), var(--border));
-    border-radius: 16px;
+    padding: 5rem 2rem 4rem;
     margin-bottom: 3rem;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
   }
-  .hero-content { max-width: 800px; margin: 0 auto; }
-  .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
-  .hero-subtitle { font-size: 1.3rem; color: var(--muted); margin-bottom: 0.5rem; }
-  .hero-desc { color: var(--muted); margin-bottom: 2rem; }
-  .hero-stats { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
-  .stat { text-align: center; }
-  .stat-number { display: block; font-size: 2rem; font-weight: 700; color: var(--accent); }
-  .stat-label { font-size: 0.9rem; color: var(--muted); }
-  .hero-actions { display: flex; gap: 1rem; justify-content: center; }
-  .btn { display: inline-block; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600; transition: all 0.2s; }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(233, 69, 96, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, rgba(99, 102, 241, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; max-width: 700px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+  .hero-title { font-size: 2.8rem; line-height: 1.2; margin-bottom: 1.2rem; }
+  .hero-line { display: block; }
+  .hero-line.accent { color: var(--accent); }
+  .hero-desc { color: var(--muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 2.5rem; }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    min-width: 100px;
+  }
+  .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--text); }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+
+  .hero-actions { display: flex; gap: 0.75rem; justify-content: center; }
+
+  /* ============ Buttons ============ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    border: 1.5px solid transparent;
+  }
+  .btn-icon { font-size: 1.1rem; }
   .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { background: var(--accent-light); transform: translateY(-2px); color: white; }
-  .btn-secondary { background: var(--card-bg); color: var(--text); border: 2px solid var(--border); }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-outline { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+  .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); color: white; }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-outline { background: transparent; color: var(--accent); border-color: var(--accent); }
   .btn-outline:hover { background: var(--accent); color: white; }
 
-  /* Posts Grid */
-  .featured { margin-bottom: 4rem; }
-  .featured h2 { font-size: 2rem; margin-bottom: 2rem; }
-  .posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-  .post-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.2s; }
-  .post-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-  .post-cover { width: 100%; height: 200px; overflow: hidden; }
-  .post-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-  .post-card:hover .post-cover img { transform: scale(1.05); }
-  .post-body { padding: 1.5rem; }
-  .post-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; font-size: 0.9rem; color: var(--muted); }
-  .post-badges { display: flex; gap: 0.5rem; align-items: center; }
-  .post-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
-  .post-card h3 a { color: var(--text); text-decoration: none; }
-  .post-card h3 a:hover { color: var(--accent); }
-  .post-desc { color: var(--muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .post-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
-  .post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .read-time { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
-  .read-more { color: var(--accent); font-weight: 500; font-size: 0.95rem; }
-  .read-more:hover { text-decoration: underline; }
-  .view-all { text-align: center; }
-
-  /* Concepts CTA */
-  .concepts-cta {
-    margin-bottom: 3rem;
-    padding: 2.5rem;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
-    border: 2px solid rgba(99, 102, 241, 0.2);
-    border-radius: 16px;
-    text-align: center;
-  }
-  .concepts-badge {
+  /* ============ Section ============ */
+  .section { margin-bottom: 4rem; }
+  .section-header { margin-bottom: 2rem; }
+  .section-label {
     display: inline-block;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
-    padding: 0.3rem 1rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
   }
-  .concepts-cta h2 { font-size: 2rem; margin-bottom: 0.8rem; }
-  .concepts-cta p { color: var(--muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .section-header h2 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  .section-desc { color: var(--muted); font-size: 0.95rem; }
+  .section-action { text-align: center; margin-top: 2rem; }
 
-  /* Series */
-  .series { margin-bottom: 4rem; }
-  .series h2 { font-size: 2rem; margin-bottom: 2rem; }
-  .series-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-  .series-card {
+  /* ============ Concepts Preview ============ */
+  .concepts-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+  }
+  .concepts-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .concept-preview-card {
+    display: block;
+    padding: 1.25rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .concept-preview-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+  .preview-order {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    margin-bottom: 0.6rem;
+  }
+  .concept-preview-card h3 { font-size: 1rem; margin-bottom: 0.4rem; line-height: 1.4; }
+  .concept-preview-card p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-bottom: 0.6rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .preview-link { font-size: 0.8rem; color: var(--accent); font-weight: 500; }
+
+  /* ============ Posts Grid ============ */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+  .post-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 2rem;
-    text-align: center;
+    padding: 1.5rem;
     transition: all 0.2s;
-    text-decoration: none;
-    display: block;
-    color: var(--text);
+    display: flex;
+    flex-direction: column;
   }
-  .series-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-  .series-card h3 { font-size: 1.3rem; margin-bottom: 0.8rem; }
-  .series-card p { color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
-  .series-progress { display: flex; align-items: center; gap: 0.75rem; justify-content: center; }
-  .mini-bar { flex: 1; max-width: 150px; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-  .mini-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 4px; transition: width 1s ease-out; }
-  .series-count { font-size: 0.9rem; color: var(--accent); font-weight: 600; }
+  .post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  }
+  .post-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+  .post-card-top time { font-size: 0.8rem; color: var(--muted); }
+  .post-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; line-height: 1.4; }
+  .post-card h3 a { color: var(--text); text-decoration: none; }
+  .post-card h3 a:hover { color: var(--accent); }
+  .post-desc {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .post-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .post-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .read-time { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
 
-  /* Ideas × Inventions */
-  .ideas-inventions { margin-bottom: 4rem; }
-  .ideas-inventions h2 { font-size: 2rem; margin-bottom: 2rem; text-align: center; }
-  .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-  .dual-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; }
-  .dual-section h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-  .section-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-  .items-list { min-height: 120px; margin-bottom: 1rem; }
-  .mini-card { padding: 1rem 0; border-bottom: 1px solid var(--border); }
-  .mini-card:last-child { border-bottom: none; }
-  .mini-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
-  .mini-card time { font-size: 0.8rem; color: var(--muted); }
-  .status-badge { font-size: 0.75rem; padding: 0.15rem 0.5rem; border-radius: 20px; }
+  /* ============ Series ============ */
+  .series-grid { display: flex; flex-direction: column; gap: 1rem; }
+  .series-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .series-card:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+  .series-new { border-left: 3px solid var(--accent); }
+  .series-icon { font-size: 2rem; flex-shrink: 0; }
+  .series-info { flex: 1; }
+  .series-info h3 { font-size: 1.1rem; margin-bottom: 0.2rem; }
+  .series-info p { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .series-progress { display: flex; align-items: center; gap: 0.75rem; }
+  .progress-track { flex: 1; max-width: 200px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+  .series-progress span { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+
+  /* ============ Dual Panel ============ */
+  .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .dual-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+  }
+  .panel-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .panel-icon { font-size: 1.8rem; }
+  .panel-header h3 { font-size: 1.1rem; margin-bottom: 0.1rem; }
+  .panel-sub { font-size: 0.8rem; color: var(--muted); }
+  .panel-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; min-height: 160px; }
+  .list-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.15s;
+  }
+  .list-item:hover { border-color: var(--accent); }
+  .item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
+  .item-top time { font-size: 0.75rem; color: var(--muted); }
+  .list-item h4 { font-size: 0.9rem; line-height: 1.3; }
+  .panel-link { font-size: 0.85rem; color: var(--accent); font-weight: 500; }
+  .panel-link:hover { text-decoration: underline; }
+
+  .status-pill {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 100px;
+    font-weight: 500;
+  }
   .status-idea { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
   .status-building { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
   .status-done { background: rgba(16, 185, 129, 0.1); color: #10b981; }
   .status-prototype { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
   .status-beta { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
   .status-released { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-  .mini-card h4 { font-size: 1rem; margin: 0.3rem 0; }
-  .mini-card h4 a { color: var(--text); text-decoration: none; }
-  .mini-card h4 a:hover { color: var(--accent); }
-  .mini-card p { color: var(--muted); font-size: 0.85rem; margin: 0; }
-  .mini-links { display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; }
-  .link-badge { display: inline-block; background: var(--accent); color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
-  .related-link { font-size: 0.8rem; color: var(--accent); }
-  .related-link:hover { text-decoration: underline; }
-  .empty-hint { color: var(--muted); font-style: italic; text-align: center; padding: 2rem 0; }
+  .status-planning { background: rgba(107, 114, 128, 0.1); color: #6b7280; }
 
-  /* About */
-  .about { text-align: center; padding: 3rem; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); }
-  .about h2 { font-size: 2rem; margin-bottom: 1.5rem; }
-  .about-content p { color: var(--muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem; }
-  .about-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-  .about-links a { padding: 0.6rem 1.2rem; border: 2px solid var(--border); border-radius: 8px; color: var(--text); transition: all 0.2s; }
-  .about-links a:hover { border-color: var(--accent); color: var(--accent); }
+  .empty-hint { color: var(--muted); font-style: italic; text-align: center; padding: 2rem 0; font-size: 0.9rem; }
 
-  /* Shell Plan */
-  .shell-plan { margin-bottom: 4rem; }
-  .shell-plan h2 { font-size: 2rem; margin-bottom: 0.5rem; }
-  .shell-intro { color: var(--muted); margin-bottom: 2rem; text-align: center; }
-  .shell-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
-  .shell-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; border-left: 4px solid #00e676; transition: all 0.2s; }
-  .shell-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-  .shell-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-  .shell-number { background: #00e676; color: white; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
-  .shell-card h4 { font-size: 1rem; margin: 0.3rem 0; }
-  .shell-card h4 a { color: var(--text); text-decoration: none; }
-  .shell-card h4 a:hover { color: var(--accent); }
-  .shell-card p { color: var(--muted); font-size: 0.85rem; margin: 0; line-height: 1.4; }
-  .shell-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; }
-  .budget-tag { font-size: 0.75rem; color: #00e676; }
-  .shell-cta { text-align: center; }
+  /* ============ Shell ============ */
+  .shell-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+  .shell-card {
+    display: block;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    border-left: 3px solid #10b981;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .shell-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+  .shell-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
+  .shell-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+  }
+  .shell-card h4 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .shell-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.4; margin-bottom: 0.5rem; }
+  .budget { font-size: 0.75rem; color: #10b981; }
 
+  /* ============ About ============ */
+  .about-section { text-align: center; }
+  .about-card {
+    display: inline-block;
+    padding: 3rem 4rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+  .about-avatar {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  .about-card h2 { font-size: 1.6rem; margin-bottom: 0.3rem; }
+  .about-role { font-size: 0.85rem; color: var(--accent); margin-bottom: 1rem; }
+  .about-desc { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; max-width: 400px; margin-left: auto; margin-right: auto; }
+  .about-links { display: flex; gap: 0.75rem; justify-content: center; }
+  .about-link {
+    padding: 0.5rem 1.25rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .about-link:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ============ Responsive ============ */
   @media (max-width: 768px) {
-    .hero h1 { font-size: 2rem; }
-    .hero-stats { gap: 1.5rem; }
+    .hero { padding: 3rem 1.5rem 2.5rem; }
+    .hero-title { font-size: 2rem; }
+    .hero-stats { gap: 0.5rem; }
+    .stat-card { padding: 0.75rem 1rem; min-width: 80px; }
+    .stat-num { font-size: 1.3rem; }
     .hero-actions { flex-direction: column; align-items: center; }
+    .concepts-section { padding: 1.5rem; }
+    .concepts-preview { grid-template-columns: 1fr; }
     .posts-grid { grid-template-columns: 1fr; }
     .dual-grid { grid-template-columns: 1fr; }
-    .series-grid { grid-template-columns: 1fr; }
     .shell-grid { grid-template-columns: 1fr; }
+    .about-card { padding: 2rem 1.5rem; }
   }
 </style>
