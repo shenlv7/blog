@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import SearchBox from '../components/SearchBox.astro';
-import ProgressBar from '../components/ProgressBar.astro';
 import TagBadge from '../components/TagBadge.astro';
 import DifficultyBadge from '../components/DifficultyBadge.astro';
 import ReadingTime from '../components/ReadingTime.astro';
@@ -109,8 +108,6 @@ const base = '/blog/';
   <SearchBox />
 
   <!-- Progress Bar -->
-  <ProgressBar current={completedCount} total={12} />
-
   <!-- Latest Posts -->
   <section class="featured">
     <h2>📚 最新文章</h2>
