@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from '../components/ThemeToggle.astro';
+import MobileMenu from '../components/MobileMenu.astro';
 
 export interface Props {
   title: string;
@@ -106,6 +107,7 @@ const ogImage = image || `https://shenlv7.github.io${base}og-default.svg`;
         </div>
         <div class="nav-actions">
           <ThemeToggle />
+          <MobileMenu />
         </div>
       </nav>
     </header>
