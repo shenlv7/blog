@@ -1,10 +1,11 @@
 ---
 title: "大语言模型(LLM)实战笔记"
-inventionNumber: "009"
+inventionNumber: 9
+description: "大语言模型(LLM)实战笔记 - 从理论到代码的完整指南"
 ideaId: "009"
 pubDate: 2026-06-24
 tags: ["AI学习", "LLM", "大语言模型", "实战"]
-status: "published"
+status: "released"
 ---
 
 # 🔧 发明 009：大语言模型(LLM)实战笔记

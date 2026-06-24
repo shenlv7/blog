@@ -1,9 +1,9 @@
 ---
 title: "AI学习系列第9期：大语言模型(LLM)"
-ideaNumber: "009"
+ideaNumber: 9
 pubDate: 2026-06-24
 tags: ["AI学习", "LLM", "大语言模型"]
-status: "published"
+status: "building"
 ---
 
 # 💡 灵感 009：大语言模型(LLM)——语言的炼金术
