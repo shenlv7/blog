@@ -11,6 +11,7 @@ const posts = defineCollection({
     difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
     series: z.string().optional(),
     seriesOrder: z.number().optional(),
+    episode: z.number().optional(),
   }),
 });
 
