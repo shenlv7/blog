@@ -19,9 +19,7 @@ const shells = (await getCollection('shell')).sort(
 );
 const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
 
-const aiSeriesPosts = posts.filter(p => 
-  p.data.tags?.some(t => ['机器学习', '深度学习', '神经网络', 'AI基础', 'NLP', '计算机视觉', '强化学习', 'Transformer', 'LLM'].includes(t))
-);
+const aiSeriesPosts = posts.filter(p => p.data.series === 'AI学习之路');
 const completedCount = aiSeriesPosts.length;
 const conceptPosts = posts.filter(p => p.data.series === 'ai-concepts');
 const publishedCount = conceptPosts.length;
