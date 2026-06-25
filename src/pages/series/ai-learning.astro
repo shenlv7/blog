@@ -1,0 +1,227 @@
+---
+import Base from '../../layouts/Base.astro';
+import TagBadge from '../../components/TagBadge.astro';
+import DifficultyBadge from '../../components/DifficultyBadge.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+const base = '/blog/';
+
+const seriesPosts = allPosts
+  .filter(p => p.data.series === 'AI学习之路')
+  .sort((a, b) => (a.data.episode || 0) - (b.data.episode || 0));
+
+const difficultyMap: Record<number, 'beginner' | 'intermediate' | 'advanced'> = {
+  1: 'beginner', 2: 'beginner', 3: 'beginner', 4: 'beginner',
+  5: 'intermediate', 6: 'intermediate', 7: 'intermediate', 8: 'intermediate',
+  9: 'advanced', 10: 'advanced', 11: 'advanced', 12: 'advanced',
+};
+
+function estimateReadingTime(content: string): number {
+  const chineseChars = (content.match(/[\u4e00-\u9fff]/g) || []).length;
+  const englishWords = content.replace(/[\u4e00-\u9fff]/g, '').match(/\b\w+\b/g)?.length || 0;
+  return Math.ceil(chineseChars / 450 + englishWords / 200);
+}
+---
+
+<Base title="AI学习之路 - 从零到一的AI进阶之旅">
+  <div class="series-page">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge">📚 12期系统学习</div>
+      <h1>AI学习之路</h1>
+      <p class="hero-desc">从机器学习基础到大语言模型，从模型训练到生产部署，12期带你建立完整的AI技术栈。</p>
+      <div class="hero-progress">
+        <div class="progress-track">
+          <div class="progress-fill" style="width: 100%"></div>
+        </div>
+        <span class="progress-text">✅ 已完结 · {seriesPosts.length}/12 期</span>
+      </div>
+      <div class="hero-nav">
+        <a href={`${base}`} class="btn btn-ghost">← 返回首页</a>
+        <a href="#episodes" class="btn btn-primary">查看目录 ↓</a>
+      </div>
+    </section>
+
+    <!-- 路线图 -->
+    <section class="roadmap" id="episodes">
+      <h2>📖 学习路线</h2>
+      <div class="roadmap-phases">
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-badge phase-basic">🟢 基础篇</span>
+            <span class="phase-range">第 1-4 期</span>
+          </div>
+          <p class="phase-desc">理解AI的最小知识集</p>
+        </div>
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-badge phase-intermediate">🟡 中级篇</span>
+            <span class="phase-range">第 5-8 期</span>
+          </div>
+          <p class="phase-desc">掌握核心AI技术</p>
+        </div>
+        <div class="phase">
+          <div class="phase-header">
+            <span class="phase-badge phase-advanced">🔴 进阶篇</span>
+            <span class="phase-range">第 9-12 期</span>
+          </div>
+          <p class="phase-desc">前沿技术与工程实践</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 文章列表 -->
+    <section class="episodes-list">
+      {seriesPosts.map(post => {
+        const slug = post.id.replace(/\.md$/, '');
+        const ep = post.data.episode || 0;
+        const difficulty = difficultyMap[ep];
+        const readTime = estimateReadingTime(post.body || '');
+        const phaseLabel = ep <= 4 ? '基础' : ep <= 8 ? '中级' : '进阶';
+        const phaseColor = ep <= 4 ? '#10b981' : ep <= 8 ? '#f59e0b' : '#ef4444';
+
+        return (
+          <article class="episode-card" style={`border-left: 3px solid ${phaseColor}`}>
+            <div class="episode-left">
+              <span class="episode-num" style={`background: ${phaseColor}`}>{String(ep).padStart(2, '0')}</span>
+              <span class="episode-phase" style={`color: ${phaseColor}`}>{phaseLabel}</span>
+            </div>
+            <div class="episode-content">
+              <div class="episode-top">
+                <time>{post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+                {difficulty && <DifficultyBadge difficulty={difficulty} />}
+              </div>
+              <h2><a href={`${base}posts/${slug}/`}>{post.data.title}</a></h2>
+              <p class="episode-desc">{post.data.description}</p>
+              <div class="episode-meta">
+                <div class="episode-tags">
+                  {post.data.tags?.slice(0, 3).map(tag => (
+                    <TagBadge tag={tag} size="sm" />
+                  ))}
+                </div>
+                <span class="read-time">📖 {readTime}分钟</span>
+              </div>
+            </div>
+            <a href={`${base}posts/${slug}/`} class="episode-link">阅读 →</a>
+          </article>
+        );
+      })}
+    </section>
+
+    <!-- 完成提示 -->
+    <section class="complete-banner">
+      <div class="banner-icon">🎉</div>
+      <h3>系列完结</h3>
+      <p>恭喜你读完全部12期！接下来选一个方向深入，动手做项目，在实践中成长。</p>
+      <a href={`${base}posts/`} class="btn btn-outline">探索更多文章 →</a>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .series-page { max-width: 900px; margin: 0 auto; }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, var(--card-bg), var(--border));
+    border-radius: 16px;
+    margin-bottom: 3rem;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .hero h1 { font-size: 2.5rem; margin-bottom: 0.8rem; }
+  .hero-desc { color: var(--muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .hero-progress { max-width: 400px; margin: 0 auto 2rem; }
+  .progress-track { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; margin-bottom: 0.5rem; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); border-radius: 5px; }
+  .progress-text { font-size: 0.9rem; color: var(--accent); font-weight: 600; }
+  .hero-nav { display: flex; gap: 0.75rem; justify-content: center; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem;
+    transition: all 0.2s; border: 1.5px solid transparent;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: var(--accent-light); color: white; }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-outline { background: transparent; color: var(--accent); border-color: var(--accent); }
+  .btn-outline:hover { background: var(--accent); color: white; }
+
+  /* Roadmap */
+  .roadmap { margin-bottom: 3rem; }
+  .roadmap h2 { font-size: 1.6rem; margin-bottom: 1.5rem; }
+  .roadmap-phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .phase {
+    padding: 1.25rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  }
+  .phase-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .phase-badge {
+    padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+  }
+  .phase-basic { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+  .phase-intermediate { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+  .phase-advanced { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+  .phase-range { font-size: 0.75rem; color: var(--muted); }
+  .phase-desc { color: var(--muted); font-size: 0.85rem; }
+
+  /* Episodes */
+  .episodes-list { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 3rem; }
+  .episode-card {
+    display: flex; align-items: center; gap: 1.5rem;
+    padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+    transition: all 0.2s;
+  }
+  .episode-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .episode-left { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; min-width: 50px; }
+  .episode-num {
+    width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 0.85rem;
+  }
+  .episode-phase { font-size: 0.7rem; font-weight: 600; }
+  .episode-content { flex: 1; min-width: 0; }
+  .episode-top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem; }
+  .episode-top time { font-size: 0.8rem; color: var(--muted); }
+  .episode-content h2 { font-size: 1.2rem; margin-bottom: 0.4rem; }
+  .episode-content h2 a { color: var(--text); text-decoration: none; }
+  .episode-content h2 a:hover { color: var(--accent); }
+  .episode-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 0.6rem; }
+  .episode-meta { display: flex; justify-content: space-between; align-items: center; }
+  .episode-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+  .read-time { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+  .episode-link {
+    color: var(--accent); font-weight: 600; font-size: 0.9rem; white-space: nowrap;
+    padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.2s;
+  }
+  .episode-link:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+  /* Complete banner */
+  .complete-banner {
+    text-align: center; padding: 3rem 2rem; background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 16px; border-top: 3px solid var(--accent);
+  }
+  .banner-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .complete-banner h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .complete-banner p { color: var(--muted); margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 2rem; }
+    .roadmap-phases { grid-template-columns: 1fr; }
+    .episode-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .episode-left { flex-direction: row; gap: 0.75rem; }
+    .episode-link { align-self: flex-end; }
+  }
+</style>
