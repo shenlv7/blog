@@ -2,6 +2,8 @@
 title: "AI学习之路(第4期)：数据预处理与特征工程"
 description: "模型再牛，数据不行也白搭。从清洗、转换到特征构建，掌握让模型'吃好饭'的核心技能"
 pubDate: 2026-06-03
+series: "AI学习之路"
+episode: 4
 tags: ["数据预处理", "特征工程", "Pandas", "Scikit-learn", "数据清洗", "AI基础"]
 ---
 

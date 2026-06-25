@@ -2,6 +2,8 @@
 title: "AI学习之路(第2期)：深度学习入门"
 description: "从感知机到深度神经网络，理解深度学习的核心原理，用PyTorch实战手写数字识别"
 pubDate: 2026-05-30
+series: "AI学习之路"
+episode: 2
 tags: ["深度学习", "PyTorch", "神经网络", "AI基础"]
 ---
 

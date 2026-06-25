@@ -2,6 +2,8 @@
 title: "AI学习之路(第1期)：机器学习核心概念"
 description: "从零开始理解机器学习的三大范式：监督学习、无监督学习和强化学习，附Python代码示例"
 pubDate: 2026-05-29
+series: "AI学习之路"
+episode: 1
 tags: ["机器学习", "Python", "AI基础"]
 ---
 

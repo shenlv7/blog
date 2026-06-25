@@ -2,6 +2,8 @@
 title: "AI学习之路(第3期)：神经网络架构"
 description: "从全连接到卷积、循环、注意力，一文看懂主流神经网络架构的设计哲学与适用场景"
 pubDate: 2026-06-02
+series: "AI学习之路"
+episode: 3
 tags: ["神经网络", "CNN", "RNN", "LSTM", "架构设计", "AI基础"]
 ---
 
