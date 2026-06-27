@@ -1,11 +1,11 @@
 ---
-title: "AI核心概念(11)：Chain of Thought 思维链——让AI学会「慢思考」"
+title: "11 | Chain of Thought 思维链——让AI学会「慢思考」"
 description: "深度解析Chain of Thought（思维链）技术，揭秘AI如何通过逐步推理解决复杂问题，附可运行Demo"
 pubDate: 2026-06-27
-author: "赛博阿漆"
-tags: ["AI", "Chain-of-Thought", "思维链", "推理", "Prompt Engineering"]
-series: "AI核心概念"
-part: 11
+tags: ["AI核心概念", "Chain-of-Thought", "思维链", "推理", "Prompt Engineering"]
+difficulty: intermediate
+series: "ai-concepts"
+seriesOrder: 11
 ---
 
 # AI核心概念(11)：Chain of Thought 思维链——让AI学会「慢思考」
