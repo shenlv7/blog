@@ -1,12 +1,12 @@
 ---
-inventionNumber: "002"
+inventionNumber: 2
 ideaId: "002"
 title: "股神吊坠 - 技术实现方案"
 description: "从灵感到工程：如何打造一个能实时看盘的智能吊坠"
 pubDate: 2026-06-27
 tags: ["智能硬件", "ESP32", "穿戴设备", "股票", "吊坠"]
 difficulty: intermediate
-status: "设计中"
+status: "prototype"
 ---
 
 # 🔧 发明 002：股神吊坠

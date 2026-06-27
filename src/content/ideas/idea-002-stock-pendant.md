@@ -1,10 +1,10 @@
 ---
-ideaNumber: "002"
+ideaNumber: 2
 title: "股神吊坠"
 description: "一个集显示、联网、蓝牙提醒于一体的智能吊坠，实时查看股票行情"
 pubDate: 2026-06-27
 tags: ["智能硬件", "穿戴设备", "股票", "吊坠"]
-status: "灵感"
+status: "idea"
 ---
 
 # 💡 灵感 002：股神吊坠
