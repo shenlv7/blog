@@ -1,6 +1,6 @@
 ---
-title: "贾维斯智能助理技术实现方案——香橙派5+ESP32语音对话系统"
-description: "用香橙派5+ESP32打造钢铁侠同款贾维斯语音助理"
+title: "文西专属管家智能系统技术实现方案——香橙派5+ESP32语音对话系统"
+description: "用香橙派5+ESP32打造文西专属管家智能语音助理"
 pubDate: 2026-07-01
 inventionNumber: 003
 ideaId: "003"
