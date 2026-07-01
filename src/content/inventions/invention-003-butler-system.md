@@ -8,9 +8,9 @@ tags: ["AI", "IoT", "语音交互", "ESP32", "香橙派", "OpenClaw"]
 status: prototype
 ---
 
-# 🔧 文西管家智能助理技术实现方案
+# 🔧 文西专属管家智能系统技术实现方案
 
-> 从灵感到代码，把文西管家从电影里拽出来。
+> 碳基点子王出了个点子，赛博文西说：能做。
 
 ## 一、系统架构总览
 
@@ -59,7 +59,7 @@ status: prototype
 | 电源 | 5V/3A USB-C | ¥20 | 香橙派供电 |
 | 外壳 | 3D打印/现成壳 | ¥30 | 可选，看审美 |
 
-**总成本：约 ¥600**（比钢铁侠便宜几亿）
+**总成本：约 ¥600** — 没有预算也能搞发明。
 
 ## 三、ESP32 固件实现
 
@@ -168,36 +168,29 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
     switch (type) {
         case WStype_CONNECTED:
             Serial.println("[WebSocket] 已连接到香橙派");
-            // 发送注册消息
             webSocket.sendTXT("{\"type\":\"register\",\"device\":\"esp32-butler\"}");
             break;
 
         case WStype_TEXT: {
-            // 收到文本消息（AI回复或控制指令）
             StaticJsonDocument<512> doc;
             deserializeJson(doc, payload);
-            
             String msgType = doc["type"].as<String>();
-            
+
             if (msgType == "tts_start") {
-                // TTS音频即将开始
                 isSpeaking = true;
                 Serial.println("[TTS] 开始播放");
             }
             else if (msgType == "tts_end") {
-                // TTS播放结束
                 isSpeaking = false;
                 Serial.println("[TTS] 播放结束");
             }
             else if (msgType == "text") {
-                // 显示AI回复文本（调试用）
                 Serial.printf("[AI] %s\n", doc["content"].as<String>().c_str());
             }
             break;
         }
 
         case WStype_BIN: {
-            // 收到音频数据（TTS输出）
             if (isSpeaking) {
                 size_t bytes_written;
                 i2s_write(I2S_NUM_1, payload, length, &bytes_written, portMAX_DELAY);
@@ -218,8 +211,6 @@ bool detectVoice(int16_t* buffer, size_t samples) {
         energy += abs(buffer[i]);
     }
     energy /= samples;
-    
-    // 阈值需要根据环境调整
     return energy > 500;
 }
 
@@ -227,25 +218,18 @@ bool detectVoice(int16_t* buffer, size_t samples) {
 void recordAndSend() {
     int16_t buffer[BUFFER_SIZE];
     size_t bytes_read;
-    
-    // 读取麦克风数据
     i2s_read(I2S_NUM_0, buffer, sizeof(buffer), &bytes_read, portMAX_DELAY);
-    
-    // 检测是否有语音
+
     if (detectVoice(buffer, BUFFER_SIZE)) {
         if (!isRecording) {
             isRecording = true;
-            // 通知服务端开始录音
             webSocket.sendTXT("{\"type\":\"record_start\"}");
             Serial.println("[录音] 检测到语音，开始录音");
         }
-        
-        // 发送音频数据
         webSocket.sendBIN((uint8_t*)buffer, bytes_read);
     } else {
         if (isRecording) {
             isRecording = false;
-            // 通知服务端录音结束
             webSocket.sendTXT("{\"type\":\"record_end\"}");
             Serial.println("[录音] 语音结束");
         }
@@ -254,20 +238,16 @@ void recordAndSend() {
 
 void setup() {
     Serial.begin(115200);
-    
-    // 连接WiFi
     WiFi.begin(WIFI_SSID, WIFI_PASS);
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
     }
     Serial.printf("\nWiFi已连接: %s\n", WiFi.localIP().toString().c_str());
-    
-    // 初始化音频
+
     setupMicrophone();
     setupSpeaker();
-    
-    // 连接WebSocket服务器
+
     webSocket.begin(SERVER_IP, SERVER_PORT, "/ws");
     webSocket.onEvent(webSocketEvent);
     webSocket.setReconnectInterval(5000);
@@ -275,7 +255,6 @@ void setup() {
 
 void loop() {
     webSocket.loop();
-    
     if (!isSpeaking) {
         recordAndSend();
     }
@@ -292,14 +271,13 @@ void loop() {
 
 void loop() {
     webSocket.loop();
-    
+
     if (digitalRead(BUTTON_PIN) == LOW) {
-        // 按住录音
         int16_t buffer[BUFFER_SIZE];
         size_t bytes_read;
         i2s_read(I2S_NUM_0, buffer, sizeof(buffer), &bytes_read, portMAX_DELAY);
         webSocket.sendBIN((uint8_t*)buffer, bytes_read);
-        
+
         if (!isRecording) {
             isRecording = true;
             webSocket.sendTXT("{\"type\":\"record_start\"}");
@@ -352,7 +330,7 @@ from typing import Optional
 import websockets
 import whisper
 import edge_tts
-from openai import OpenAI  # 或其他LLM客户端
+from openai import OpenAI
 
 # ============ 配置 ============
 
@@ -374,82 +352,78 @@ TTS_VOICE = "zh-CN-YunxiNeural"  # 男声，也可选女声
 
 class ButlerBrain:
     """文西管家大脑 - 处理语音识别、对话和语音合成"""
-    
+
     def __init__(self):
         print("[初始化] 加载 Whisper 模型...")
         self.stt_model = whisper.load_model(WHISPER_MODEL)
-        
+
         print("[初始化] 连接 LLM API...")
         self.llm_client = OpenAI(
             api_key=LLM_API_KEY,
             base_url=LLM_BASE_URL
         )
-        
-        # 对话历史
+
         self.conversation_history = [
             {
                 "role": "system",
                 "content": """你是文西管家，一个智能AI助理。
                 你的回答应该简洁、准确、有帮助。
                 你可以帮助用户查询信息、控制智能家居、设置提醒等。
-                说话风格像电影里的文西管家：专业但带点幽默。"""
+                说话风格：专业但带点幽默，像一个靠谱的老朋友。"""
             }
         ]
-        
+
         print("[初始化] 文西管家大脑就绪 ✓")
-    
+
     def speech_to_text(self, audio_data: bytes) -> str:
         """语音转文字"""
-        # 将 bytes 转为 numpy 数组
         audio_np = np.frombuffer(audio_data, dtype=np.int16).astype(np.float32) / 32768.0
-        
-        # Whisper 需要 float32 格式，16kHz
+
         result = self.stt_model.transcribe(
             audio_np,
             language="zh",
             fp16=False  # 香橙派5 用 CPU，关闭 fp16
         )
-        
+
         text = result["text"].strip()
         print(f"[STT] 识别结果: {text}")
         return text
-    
+
     def chat(self, user_input: str) -> str:
         """LLM 对话"""
         self.conversation_history.append({
             "role": "user",
             "content": user_input
         })
-        
+
         response = self.llm_client.chat.completions.create(
             model=LLM_MODEL,
             messages=self.conversation_history,
             max_tokens=500,
             temperature=0.7
         )
-        
+
         assistant_message = response.choices[0].message.content
         self.conversation_history.append({
             "role": "assistant",
             "content": assistant_message
         })
-        
+
         # 保持对话历史不超过20轮
-        if len(self.conversation_history) > 22:  # system + 20轮
+        if len(self.conversation_history) > 22:
             self.conversation_history = [self.conversation_history[0]] + self.conversation_history[-20:]
-        
+
         print(f"[LLM] 回复: {assistant_message}")
         return assistant_message
-    
+
     async def text_to_speech(self, text: str) -> bytes:
         """文字转语音 (Edge TTS)"""
         with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
             temp_path = f.name
-        
+
         communicate = edge_tts.Communicate(text, TTS_VOICE)
         await communicate.save(temp_path)
-        
-        # 转换为 PCM 格式 (16kHz, 16bit, mono)
+
         import subprocess
         pcm_path = temp_path.replace(".mp3", ".pcm")
         subprocess.run([
@@ -457,117 +431,97 @@ class ButlerBrain:
             "-ar", "16000", "-ac", "1", "-f", "s16le",
             pcm_path
         ], capture_output=True)
-        
+
         audio_data = Path(pcm_path).read_bytes()
-        
-        # 清理临时文件
+
         Path(temp_path).unlink(missing_ok=True)
         Path(pcm_path).unlink(missing_ok=True)
-        
+
         print(f"[TTS] 合成完成，{len(audio_data)} 字节")
         return audio_data
 
 class ButlerServer:
     """WebSocket 服务器 - 处理 ESP32 通信"""
-    
+
     def __init__(self):
         self.brain = ButlerBrain()
         self.clients = set()
-    
+
     async def handle_client(self, websocket, path):
         """处理单个客户端连接"""
         self.clients.add(websocket)
         client_ip = websocket.remote_address[0]
         print(f"[连接] 新客户端: {client_ip}")
-        
+
         audio_buffer = bytearray()
         is_recording = False
-        
+
         try:
             async for message in websocket:
                 if isinstance(message, str):
-                    # 文本消息（控制指令）
                     data = json.loads(message)
                     msg_type = data.get("type")
-                    
+
                     if msg_type == "register":
                         print(f"[设备] ESP32 注册: {data.get('device')}")
-                    
                     elif msg_type == "record_start":
                         is_recording = True
                         audio_buffer.clear()
                         print("[录音] 开始接收音频")
-                    
                     elif msg_type == "record_end":
                         is_recording = False
                         print(f"[录音] 结束，共 {len(audio_buffer)} 字节")
-                        
-                        if len(audio_buffer) > 1600:  # 至少0.05秒音频
-                            # 处理语音
+                        if len(audio_buffer) > 1600:
                             await self.process_voice(websocket, bytes(audio_buffer))
                         audio_buffer.clear()
-                
+
                 elif isinstance(message, bytes):
-                    # 音频数据
                     if is_recording:
                         audio_buffer.extend(message)
-        
+
         except websockets.exceptions.ConnectionClosed:
             print(f"[断开] 客户端: {client_ip}")
         finally:
             self.clients.discard(websocket)
-    
+
     async def process_voice(self, websocket, audio_data: bytes):
         """处理语音：STT → LLM → TTS"""
         try:
-            # 1. 语音识别
             await websocket.send(json.dumps({"type": "status", "content": "正在识别..."}))
             text = self.brain.speech_to_text(audio_data)
-            
+
             if not text or len(text) < 2:
                 await websocket.send(json.dumps({
                     "type": "text",
                     "content": "没听清，请再说一次"
                 }))
                 return
-            
-            # 2. LLM 对话
+
             await websocket.send(json.dumps({"type": "status", "content": "思考中..."}))
             reply = self.brain.chat(text)
-            
-            # 3. 发送文本回复
-            await websocket.send(json.dumps({
-                "type": "text",
-                "content": reply
-            }))
-            
-            # 4. TTS 合成并发送音频
+
+            await websocket.send(json.dumps({"type": "text", "content": reply}))
+
             await websocket.send(json.dumps({"type": "tts_start"}))
             audio = await self.brain.text_to_speech(reply)
-            
-            # 分块发送音频（每块 1024 字节）
+
             chunk_size = 1024
             for i in range(0, len(audio), chunk_size):
                 chunk = audio[i:i + chunk_size]
                 await websocket.send(chunk)
-                await asyncio.sleep(0.01)  # 模拟实时播放
-            
+                await asyncio.sleep(0.01)
+
             await websocket.send(json.dumps({"type": "tts_end"}))
-            
+
         except Exception as e:
             print(f"[错误] 处理失败: {e}")
-            await websocket.send(json.dumps({
-                "type": "error",
-                "content": str(e)
-            }))
-    
+            await websocket.send(json.dumps({"type": "error", "content": str(e)}))
+
     async def start(self):
         """启动服务器"""
         print(f"[服务器] 启动于 ws://{WS_HOST}:{WS_PORT}")
         async with websockets.serve(self.handle_client, WS_HOST, WS_PORT):
-            await asyncio.Future()  # 永远运行
-
-# ============ 启动 ============
+            await asyncio.Future()
 
 if __name__ == "__main__":
     server = ButlerServer()
@@ -609,8 +563,6 @@ sudo systemctl status butler
 让文西管家不仅能聊天，还能执行 OpenClaw 的能力：
 
 ```python
-# 在 server.py 中添加 OpenClaw 集成
-
 import subprocess
 
 def execute_openclaw_command(command: str) -> str:
@@ -625,49 +577,36 @@ def execute_openclaw_command(command: str) -> str:
         return result.stdout
     except Exception as e:
         return f"执行失败: {e}"
-
-# 在 chat() 方法中添加工具调用判断
-def chat(self, user_input: str) -> str:
-    # 检查是否是指令
-    if any(keyword in user_input for keyword in ["帮我", "执行", "运行", "查一下"]):
-        # 调用 OpenClaw
-        result = execute_openclaw_command(user_input)
-        return result
-    
-    # 普通对话
-    # ... 原有逻辑
 ```
 
 ### 5.2 智能家居控制扩展
 
 ```python
-# 智能家居控制模块
-
 class SmartHome:
     """智能家居控制"""
-    
+
     def __init__(self):
         self.devices = {
             "客厅灯": {"state": False, "type": "light"},
             "卧室灯": {"state": False, "type": "light"},
             "空调": {"state": False, "type": "ac", "temp": 26},
         }
-    
+
     def control(self, device_name: str, action: str) -> str:
         if device_name not in self.devices:
             return f"未找到设备: {device_name}"
-        
+
         device = self.devices[device_name]
-        
+
         if action == "开":
             device["state"] = True
             return f"已打开{device_name}"
         elif action == "关":
             device["state"] = False
             return f"已关闭{device_name}"
-        
+
         return "未知操作"
-    
+
     def parse_command(self, text: str) -> Optional[tuple]:
         """解析语音指令"""
         for device_name in self.devices:
@@ -745,8 +684,8 @@ ffmpeg -f alsa -i default -t 5 test.wav
 - [ ] 接入 Home Assistant 控制智能家居
 - [ ] 情感识别（根据语气调整回复）
 - [ ] 本地 LLM 部署（隐私+低延迟）
-- [ ] 3D 打印文西管家风格外壳
+- [ ] 3D 打印专属外壳
 
 ---
 
-_钢铁侠花了几十亿研发文西管家，我们花了六百块。虽然没有全息投影，但至少能关灯。_
+_六百块，一个香橙派，一个ESP32，一个属于赛博文西自己的智能管家。没有全息投影，但能关灯、查天气、发消息——这就够了。_
