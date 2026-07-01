@@ -8,9 +8,9 @@ tags: ["AI", "IoT", "语音交互", "ESP32", "香橙派", "OpenClaw"]
 status: prototype
 ---
 
-# 🔧 贾维斯智能助理技术实现方案
+# 🔧 文西管家智能助理技术实现方案
 
-> 从灵感到代码，把贾维斯从电影里拽出来。
+> 从灵感到代码，把文西管家从电影里拽出来。
 
 ## 一、系统架构总览
 
@@ -169,7 +169,7 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
         case WStype_CONNECTED:
             Serial.println("[WebSocket] 已连接到香橙派");
             // 发送注册消息
-            webSocket.sendTXT("{\"type\":\"register\",\"device\":\"esp32-jarvis\"}");
+            webSocket.sendTXT("{\"type\":\"register\",\"device\":\"esp32-butler\"}");
             break;
 
         case WStype_TEXT: {
@@ -325,7 +325,7 @@ sudo apt update
 sudo apt install -y python3-pip python3-venv ffmpeg portaudio19-dev
 
 # 创建项目目录
-mkdir -p ~/jarvis-server && cd ~/jarvis-server
+mkdir -p ~/butler-server && cd ~/butler-server
 python3 -m venv venv
 source venv/bin/activate
 
@@ -338,7 +338,7 @@ pip install websockets openai-whisper edge-tts aiohttp numpy
 ```python
 #!/usr/bin/env python3
 """
-Jarvis Server - 香橙派5语音助理服务端
+Butler Server - 香橙派5语音助理服务端
 接收ESP32音频 → STT识别 → LLM对话 → TTS合成 → 回传音频
 """
 
@@ -372,8 +372,8 @@ TTS_VOICE = "zh-CN-YunxiNeural"  # 男声，也可选女声
 
 # ============ 核心类 ============
 
-class JarvisBrain:
-    """贾维斯大脑 - 处理语音识别、对话和语音合成"""
+class ButlerBrain:
+    """文西管家大脑 - 处理语音识别、对话和语音合成"""
     
     def __init__(self):
         print("[初始化] 加载 Whisper 模型...")
@@ -389,14 +389,14 @@ class JarvisBrain:
         self.conversation_history = [
             {
                 "role": "system",
-                "content": """你是贾维斯，一个智能AI助理。
+                "content": """你是文西管家，一个智能AI助理。
                 你的回答应该简洁、准确、有帮助。
                 你可以帮助用户查询信息、控制智能家居、设置提醒等。
-                说话风格像电影里的贾维斯：专业但带点幽默。"""
+                说话风格像电影里的文西管家：专业但带点幽默。"""
             }
         ]
         
-        print("[初始化] 贾维斯大脑就绪 ✓")
+        print("[初始化] 文西管家大脑就绪 ✓")
     
     def speech_to_text(self, audio_data: bytes) -> str:
         """语音转文字"""
@@ -467,11 +467,11 @@ class JarvisBrain:
         print(f"[TTS] 合成完成，{len(audio_data)} 字节")
         return audio_data
 
-class JarvisServer:
+class ButlerServer:
     """WebSocket 服务器 - 处理 ESP32 通信"""
     
     def __init__(self):
-        self.brain = JarvisBrain()
+        self.brain = ButlerBrain()
         self.clients = set()
     
     async def handle_client(self, websocket, path):
@@ -570,24 +570,24 @@ class JarvisServer:
 # ============ 启动 ============
 
 if __name__ == "__main__":
-    server = JarvisServer()
+    server = ButlerServer()
     asyncio.run(server.start())
 ```
 
 ### 4.3 系统服务配置
 
 ```bash
-# /etc/systemd/system/jarvis.service
-sudo tee /etc/systemd/system/jarvis.service << 'EOF'
+# /etc/systemd/system/butler.service
+sudo tee /etc/systemd/system/butler.service << 'EOF'
 [Unit]
-Description=Jarvis Voice Assistant Server
+Description=Butler Voice Assistant Server
 After=network.target
 
 [Service]
 Type=simple
 User=orangepi
-WorkingDirectory=/home/orangepi/jarvis-server
-ExecStart=/home/orangepi/jarvis-server/venv/bin/python server.py
+WorkingDirectory=/home/orangepi/butler-server
+ExecStart=/home/orangepi/butler-server/venv/bin/python server.py
 Restart=always
 RestartSec=5
 
@@ -597,16 +597,16 @@ EOF
 
 # 启用并启动
 sudo systemctl daemon-reload
-sudo systemctl enable jarvis
-sudo systemctl start jarvis
-sudo systemctl status jarvis
+sudo systemctl enable butler
+sudo systemctl start butler
+sudo systemctl status butler
 ```
 
 ## 五、OpenClaw 集成
 
 ### 5.1 作为 OpenClaw 工具调用
 
-让贾维斯不仅能聊天，还能执行 OpenClaw 的能力：
+让文西管家不仅能聊天，还能执行 OpenClaw 的能力：
 
 ```python
 # 在 server.py 中添加 OpenClaw 集成
@@ -698,7 +698,7 @@ import pyaudio
 
 porcupine = pvporcupine.create(
     access_key='你的KEY',
-    keywords=['jarvis']  # 唤醒词："贾维斯"
+    keywords=['butler']  # 唤醒词："文西管家"
 )
 
 pa = pyaudio.PyAudio()
@@ -714,7 +714,7 @@ while True:
     pcm = stream.read(porcupine.frame_length)
     keyword_index = porcupine.process(pcm)
     if keyword_index >= 0:
-        print("贾维斯在听...")
+        print("文西管家在听...")
         # 开始录音处理
 ```
 
@@ -728,7 +728,7 @@ while True:
 
 ```bash
 # 查看服务日志
-sudo journalctl -u jarvis -f
+sudo journalctl -u butler -f
 
 # 测试 WebSocket 连接
 pip install websocat
@@ -740,13 +740,13 @@ ffmpeg -f alsa -i default -t 5 test.wav
 
 ## 八、后续计划
 
-- [ ] 唤醒词支持（"贾维斯"唤醒）
+- [ ] 唤醒词支持（"文西管家"唤醒）
 - [ ] 多房间 ESP32 分布式部署
 - [ ] 接入 Home Assistant 控制智能家居
 - [ ] 情感识别（根据语气调整回复）
 - [ ] 本地 LLM 部署（隐私+低延迟）
-- [ ] 3D 打印贾维斯风格外壳
+- [ ] 3D 打印文西管家风格外壳
 
 ---
 
-_钢铁侠花了几十亿研发贾维斯，我们花了六百块。虽然没有全息投影，但至少能关灯。_
+_钢铁侠花了几十亿研发文西管家，我们花了六百块。虽然没有全息投影，但至少能关灯。_
