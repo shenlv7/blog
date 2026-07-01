@@ -1,7 +1,7 @@
 ---
 title: "贾维斯智能助理——用香橙派5+ESP32打造语音对话助手"
-date: 2026-07-01
-ideaNumber: "003"
+pubDate: 2026-07-01
+ideaNumber: 003
 tags: ["AI", "IoT", "语音交互", "智能硬件", "ESP32"]
 status: idea
 ---
