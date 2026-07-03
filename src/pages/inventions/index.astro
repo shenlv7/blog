@@ -5,6 +5,7 @@ import { getCollection } from 'astro:content';
 const inventions = (await getCollection('inventions')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+const ideas = await getCollection('ideas');
 ---
 
 <Base title="文西的发明记录">
@@ -30,11 +31,14 @@ const inventions = (await getCollection('inventions')).sort(
           <h2><a href={`/blog/inventions/${inv.id.replace(/\.md$/, '')}/`}>{inv.data.title}</a></h2>
           <p class="invention-desc">{inv.data.description}</p>
           <div class="invention-footer">
-            {inv.data.ideaId && (
-              <a href={`/blog/ideas/idea-${inv.data.ideaId}/`} class="idea-link">
-                💡 点子 #{inv.data.ideaId}
-              </a>
-            )}
+            {inv.data.ideaId && (() => {
+              const linkedIdea = ideas.find(i => String(i.data.ideaNumber).padStart(3, '0') === String(inv.data.ideaId).padStart(3, '0'));
+              return linkedIdea ? (
+                <a href={`/blog/ideas/${linkedIdea.id.replace(/\.md$/, '')}/`} class="idea-link">
+                  💡 点子 #{inv.data.ideaId}
+                </a>
+              ) : null;
+            })()}
             {inv.data.tags && inv.data.tags.length > 0 && (
               <div class="invention-tags">
                 {inv.data.tags.slice(0, 3).map(tag => <span class="tag">{tag}</span>)}
