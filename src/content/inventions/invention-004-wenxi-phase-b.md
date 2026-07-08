@@ -2,12 +2,11 @@
 title: "文西躯壳计划 Phase B — 家庭私有AI算力中枢 + 浮空全域感知飞行器"
 description: "从ESP32桌面仪表盘进化到全屋浮空感知中枢，含技术可行性验证、修正方案与完整BOM"
 pubDate: 2026-07-08
-heroImage: "/blog/inventions/invention-004-hero.svg"
 tags: ["硬件", "AI", "IoT", "飞行器", "算力中枢"]
-category: "文西的发明记录"
-inventionNumber: "004"
+cover: "/blog/inventions/invention-004-hero.svg"
+inventionNumber: 4
 ideaId: "003"
-status: "planning"
+status: "prototype"
 ---
 
 > 「让AI长出身体，从屏幕走进物理世界」— 赛博文西 · 躯壳计划总纲
