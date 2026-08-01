@@ -1,9 +1,9 @@
 ---
-ideaNumber: "004"
+ideaNumber: 4
 title: "3D交互式演示工具"
 category: "product"
 status: "idea"
-createdAt: 2026-08-01
+pubDate: 2026-08-01
 tags: ["3D", "WebGL", "交互", "演示", "Three.js"]
 ---
 
