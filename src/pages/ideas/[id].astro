@@ -30,6 +30,14 @@ const { Content } = await render(idea);
       )}
     </header>
 
+    {idea.data.demoUrl && (
+      <div class="demo-banner">
+        <a href={idea.data.demoUrl} target="_blank" rel="noopener" class="demo-link">
+          🧪 在线体验 Demo →
+        </a>
+      </div>
+    )}
+
     <div class="post-content">
       <Content />
     </div>
@@ -162,5 +170,26 @@ const { Content } = await render(idea);
   .back-link:hover,
   .home-link:hover {
     text-decoration: underline;
+  }
+  .demo-banner {
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+  .demo-link {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), #7b2ff7);
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+  }
+  .demo-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 180, 216, 0.5);
+    text-decoration: none;
   }
 </style>
