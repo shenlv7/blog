@@ -5,7 +5,7 @@ category: "product"
 status: "idea"
 pubDate: 2026-08-01
 tags: ["3D", "WebGL", "交互", "演示", "Three.js"]
-demoUrl: "https://shenlv7.github.io/blog/3d-ppt-demo/"
+demoUrl: "https://shenlv7.github.io/blog/demos/idea-004-3d-presentation.html"
 ---
 
 # 🎯 灵感：3D交互式演示工具
@@ -48,7 +48,7 @@ demoUrl: "https://shenlv7.github.io/blog/3d-ppt-demo/"
 
 > 已做出第一个 Demo！基于 Three.js 实现了 3D 柱状图、节点网络、鼠标悬停数据卡片、拖拽旋转视角等交互效果。
 
-🔗 **[在线体验 Demo](https://shenlv7.github.io/blog/3d-ppt-demo/)**
+🔗 **[在线体验 Demo](https://shenlv7.github.io/blog/demos/idea-004-3d-presentation.html)**
 
 **Demo 功能：**
 - 4页幻灯片切换（左右箭头 / 空格）
