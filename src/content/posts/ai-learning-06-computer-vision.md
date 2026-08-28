@@ -3,7 +3,7 @@ title: "AI学习之路(第6期)：计算机视觉"
 slug: ai-learning-06-computer-vision
 pubDate: 2026-06-10
 description: "从像素到理解，探索计算机视觉的核心技术与实战应用"
-image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1200"
+image: "/blog/images/photo-1555949963-aa79dcee981c.jpg
 tags: ["AI学习", "计算机视觉", "CNN", "图像识别", "深度学习"]
 series: "AI学习之路"
 episode: 6
@@ -11,7 +11,7 @@ episode: 6
 
 # AI学习之路(第6期)：计算机视觉
 
-![计算机视觉](https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800)
+![计算机视觉](/blog/images/photo-1555949963-aa79dcee981c.jpg)
 
 > "眼睛是心灵的窗户，而计算机视觉是AI的眼睛。"
 

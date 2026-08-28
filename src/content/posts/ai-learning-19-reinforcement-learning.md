@@ -3,14 +3,14 @@ title: "AI学习之路(第19期)：强化学习——AI如何学会自己做决�
 slug: ai-learning-19-reinforcement-learning
 pubDate: 2026-08-26
 description: "第二季第七期！探索强化学习的奥秘，从智能体与环境的交互到Q-Learning和策略梯度"
-image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=1200"
+image: "/blog/images/photo-1605810230434-7631ac76ec81.jpg
 series: "AI学习之路"
 episode: 19
 tags: ["强化学习", "Q-Learning", "策略梯度", "PPO", "深度学习"]
 difficulty: "intermediate"
 ---
 
-![强化学习](https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800&h=400&fit=crop)
+![强化学习](/blog/images/photo-1605810230434-7631ac76ec81.jpg)
 
 ## 上期回顾
 
@@ -31,7 +31,7 @@ difficulty: "intermediate"
                 → 学习最优策略（Policy）
 ```
 
-![强化学习交互循环](https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=400&fit=crop)
+![强化学习交互循环](/blog/images/photo-1555949963-aa79dcee981c.jpg)
 
 ## 核心概念解析
 
@@ -220,7 +220,7 @@ def reinforce(policy_net, optimizer, episodes=1000):
         optimizer.step()
 ```
 
-![强化学习训练过程](https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=400&fit=crop)
+![强化学习训练过程](/blog/images/photo-1518770660439-4636190af475.jpg)
 
 ## 进阶：深度强化学习
 

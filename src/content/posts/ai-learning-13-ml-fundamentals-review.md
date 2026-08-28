@@ -8,7 +8,7 @@ tags: ["机器学习", "梯度下降", "线性回归", "AI基础"]
 difficulty: "beginner"
 ---
 
-![机器学习](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=400&fit=crop)
+![机器学习](/blog/images/photo-1620712943543-bcc4688e7485.jpg)
 
 ## 第二季开篇
 
@@ -22,7 +22,7 @@ difficulty: "beginner"
 
 很多人觉得线性回归太简单，不值一提。但它是理解所有复杂模型的基石。
 
-![线性回归](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop)
+![线性回归](/blog/images/photo-1551288049-bebda4e38f71.jpg)
 
 线性回归的本质是找到一个函数 $f(x) = wx + b$，使得预测值和真实值之间的差距最小。这个"差距"我们用**均方误差（MSE）**来衡量：
 
@@ -36,7 +36,7 @@ $$L = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$$
 
 梯度下降的直觉非常简单：想象你蒙着眼站在山上，想走到山谷最低点。你唯一能做的，就是用脚感受当前位置的坡度，然后往最陡的下坡方向迈一步。
 
-![梯度下降](https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=400&fit=crop)
+![梯度下降](/blog/images/photo-1504384308090-c894fdcc538d.jpg)
 
 数学上，梯度就是函数在某一点变化最快的方向。我们沿着梯度的**反方向**更新参数：
 
@@ -95,7 +95,7 @@ Epoch 800: loss=0.2500, w=3.0020, b=7.0020
 - **太小**：走得比蜗牛还慢，训练到天荒地老
 - **刚刚好**：快速收敛到最优解
 
-![学习率对比](https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=400&fit=crop)
+![学习率对比](/blog/images/photo-1555949963-aa79dcee981c.jpg)
 
 ```python
 # 不同学习率的对比
@@ -121,7 +121,7 @@ for lr in [0.001, 0.01, 0.1, 0.5]:
 
 过拟合的本质是模型"记住"了训练数据的噪声，而不是学到了真正的规律。
 
-![过拟合示意](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop)
+![过拟合示意](/blog/images/photo-1551288049-bebda4e38f71.jpg)
 
 解决方案是**正则化**——在损失函数中加入对模型复杂度的惩罚：
 

@@ -3,7 +3,7 @@ title: "AI学习之路(第9期)：大语言模型(LLM)——语言的炼金术"
 slug: ai-learning-09-llm
 pubDate: 2026-06-24
 description: "从GPT到开源大模型，深入解析大语言模型的架构、训练范式与核心能力"
-image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200"
+image: "/blog/images/photo-1677442136019-21780ecad995.jpg
 tags: ["AI学习", "LLM", "大语言模型", "GPT", "Transformer", "深度学习"]
 series: "AI学习之路"
 episode: 9
@@ -11,7 +11,7 @@ episode: 9
 
 # AI学习之路(第9期)：大语言模型(LLM)——语言的炼金术
 
-![大语言模型](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800)
+![大语言模型](/blog/images/photo-1677442136019-21780ecad995.jpg)
 
 > "语言是思想的衣服。" —— 塞缪尔·约翰逊
 

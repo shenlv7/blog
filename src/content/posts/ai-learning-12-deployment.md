@@ -3,7 +3,7 @@ title: "AI学习之路(第12期)：AI应用部署与工程化——从Notebook�
 slug: ai-learning-12-deployment
 pubDate: 2026-06-27
 description: "从模型导出到服务部署，从性能优化到监控运维，把训练好的AI模型变成真正可用的产品"
-image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200"
+image: "/blog/images/photo-1551288049-bebda4e38f71.jpg
 tags: ["AI学习", "模型部署", "ONNX", "TensorRT", "Docker", "MLOps", "工程化"]
 series: "AI学习之路"
 episode: 12
@@ -11,7 +11,7 @@ episode: 12
 
 # AI学习之路(第12期)：AI应用部署与工程化——从Notebook到产品
 
-![AI部署](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800)
+![AI部署](/blog/images/photo-1551288049-bebda4e38f71.jpg)
 
 > "一个模型如果没有部署到生产环境，那它只是一个昂贵的实验。"
 

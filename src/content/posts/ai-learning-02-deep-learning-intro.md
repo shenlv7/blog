@@ -7,7 +7,7 @@ episode: 2
 tags: ["深度学习", "PyTorch", "神经网络", "AI基础"]
 ---
 
-![深度学习网络](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=400&fit=crop)
+![深度学习网络](/blog/images/photo-1620712943543-bcc4688e7485.jpg)
 
 ## 引言
 
@@ -27,7 +27,7 @@ tags: ["深度学习", "PyTorch", "神经网络", "AI基础"]
 
 就像你决定今天穿什么：温度（输入1）× 权重1 + 天气（输入2）× 权重2 → 经过大脑处理（激活函数）→ 穿短袖（输出）。
 
-![神经元结构](https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&h=400&fit=crop)
+![神经元结构](/blog/images/photo-1559757175-5700dde675bc.jpg)
 
 ### 为什么需要"深度"？
 
@@ -74,7 +74,7 @@ print(F.relu(x))  # tensor([0., 0., 0., 1., 2.])
 
 简单说：**算误差 → 找方向 → 调参数 → 重复**。
 
-![梯度下降](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop)
+![梯度下降](/blog/images/photo-1551288049-bebda4e38f71.jpg)
 
 ## 实战：用PyTorch识别手写数字
 

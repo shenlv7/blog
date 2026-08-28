@@ -3,14 +3,14 @@ title: "AI学习之路(第14期)：深度学习——从感知机到万能逼近
 slug: ai-learning-14-deep-learning-v2
 pubDate: 2026-07-22
 description: "第二季深度学习篇！从感知机的历史出发，理解神经网络为什么能逼近任意函数，以及反向传播的数学直觉"
-image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200"
+image: "/blog/images/photo-1677442136019-21780ecad995.jpg
 series: "AI学习之路"
 episode: 14
 tags: ["深度学习", "感知机", "反向传播", "激活函数", "万能逼近定理"]
 difficulty: "intermediate"
 ---
 
-![深度学习](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop)
+![深度学习](/blog/images/photo-1677442136019-21780ecad995.jpg)
 
 ## 上期回顾
 
@@ -22,7 +22,7 @@ difficulty: "intermediate"
 
 1957年，Frank Rosenblatt提出了**感知机（Perceptron）**。它的结构极其简单：
 
-![感知机](https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&h=400&fit=crop)
+![感知机](/blog/images/photo-1635070041078-e363dbe005cb.jpg)
 
 ```
 输入 → 加权求和 → 激活函数 → 输出
@@ -54,7 +54,7 @@ y = np.array([0, 1, 1, 0])
 
 解法其实很简单：**叠两层**。
 
-![多层网络](https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=400&fit=crop)
+![多层网络](/blog/images/photo-1558494949-ef010cbdcc31.jpg)
 
 把多个感知机排成一层，再把多层叠起来，就是**多层感知机（MLP）**——深度学习最基础的架构。
 
@@ -106,7 +106,7 @@ with torch.no_grad():
 
 如果没有激活函数，多层线性变换的组合还是线性变换——叠再多层也没用。激活函数引入非线性，才是深度学习的"深度"真正有意义的原因。
 
-![激活函数](https://images.unsplash.com/photo-1639322537228-f710d846310a?w=800&h=400&fit=crop)
+![激活函数](/blog/images/photo-1639322537228-f710d846310a.jpg)
 
 常见的激活函数：
 
@@ -142,7 +142,7 @@ silu = F.silu(x)
 
 训练深度网络的核心算法是**反向传播（Backpropagation）**。它的本质就是链式法则。
 
-![链式法则](https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&h=400&fit=crop)
+![链式法则](/blog/images/photo-1509228468518-180dd4864904.jpg)
 
 假设网络有三层：$y = f_3(f_2(f_1(x)))$
 

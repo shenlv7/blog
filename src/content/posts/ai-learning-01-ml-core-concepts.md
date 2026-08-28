@@ -7,7 +7,7 @@ episode: 1
 tags: ["机器学习", "Python", "AI基础"]
 ---
 
-![机器学习概念图](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop)
+![机器学习概念图](/blog/images/photo-1677442136019-21780ecad995.jpg)
 
 ## 引言
 
@@ -19,7 +19,7 @@ tags: ["机器学习", "Python", "AI基础"]
 
 机器学习（Machine Learning）是人工智能的一个子领域，它让计算机能够从数据中学习，而不需要显式编程。简单来说，机器学习就是让机器从经验中学习，就像人类从经验中学习一样。
 
-![学习曲线](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop)
+![学习曲线](/blog/images/photo-1551288049-bebda4e38f71.jpg)
 
 ## 机器学习的三大范式
 
@@ -98,7 +98,7 @@ plt.show()
 - 机器人控制
 - 自动驾驶
 
-![强化学习](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=400&fit=crop)
+![强化学习](/blog/images/photo-1620712943543-bcc4688e7485.jpg)
 
 ## 机器学习工作流程
 

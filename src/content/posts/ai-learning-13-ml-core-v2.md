@@ -3,7 +3,7 @@ title: "AI学习之路(第13期)：机器学习核心概念——重新出发的
 slug: ai-learning-13-ml-core-v2
 pubDate: 2026-07-13
 description: "新周期开篇！从直觉出发重新理解机器学习，掌握模型训练的完整心智模型，附实战代码"
-image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1200"
+image: "/blog/images/photo-1555949963-aa79dcee981c.jpg
 tags: ["AI学习", "机器学习", "scikit-learn", "特征工程", "模型评估"]
 series: "AI学习之路·第二季"
 episode: 13
@@ -11,7 +11,7 @@ episode: 13
 
 # AI学习之路(第13期)：机器学习核心概念——重新出发的正确姿势
 
-![机器学习](https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=400&fit=crop)
+![机器学习](/blog/images/photo-1555949963-aa79dcee981c.jpg)
 
 > "所有的模型都是错的，但有些是有用的。" —— George Box
 
@@ -53,7 +53,7 @@ episode: 13
 机器学习：  数据 + 结果  →  规则（模型）
 ```
 
-![编程范式对比](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop)
+![编程范式对比](/blog/images/photo-1551288049-bebda4e38f71.jpg)
 
 ---
 
@@ -169,7 +169,7 @@ print(f"RMSE: {rmse:.4f}")  # 均方根误差
 print(f"R²: {r2:.4f}")      # 决定系数（越接近1越好）
 ```
 
-![模型训练流程](https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=800&h=400&fit=crop)
+![模型训练流程](/blog/images/photo-1518186285589-2f7649de83e0.jpg)
 
 ---
 

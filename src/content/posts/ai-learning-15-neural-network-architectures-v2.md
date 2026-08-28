@@ -3,14 +3,14 @@ title: "AI学习之路(第15期)：神经网络架构——从MLP到ResNet的进
 slug: ai-learning-15-neural-network-architectures-v2
 pubDate: 2026-07-29
 description: "第二季第三期！深入探索神经网络的核心架构，从最简单的多层感知机到革命性的残差网络，理解网络设计的底层逻辑"
-image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200"
+image: "/blog/images/photo-1620712943543-bcc4688e7485.jpg
 series: "AI学习之路"
 episode: 15
 tags: ["神经网络", "MLP", "CNN", "ResNet", "网络架构", "深度学习"]
 difficulty: "intermediate"
 ---
 
-![神经网络架构](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=400&fit=crop)
+![神经网络架构](/blog/images/photo-1620712943543-bcc4688e7485.jpg)
 
 ## 上期回顾
 

@@ -3,7 +3,7 @@ title: "AI学习之路(第8期)：生成对抗网络(GANs)——两个AI的博�
 slug: ai-learning-08-gans
 pubDate: 2026-06-22
 description: "从造假币到造人脸，探索GANs的核心原理、经典变体与实战代码"
-image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200"
+image: "/blog/images/photo-1633356122544-f134324a6cee.jpg
 tags: ["AI学习", "GANs", "生成对抗网络", "深度学习", "图像生成"]
 series: "AI学习之路"
 episode: 8
@@ -11,7 +11,7 @@ episode: 8
 
 # AI学习之路(第8期)：生成对抗网络(GANs)——两个AI的博弈艺术
 
-![生成对抗网络](https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800)
+![生成对抗网络](/blog/images/photo-1633356122544-f134324a6cee.jpg)
 
 > "GANs是过去十年机器学习领域最有趣的想法。" —— Yann LeCun（深度学习三巨头之一）
 

@@ -3,7 +3,7 @@ title: "AI学习之路(第10期)：AI Agent——从对话到行动"
 slug: ai-learning-10-ai-agent
 pubDate: 2026-06-25
 description: "从ChatGPT到自主Agent，探索AI如何从被动回答进化为主动执行，附实战代码"
-image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200"
+image: "/blog/images/photo-1677442136019-21780ecad995.jpg
 tags: ["AI学习", "AI Agent", "工具调用", "ReAct", "LLM", "深度学习"]
 series: "AI学习之路"
 episode: 10
@@ -11,7 +11,7 @@ episode: 10
 
 # AI学习之路(第10期)：AI Agent——从对话到行动
 
-![AI Agent](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800)
+![AI Agent](/blog/images/photo-1677442136019-21780ecad995.jpg)
 
 > "The best interface is no interface." —— Golden Krishna
 

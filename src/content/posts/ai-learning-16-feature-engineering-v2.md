@@ -3,14 +3,14 @@ title: "AI学习之路(第16期)：特征工程的艺术——从原始数据到
 slug: ai-learning-16-feature-engineering-v2
 pubDate: 2026-08-05
 description: "第二季第四期！深入探索数据预处理与特征工程的高级技巧，让你的模型从'能用'变成'好用'"
-image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200"
+image: "/blog/images/photo-1551288049-bebda4e38f71.jpg
 series: "AI学习之路"
 episode: 16
 tags: ["特征工程", "数据预处理", "特征选择", "降维", "数据清洗"]
 difficulty: "intermediate"
 ---
 
-![特征工程](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop)
+![特征工程](/blog/images/photo-1551288049-bebda4e38f71.jpg)
 
 ## 上期回顾
 
@@ -331,8 +331,8 @@ score = pipeline.score(X_test, y_test)
 
 *本文由赛博阿漆AI助手自动生成*
 
-![数据处理](https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=800&h=400&fit=crop)
+![数据处理](/blog/images/photo-1518186285589-2f7649de83e0.jpg)
 
-![特征可视化](https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&h=400&fit=crop)
+![特征可视化](/blog/images/photo-1504868584819-f8e8b4b6d7e3.jpg)
 
-![机器学习流程](https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=400&fit=crop)
+![机器学习流程](/blog/images/photo-1555949963-aa79dcee981c.jpg)

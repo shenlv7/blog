@@ -3,7 +3,7 @@ title: "AI学习之路(第5期)：NLP自然语言处理"
 slug: ai-learning-05-nlp
 pubDate: 2026-06-03
 description: "从文本处理到语言理解，探索NLP的核心技术与应用"
-image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200"
+image: "/blog/images/photo-1516321318423-f06f85e504b3.jpg
 tags: ["AI学习", "NLP", "自然语言处理", "机器学习"]
 series: "AI学习之路"
 episode: 5
@@ -11,7 +11,7 @@ episode: 5
 
 # AI学习之路(第5期)：NLP自然语言处理
 
-![NLP与语言处理](https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800)
+![NLP与语言处理](/blog/images/photo-1516321318423-f06f85e504b3.jpg)
 
 > "语言是人类思维的镜子，而NLP是AI理解这面镜子的钥匙。"
 
@@ -31,7 +31,7 @@ NLP是计算机科学、人工智能和语言学的交叉领域，目标是让�
 2. **生成**自然流畅的文本
 3. **处理**各种语言任务（翻译、摘要、问答等）
 
-![语言与AI](https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800)
+![语言与AI](/blog/images/photo-1456513080510-7bf3a84b82f8.jpg)
 
 ### NLP的核心挑战
 
@@ -104,7 +104,7 @@ filtered = [w for w in tokens if w.lower() not in stop_words]
 
 ## 词向量：让机器"理解"词义
 
-![向量空间](https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800)
+![向量空间](/blog/images/photo-1635070041078-e363dbe005cb.jpg)
 
 传统方法用one-hot编码表示词语，但这种方法无法表达词与词之间的语义关系。**词向量（Word Embedding）** 解决了这个问题。
 
@@ -215,7 +215,7 @@ print(result)  # "自然语言处理是迷人的。"
 
 ## NLP的演进：从规则到神经网络
 
-![技术演进](https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800)
+![技术演进](/blog/images/photo-1555949963-aa79dcee981c.jpg)
 
 NLP的发展经历了几个重要阶段：
 
@@ -253,7 +253,7 @@ class SimpleRNN(nn.Module):
 
 传统RNN的瓶颈：无法有效处理长距离依赖。**注意力机制**让模型能够"关注"输入序列中最相关的部分。
 
-![注意力机制](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800)
+![注意力机制](/blog/images/photo-1620712943543-bcc4688e7485.jpg)
 
 ```python
 import torch

@@ -7,7 +7,7 @@ episode: 3
 tags: ["神经网络", "CNN", "RNN", "LSTM", "架构设计", "AI基础"]
 ---
 
-![神经网络架构](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop)
+![神经网络架构](/blog/images/photo-1677442136019-21780ecad995.jpg)
 
 ## 引言
 
@@ -96,7 +96,7 @@ class SimpleCNN(nn.Module):
 
 ### CNN的进化史
 
-![CNN演进](https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=400&fit=crop)
+![CNN演进](/blog/images/photo-1555949963-aa79dcee981c.jpg)
 
 **LeNet-5（1998）**：卷积网络的开山之作，用于手写数字识别
 
@@ -142,7 +142,7 @@ h_t = tanh(W_hh · h_{t-1} + W_xh · x_t + b)
 
 ### LSTM：长期记忆的突破
 
-![记忆与遗忘](https://images.unsplash.com/photo-1501159599894-155982264a55?w=800&h=400&fit=crop)
+![记忆与遗忘](/blog/images/photo-1501159599894-155982264a55.jpg)
 
 原始RNN有个致命缺陷：**长期依赖问题**。当序列很长时，早期的信息在反向传播过程中会指数级衰减或爆炸——网络会"忘记"很久以前的事情。
 
@@ -192,7 +192,7 @@ RNN的问题：必须按顺序处理序列，无法并行；而且即使有LSTM�
 
 ### Self-Attention 自注意力
 
-![注意力聚焦](https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&h=400&fit=crop)
+![注意力聚焦](/blog/images/photo-1485827404703-89b55fcc595e.jpg)
 
 自注意力让序列中的每个位置都能直接"看到"其他所有位置，计算它们之间的相关性：
 

@@ -7,7 +7,7 @@ episode: 4
 tags: ["数据预处理", "特征工程", "Pandas", "Scikit-learn", "数据清洗", "AI基础"]
 ---
 
-![数据预处理与特征工程](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop)
+![数据预处理与特征工程](/blog/images/photo-1551288049-bebda4e38f71.jpg)
 
 ## 引言
 
@@ -89,7 +89,7 @@ df['city'] = df['city'].str.strip().str.lower()
 df.drop_duplicates(subset=['user_id'], keep='last', inplace=True)
 ```
 
-![数据清洗流程](https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&h=400&fit=crop)
+![数据清洗流程](/blog/images/photo-1504868584819-f8e8b4b6d7e3.jpg)
 
 ## 二、特征转换：让数据"说人话"
 
@@ -220,7 +220,7 @@ df['word_count'] = df['text'].str.split().str.len()
 df['has_question'] = df['text'].str.contains(r'\?').astype(int)
 ```
 
-![特征工程思维](https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&h=400&fit=crop)
+![特征工程思维](/blog/images/photo-1509228468518-180dd4864904.jpg)
 
 ## 四、特征选择：不是越多越好
 

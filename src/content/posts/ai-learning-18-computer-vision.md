@@ -3,14 +3,14 @@ title: "AI学习之路(第18期)：计算机视觉——让机器看懂世界"
 slug: ai-learning-18-computer-vision
 pubDate: 2026-08-19
 description: "第二季第六期！探索计算机视觉的奥秘，从图像处理基础到CNN的魔力"
-image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200"
+image: "/blog/images/photo-1526374965328-7f61d4dc18c5.jpg
 series: "AI学习之路"
 episode: 18
 tags: ["计算机视觉", "CNN", "图像处理", "目标检测", "深度学习"]
 difficulty: "intermediate"
 ---
 
-![计算机视觉](https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=400&fit=crop)
+![计算机视觉](/blog/images/photo-1526374965328-7f61d4dc18c5.jpg)
 
 ## 上期回顾
 
@@ -20,7 +20,7 @@ difficulty: "intermediate"
 
 计算机视觉（Computer Vision，CV）是人工智能的一个重要分支，旨在让计算机能够"看懂"图像和视频。人类看一张照片，瞬间就能识别出猫、狗、人、车，但对计算机来说，图像只是一堆数字矩阵。
 
-![图像像素矩阵](https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=400&fit=crop)
+![图像像素矩阵](/blog/images/photo-1555949963-aa79dcee981c.jpg)
 
 想象一下：一张 224×224 的彩色图片，对你来说是风景，对计算机来说是 224×224×3 = 150,528 个数字的矩阵。计算机视觉的使命，就是从这些数字中提取出有意义的信息。
 
@@ -42,7 +42,7 @@ RGB图像 → [H, W, 3]  # 3个颜色通道
 
 CNN 是计算机视觉的核心武器。它模仿人类视觉皮层的工作方式，通过卷积操作提取图像特征。
 
-![神经网络结构](https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop)
+![神经网络结构](/blog/images/photo-1677442136019-21780ecad995.jpg)
 
 **卷积操作的核心思想：**
 
@@ -91,7 +91,7 @@ avg_pool = nn.AvgPool2d(kernel_size=2, stride=2)
 | GoogLeNet | 2014 | 22 | Inception模块 |
 | ResNet | 2015 | 152 | 残差连接，解决梯度消失 |
 
-![深度学习演进](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=400&fit=crop)
+![深度学习演进](/blog/images/photo-1620712943543-bcc4688e7485.jpg)
 
 ## 代码实战：图像分类
 
@@ -172,7 +172,7 @@ for epoch in range(10):
 - **人脸识别**：解锁手机、支付验证
 - **医学影像**：辅助诊断X光、CT、MRI
 
-![应用场景](https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&h=400&fit=crop)
+![应用场景](/blog/images/photo-1485827404703-89b55fcc595e.jpg)
 
 ## 实践建议
 
