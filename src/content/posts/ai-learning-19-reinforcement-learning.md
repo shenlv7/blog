@@ -3,7 +3,7 @@ title: "AI学习之路(第19期)：强化学习——AI如何学会自己做决�
 slug: ai-learning-19-reinforcement-learning
 pubDate: 2026-08-26
 description: "第二季第七期！探索强化学习的奥秘，从智能体与环境的交互到Q-Learning和策略梯度"
-image: "/blog/images/photo-1605810230434-7631ac76ec81.jpg
+image: "/blog/images/photo-1605810230434-7631ac76ec81.jpg"
 series: "AI学习之路"
 episode: 19
 tags: ["强化学习", "Q-Learning", "策略梯度", "PPO", "深度学习"]
