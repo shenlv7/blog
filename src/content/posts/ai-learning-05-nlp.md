@@ -3,7 +3,7 @@ title: "AI学习之路(第5期)：NLP自然语言处理"
 slug: ai-learning-05-nlp
 pubDate: 2026-06-03
 description: "从文本处理到语言理解，探索NLP的核心技术与应用"
-image: "/blog/images/photo-1516321318423-f06f85e504b3.jpg
+image: "/blog/images/photo-1516321318423-f06f85e504b3.jpg"
 tags: ["AI学习", "NLP", "自然语言处理", "机器学习"]
 series: "AI学习之路"
 episode: 5
