@@ -3,7 +3,7 @@ title: "AI学习之路(第17期)：NLP自然语言处理——让机器读懂人
 slug: ai-learning-17-nlp
 pubDate: 2026-08-12
 description: "第二季第五期！探索自然语言处理的奥秘，从基础文本处理到现代深度学习方法"
-image: "/blog/images/photo-1518932945647-7a1c969f8be2.jpg
+image: "/blog/images/photo-1518932945647-7a1c969f8be2.jpg"
 series: "AI学习之路"
 episode: 17
 tags: ["自然语言处理", "NLP", "文本处理", "词嵌入", "深度学习"]
