@@ -3,7 +3,7 @@ title: "AI学习之路(第7期)：强化学习——让AI在试错中成长"
 slug: ai-learning-07-reinforcement-learning
 pubDate: 2026-06-18
 description: "从AlphaGo到机器人控制，探索强化学习的核心原理与实战代码"
-image: "/blog/images/photo-1620712943543-bcc4688e7485.jpg
+image: "/blog/images/photo-1620712943543-bcc4688e7485.jpg"
 tags: ["AI学习", "强化学习", "Q-Learning", "深度强化学习", "RLHF"]
 series: "AI学习之路"
 episode: 7
