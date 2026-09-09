@@ -3,7 +3,7 @@ title: "AI学习之路(第9期)：大语言模型(LLM)——语言的炼金术"
 slug: ai-learning-09-llm
 pubDate: 2026-06-24
 description: "从GPT到开源大模型，深入解析大语言模型的架构、训练范式与核心能力"
-image: "/blog/images/photo-1677442136019-21780ecad995.jpg
+image: "/blog/images/photo-1677442136019-21780ecad995.jpg"
 tags: ["AI学习", "LLM", "大语言模型", "GPT", "Transformer", "深度学习"]
 series: "AI学习之路"
 episode: 9
