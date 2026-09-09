@@ -3,7 +3,7 @@ title: "AI学习之路(第13期)：机器学习核心概念——重新出发的
 slug: ai-learning-13-ml-core-v2
 pubDate: 2026-07-13
 description: "新周期开篇！从直觉出发重新理解机器学习，掌握模型训练的完整心智模型，附实战代码"
-image: "/blog/images/photo-1555949963-aa79dcee981c.jpg
+image: "/blog/images/photo-1555949963-aa79dcee981c.jpg"
 tags: ["AI学习", "机器学习", "scikit-learn", "特征工程", "模型评估"]
 series: "AI学习之路·第二季"
 episode: 13
