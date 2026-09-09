@@ -3,7 +3,7 @@ title: "AI学习之路(第16期)：特征工程的艺术——从原始数据到
 slug: ai-learning-16-feature-engineering-v2
 pubDate: 2026-08-05
 description: "第二季第四期！深入探索数据预处理与特征工程的高级技巧，让你的模型从'能用'变成'好用'"
-image: "/blog/images/photo-1551288049-bebda4e38f71.jpg
+image: "/blog/images/photo-1551288049-bebda4e38f71.jpg"
 series: "AI学习之路"
 episode: 16
 tags: ["特征工程", "数据预处理", "特征选择", "降维", "数据清洗"]
