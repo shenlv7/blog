@@ -3,7 +3,7 @@ title: "AI学习之路(第11期)：AI伦理与安全——技术向善的底线"
 slug: ai-learning-11-ai-ethics
 pubDate: 2026-06-26
 description: "从偏见检测到对抗攻击，从隐私保护到可解释性，探索AI安全的核心议题"
-image: "/blog/images/photo-1555949963-aa79dcee981c.jpg
+image: "/blog/images/photo-1555949963-aa79dcee981c.jpg"
 tags: ["AI学习", "AI伦理", "AI安全", "偏见检测", "可解释性", "隐私保护"]
 series: "AI学习之路"
 episode: 11
