@@ -3,7 +3,7 @@ title: "AI学习之路(第14期)：深度学习——从感知机到万能逼近
 slug: ai-learning-14-deep-learning-v2
 pubDate: 2026-07-22
 description: "第二季深度学习篇！从感知机的历史出发，理解神经网络为什么能逼近任意函数，以及反向传播的数学直觉"
-image: "/blog/images/photo-1677442136019-21780ecad995.jpg
+image: "/blog/images/photo-1677442136019-21780ecad995.jpg"
 series: "AI学习之路"
 episode: 14
 tags: ["深度学习", "感知机", "反向传播", "激活函数", "万能逼近定理"]
