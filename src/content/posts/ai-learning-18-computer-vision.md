@@ -3,7 +3,7 @@ title: "AI学习之路(第18期)：计算机视觉——让机器看懂世界"
 slug: ai-learning-18-computer-vision
 pubDate: 2026-08-19
 description: "第二季第六期！探索计算机视觉的奥秘，从图像处理基础到CNN的魔力"
-image: "/blog/images/photo-1526374965328-7f61d4dc18c5.jpg
+image: "/blog/images/photo-1526374965328-7f61d4dc18c5.jpg"
 series: "AI学习之路"
 episode: 18
 tags: ["计算机视觉", "CNN", "图像处理", "目标检测", "深度学习"]
