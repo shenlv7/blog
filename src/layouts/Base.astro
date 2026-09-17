@@ -67,25 +67,33 @@ const ogImage = image || `https://shenlv7.github.io${base}og-default.svg`;
     <!-- 智能导航栏：向下滚动隐藏，向上滚动显示 -->
     <script is:inline>
       (function() {
-        let lastScrollY = 0;
-        let ticking = false;
-        const header = document.querySelector('header');
-        if (!header) return;
-        window.addEventListener('scroll', function() {
-          if (!ticking) {
-            window.requestAnimationFrame(function() {
-              const currentScrollY = window.scrollY;
-              if (currentScrollY > lastScrollY && currentScrollY > 80) {
-                header.classList.add('header-hidden');
-              } else {
-                header.classList.remove('header-hidden');
-              }
-              lastScrollY = currentScrollY;
-              ticking = false;
-            });
-            ticking = true;
-          }
-        });
+        function initSmartNav() {
+          const header = document.querySelector('header');
+          if (!header) return;
+          let lastScrollY = window.scrollY;
+          let ticking = false;
+          window.addEventListener('scroll', function() {
+            if (!ticking) {
+              window.requestAnimationFrame(function() {
+                const y = window.scrollY;
+                // 向下滚动且已离开顶部 → 收起(折叠)；向上滚动 → 展开
+                if (y > lastScrollY && y > 60) {
+                  header.classList.add('header-hidden');
+                } else {
+                  header.classList.remove('header-hidden');
+                }
+                lastScrollY = y;
+                ticking = false;
+              });
+              ticking = true;
+            }
+          }, { passive: true });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initSmartNav);
+        } else {
+          initSmartNav();
+        }
       })();
     </script>
   </head>
@@ -199,6 +207,7 @@ const ogImage = image || `https://shenlv7.github.io${base}og-default.svg`;
     opacity: 0;
     pointer-events: none;
   }
+  header { will-change: transform; }
 
   nav {
     max-width: 1200px;
