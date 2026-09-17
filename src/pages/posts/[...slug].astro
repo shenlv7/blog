@@ -194,8 +194,24 @@ const totalInSeries = series ? allPosts.filter(p => p.data.series === series).le
   .back-link:hover { color: var(--accent); }
 
   @media (max-width: 768px) {
-    .post-header h1 { font-size: 1.6rem; }
-    .post-meta { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    /* 手机端标题卡片压缩：让正文更快进入视野 */
+    .post-header { margin-bottom: 1.25rem; padding-bottom: 1rem; }
+    .series-badge { font-size: 0.72rem; padding: 0.22rem 0.6rem; margin-bottom: 0.5rem; }
+    .post-header h1 { font-size: 1.35rem; line-height: 1.35; margin-bottom: 0.5rem; }
+    .post-description { font-size: 0.92rem; line-height: 1.45; margin-bottom: 0.7rem;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .post-meta { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.7rem; margin-bottom: 0.55rem; font-size: 0.82rem; }
+    /* tags 横向滑动，不换行堆叠 */
+    .post-tags { flex-wrap: nowrap; overflow-x: auto; gap: 0.4rem; padding-bottom: 0.2rem;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .post-tags::-webkit-scrollbar { display: none; }
+    .post-tag { flex-shrink: 0; font-size: 0.78rem; padding: 0.22rem 0.6rem; }
+    .post-content { font-size: 1rem; line-height: 1.75; }
+    .post-content :global(h2) { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content :global(h3) { font-size: 1.12rem; margin: 1.4rem 0 0.6rem; }
+    .post-content :global(pre) { padding: 1rem; font-size: 0.82rem; border-radius: 6px; }
+    .post-content :global(table) { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.85rem; }
     .share-buttons { flex-direction: column; }
+    .related-grid { grid-template-columns: 1fr; }
   }
 </style>
