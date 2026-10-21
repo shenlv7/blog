@@ -23,6 +23,11 @@ const aiSeriesPosts = posts.filter(p => p.data.series === 'AI学习之路');
 const completedCount = aiSeriesPosts.length;
 const conceptPosts = posts.filter(p => p.data.series === 'ai-concepts');
 const publishedCount = conceptPosts.length;
+const evoPosts = posts
+  .filter(p => p.data.series === 'ai-evolution' && p.data.seriesOrder)
+  .sort((a, b) => (b.data.seriesOrder || 0) - (a.data.seriesOrder || 0));
+const evoCount = evoPosts.length;
+const evoLatest = evoPosts[0];
 
 const shellStatusMap: Record<string, { label: string; emoji: string }> = {
   planning: { label: '规划中', emoji: '📋' },
@@ -100,6 +105,37 @@ const base = '/blog/';
 
   <!-- Search -->
   <SearchBox />
+
+  <!-- Featured Column -->
+  <section class="section featured-column">
+    <div class="section-header">
+      <div class="section-label">FEATURED · 精选栏目</div>
+      <h2>AI 的进化之路</h2>
+      <p class="section-desc">
+        从一个比特，到一个能对话的系统。16 篇编年文章，每篇只讲三件事：那一年卡在哪、谁用什么机制拧开了它、它变成了什么具体的东西。
+      </p>
+    </div>
+    <a href={`${base}posts/ai-evolution/`} class="featured-card">
+      <div class="featured-top">
+        <span class="featured-badge">{evoCount} / 16 期</span>
+        <span class="featured-tag">1943 → 2026 · 编年</span>
+      </div>
+      {evoLatest ? (
+        <>
+          <h3 class="featured-latest-title">{evoLatest.data.title}</h3>
+          <p class="featured-latest-desc">{evoLatest.data.description}</p>
+        </>
+      ) : (
+        <h3 class="featured-latest-title">专栏筹备中</h3>
+      )}
+      <div class="featured-bottom">
+        <div class="progress-track">
+          <div class="progress-fill" style={`width: ${Math.round((evoCount / 16) * 100)}%`}></div>
+        </div>
+        <span class="featured-cta">进入专栏 →</span>
+      </div>
+    </a>
+  </section>
 
   <!-- AI Core Concepts Highlight -->
   <section class="section concepts-section">
@@ -550,6 +586,43 @@ const base = '/blog/';
   .progress-fill { height: 100%; background: var(--accent); border-radius: 3px; }
   .series-progress span { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
 
+  /* ============ Featured Column ============ */
+  .featured-card {
+    display: block;
+    padding: 1.6rem 1.8rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .featured-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .featured-top {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 0.9rem;
+  }
+  .featured-badge {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+  }
+  .featured-tag { font-size: 0.78rem; color: var(--muted); }
+  .featured-latest-title { font-size: 1.25rem; margin-bottom: 0.5rem; line-height: 1.4; }
+  .featured-latest-desc {
+    font-size: 0.9rem; color: var(--muted); line-height: 1.65;
+    margin-bottom: 1.2rem;
+  }
+  .featured-bottom { display: flex; align-items: center; gap: 1rem; }
+  .featured-bottom .progress-track { max-width: 240px; }
+  .featured-cta { font-size: 0.85rem; font-weight: 600; color: var(--accent); white-space: nowrap; }
+
   /* ============ Dual Panel ============ */
   .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
   .dual-panel {
@@ -670,3 +743,4 @@ const base = '/blog/';
     .about-card { padding: 2rem 1.5rem; }
   }
 </style>
+
