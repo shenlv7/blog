@@ -522,18 +522,17 @@ const navItems = [
   table th { background: var(--panel-2) !important; }
 
   /* 玻璃要能透出光场：清掉页面自带的实心底色（否则 backdrop-filter 无从折射） */
-  main .section,
+  /* 只清这些容器自带的实心底；不能写 main section 通配——hero 也是 section，会被误清 */
   main .concept-section,
-  main .featured-column,
-  main section:not(.no-clear) {
-    background: transparent !important;
+  main .featured-column {
+    background: transparent;
   }
 
   /* ---------- 毛玻璃面板 ---------- */
   .glass {
     position: relative;
     /* 用 !important 压过 Astro 的 scoped 页面样式（.hero.astro-xxx 优先级更高） */
-    background: var(--glass) !important;
+    background: rgba(13, 22, 31, 0.55) !important;
     backdrop-filter: blur(var(--glass-blur)) saturate(150%);
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
     border: 1px solid var(--glass-border);
