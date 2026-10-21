@@ -117,7 +117,13 @@ const totalInSeries = series ? allPosts.filter(p => p.data.series === series).le
 <style>
   .post-article { max-width: 800px; margin: 0 auto; }
   
-  .post-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  /* 文章头必须随正文滚走：别让任何全局 header 规则把它粘住 */
+  .post-header {
+    position: static !important;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
   .series-badge {
     display: inline-flex;
     align-items: center;
