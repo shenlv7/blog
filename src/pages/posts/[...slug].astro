@@ -152,25 +152,140 @@ const totalInSeries = series ? allPosts.filter(p => p.data.series === series).le
   .post-tag { background: var(--accent); color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; text-decoration: none; transition: all 0.2s; }
   .post-tag:hover { background: var(--accent-light); transform: scale(1.05); }
 
-  .post-content { line-height: 1.8; font-size: 1.05rem; }
-  .post-content :global(h2) { font-size: 1.6rem; margin: 2.5rem 0 1rem; color: var(--text); border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
-  .post-content :global(h3) { font-size: 1.3rem; margin: 2rem 0 0.8rem; color: var(--text); }
-  .post-content :global(h4) { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; color: var(--text); }
-  .post-content :global(p) { margin: 1rem 0; color: var(--text); }
-  .post-content :global(ul), .post-content :global(ol) { margin: 1rem 0; padding-left: 2rem; }
-  .post-content :global(li) { margin: 0.5rem 0; color: var(--text); }
-  .post-content :global(blockquote) { border-left: 4px solid var(--accent); padding: 1rem 1.5rem; margin: 1.5rem 0; background: color-mix(in srgb, var(--accent) 5%, var(--bg)); border-radius: 0 8px 8px 0; }
-  .post-content :global(blockquote p) { margin: 0; font-style: italic; }
-  .post-content :global(pre) { background: var(--code-bg); padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin: 1.5rem 0; font-size: 0.9rem; line-height: 1.6; }
-  .post-content :global(code) { background: var(--code-bg); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.88em; }
-  .post-content :global(pre code) { background: none; padding: 0; font-size: inherit; }
-  .post-content :global(img) { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5rem 0; }
-  .post-content :global(a) { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
-  .post-content :global(a:hover) { color: var(--accent-light); }
-  .post-content :global(strong) { color: var(--text); font-weight: 600; }
-  .post-content :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
-  .post-content :global(th), .post-content :global(td) { padding: 0.6rem 1rem; border: 1px solid var(--border); text-align: left; }
-  .post-content :global(th) { background: var(--card-bg); font-weight: 600; }
+  /* ---- 正文排版 v2：为毛玻璃背景重做层级 ---- */
+  .post-article { max-width: 760px; margin: 0 auto; }
+
+  .post-content {
+    font-size: 1.02rem;
+    line-height: 1.85;
+    color: var(--text);
+    /* 中文正文 45-50 字/行的可读区间 */
+    letter-spacing: 0.005em;
+  }
+
+  /* h2：左侧一道青色短划标出章节起点，替代原来的粗底线 */
+  .post-content :global(h2) {
+    position: relative;
+    font-size: 1.42rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    margin: 2.8rem 0 1.1rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .post-content :global(h2)::before {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -1px;
+    width: 46px; height: 2px;
+    background: linear-gradient(90deg, var(--accent), rgba(34, 211, 238, 0.15));
+  }
+  .post-content :global(h3) {
+    font-size: 1.16rem;
+    font-weight: 600;
+    margin: 2rem 0 0.7rem;
+    color: var(--text);
+  }
+  .post-content :global(h4) {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1.7rem 0 0.5rem;
+  }
+
+  .post-content :global(p) { margin: 1rem 0; }
+  .post-content :global(ul),
+  .post-content :global(ol) { margin: 1rem 0; padding-left: 1.5rem; }
+  .post-content :global(li) { margin: 0.45rem 0; }
+  .post-content :global(li)::marker { color: var(--accent); }
+
+  /* 引文：细竖线 + 极淡底，不用粗红边 */
+  .post-content :global(blockquote) {
+    border-left: 2px solid var(--accent);
+    background: rgba(34, 211, 238, 0.045);
+    padding: 1rem 1.3rem;
+    margin: 1.7rem 0;
+    border-radius: 0 10px 10px 0;
+    color: var(--text-dim);
+  }
+  .post-content :global(blockquote p) { margin: 0; font-style: normal; }
+  .post-content :global(blockquote strong) { color: var(--text); }
+
+  /* 代码：玻璃卡片式，顶部一道极淡描边 */
+  .post-content :global(pre) {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.15rem 1.25rem;
+    overflow-x: auto;
+    margin: 1.6rem 0;
+    font-size: 0.86rem;
+    line-height: 1.65;
+    font-family: var(--mono);
+  }
+  .post-content :global(:not(pre) > code) {
+    background: rgba(34, 211, 238, 0.08);
+    border: 1px solid rgba(34, 211, 238, 0.16);
+    color: #8fe6f5;
+    padding: 0.1rem 0.38rem;
+    border-radius: 4px;
+    font-size: 0.86em;
+    font-family: var(--mono);
+  }
+  .post-content :global(pre code) { background: none; border: none; padding: 0; color: inherit; }
+
+  .post-content :global(img) {
+    max-width: 100%; height: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin: 1.6rem 0;
+  }
+
+  .post-content :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(34, 211, 238, 0.45);
+  }
+  .post-content :global(a:hover) { text-decoration-color: var(--accent); }
+
+  .post-content :global(strong) { color: #fff; font-weight: 650; }
+
+  .post-content :global(hr) {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-hi), transparent);
+    margin: 2.5rem 0;
+  }
+
+  .post-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.6rem 0;
+    font-size: 0.88rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .post-content :global(th),
+  .post-content :global(td) {
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+  }
+  .post-content :global(th) {
+    background: var(--panel-2);
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .post-content :global(tr:last-child td) { border-bottom: none; }
 
   .post-footer { margin-top: 3rem; }
 
@@ -206,8 +321,8 @@ const totalInSeries = series ? allPosts.filter(p => p.data.series === series).le
       -webkit-overflow-scrolling: touch; scrollbar-width: none; }
     .post-tags::-webkit-scrollbar { display: none; }
     .post-tag { flex-shrink: 0; font-size: 0.78rem; padding: 0.22rem 0.6rem; }
-    .post-content { font-size: 1rem; line-height: 1.75; }
-    .post-content :global(h2) { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; }
+    .post-content { font-size: 0.98rem; line-height: 1.8; }
+    .post-content :global(h2) { font-size: 1.24rem; margin: 2rem 0 0.8rem; }
     .post-content :global(h3) { font-size: 1.12rem; margin: 1.4rem 0 0.6rem; }
     .post-content :global(pre) { padding: 1rem; font-size: 0.82rem; border-radius: 6px; }
     .post-content :global(table) { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.85rem; }
