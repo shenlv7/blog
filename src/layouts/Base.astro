@@ -221,7 +221,7 @@ const navItems = [
     --border-hi: #24333f;
     --text: #d8e6f2;
     --text-dim: #93a9bd;
-    --muted: #5f7488;
+    --muted: #76899c;
     --accent: #22d3ee;
     --accent-2: #f5a524;
     --ok: #34d399;
@@ -282,6 +282,14 @@ const navItems = [
     background: var(--panel); color: var(--text); padding: 0.6rem 1rem;
   }
   .skip:focus { left: 0.5rem; top: 0.5rem; }
+
+  /* 键盘焦点：只在键盘操作时出现，鼠标点击不闪 */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  :focus:not(:focus-visible) { outline: none; }
 
   /* ---------- 滚动显影 ---------- */
   .reveal {
