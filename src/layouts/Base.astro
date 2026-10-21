@@ -306,7 +306,7 @@ const navItems = [
 
   /* ---------- 顶栏 ---------- */
   header {
-    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    background: transparent;
     border-bottom: 1px solid transparent;
     position: sticky;
     top: 0;
@@ -317,10 +317,35 @@ const navItems = [
                 border-color 0.25s, background 0.25s;
     will-change: transform;
   }
-  header.scrolled {
-    border-bottom-color: var(--border);
-    background: color-mix(in srgb, var(--bg) 92%, transparent);
+  /* 渐变模糊：模糊本体走伪元素，用 mask 让它从上到下渐强，上缘完全通透 */
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 35%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.35s var(--ease);
   }
+  header.scrolled::before { opacity: 1; }
+
+  header.scrolled {
+    border-bottom-color: transparent;
+  }
+  /* 底部一道渐隐分割线，替代实线边框 */
+  header::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-hi) 30%, var(--border-hi) 70%, transparent);
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+  header.scrolled::after { opacity: 1; }
   header.header-hidden {
     transform: translateY(-100%);
     opacity: 0;
@@ -328,6 +353,8 @@ const navItems = [
   }
 
   nav {
+    position: relative;
+    z-index: 1;
     max-width: 1160px;
     margin: 0 auto;
     padding: 0.85rem 1.75rem;
@@ -536,6 +563,13 @@ const navItems = [
     background: transparent;
   }
 
+  /* ---------- 按压弹性光效（替代单纯变色）---------- */
+  :is(a.btn, button, .share-btn, .post-tag, .nav-links a, .tag-cloud-item):active {
+    transform: scale(0.97);
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.14), 0 0 22px rgba(34, 211, 238, 0.22);
+    transition-duration: 0.07s;
+  }
+
   /* ---------- 毛玻璃面板 ---------- */
   .glass {
     position: relative;
@@ -583,6 +617,38 @@ const navItems = [
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .tilt:hover { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-3px); }
+  }
+
+  /* ---------- 滚动驱动：玻璃随滚入视口逐渐成形（Chrome 系支持）---------- */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hud-sheen { animation: sheen-in linear both; animation-timeline: view(); animation-range: entry 5% entry 55%; }
+    }
+  }
+  @keyframes sheen-in {
+    from { opacity: 0.55; transform: translateY(10px) scale(0.995); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* 极慢流光：只在 .sheen 上开（现在只有首页 hero 用），14s 一轮，非常淡 */
+  .sheen {
+    background-image: linear-gradient(
+      112deg,
+      transparent 38%,
+      rgba(255, 255, 255, 0.055) 47%,
+      rgba(34, 211, 238, 0.05) 52%,
+      transparent 62%
+    ) !important;
+    background-size: 260% 100% !important;
+    background-repeat: no-repeat !important;
+    animation: sheen-move 14s linear infinite;
+  }
+  @keyframes sheen-move {
+    0% { background-position: 160% 0; }
+    100% { background-position: -60% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sheen { animation: none; background-image: none !important; }
   }
 
   /* 等宽小标签：给元数据统一语境 */
