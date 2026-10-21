@@ -33,7 +33,7 @@ const navItems = [
     <meta name="description" content={description} />
     <meta name="keywords" content="AI, 人工智能, 机器学习, 深度学习, NLP, 技术博客, 赛博阿漆" />
     <meta name="author" content="赛博阿漆" />
-    <meta name="theme-color" content="#05080d" />
+    <meta name="theme-color" content="#0b1119" />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
@@ -213,30 +213,30 @@ const navItems = [
      动效原则：每个效果都要有功能含义，不做纯装饰
      ============================================================ */
   :root {
-    --bg: #05080d;
-    --bg-2: #070c13;
-    --panel: #0a1219;
-    --panel-2: #0d1822;
-    --border: #17222e;
-    --border-hi: #24333f;
+    --bg: #0b1119;
+    --bg-2: #0e1620;
+    --panel: #111b25;
+    --panel-2: #152230;
+    --border: #223040;
+    --border-hi: #2f4256;
     --text: #d8e6f2;
     --text-dim: #93a9bd;
-    --muted: #76899c;
+    --muted: #8497a9;
     --accent: #22d3ee;
     --accent-2: #f5a524;
     --ok: #34d399;
     --danger: #f43f5e;
-    --code-bg: #0a1017;
-    --card-bg: #0a1219;
+    --code-bg: #0d141c;
+    --card-bg: #111b25;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(34, 211, 238, 0.18);
-    --grid: rgba(34, 211, 238, 0.045);
+    --grid: rgba(34, 211, 238, 0.058);
     --mono: ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, monospace;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
     /* 玻璃 */
-    --glass: rgba(13, 22, 31, 0.55);
-    --glass-strong: rgba(13, 22, 31, 0.78);
+    --glass: rgba(20, 31, 42, 0.55);
+    --glass-strong: rgba(20, 31, 42, 0.82);
     --glass-border: rgba(255, 255, 255, 0.075);
     --glass-border-hi: rgba(34, 211, 238, 0.35);
     --glass-blur: 18px;
@@ -267,8 +267,8 @@ const navItems = [
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(58rem 38rem at 8% -12%, rgba(34, 211, 238, 0.13), transparent 62%),
-      radial-gradient(46rem 34rem at 96% 4%, rgba(118, 100, 255, 0.12), transparent 60%),
+      radial-gradient(58rem 38rem at 8% -12%, rgba(34, 211, 238, 0.15), transparent 62%),
+      radial-gradient(46rem 34rem at 96% 4%, rgba(118, 100, 255, 0.13), transparent 60%),
       radial-gradient(42rem 30rem at 52% 112%, rgba(245, 165, 36, 0.06), transparent 60%);
   }
 
@@ -305,7 +305,7 @@ const navItems = [
   .reveal[data-delay="4"] { transition-delay: 0.24s; }
 
   /* ---------- 顶栏 ---------- */
-  header {
+  body > header {
     background: transparent;
     border-bottom: 1px solid transparent;
     position: sticky;
@@ -318,7 +318,7 @@ const navItems = [
     will-change: transform;
   }
   /* 渐变模糊：模糊本体走伪元素，用 mask 让它从上到下渐强，上缘完全通透 */
-  header::before {
+  body > header::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -330,13 +330,13 @@ const navItems = [
     opacity: 0;
     transition: opacity 0.35s var(--ease);
   }
-  header.scrolled::before { opacity: 1; }
+  body > header.scrolled::before { opacity: 1; }
 
-  header.scrolled {
+  body > header.scrolled {
     border-bottom-color: transparent;
   }
   /* 底部一道渐隐分割线，替代实线边框 */
-  header::after {
+  body > header::after {
     content: '';
     position: absolute;
     left: 0; right: 0; bottom: 0;
@@ -345,8 +345,8 @@ const navItems = [
     opacity: 0;
     transition: opacity 0.35s;
   }
-  header.scrolled::after { opacity: 1; }
-  header.header-hidden {
+  body > header.scrolled::after { opacity: 1; }
+  body > header.header-hidden {
     transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
@@ -574,7 +574,7 @@ const navItems = [
   .glass {
     position: relative;
     /* 用 !important 压过 Astro 的 scoped 页面样式（.hero.astro-xxx 优先级更高） */
-    background: rgba(13, 22, 31, 0.55) !important;
+    background: rgba(20, 31, 42, 0.58) !important;
     backdrop-filter: blur(var(--glass-blur)) saturate(150%);
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
     border: 1px solid var(--glass-border);
