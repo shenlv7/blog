@@ -22,7 +22,8 @@ let seriesPosts: typeof allPosts = [];
 let seriesMeta: { name: string; total: number; current: number } | null = null;
 
 if (series && seriesOrder) {
-  seriesPosts = allPosts.filter(p => p.data.series === series);
+  // 只算有 seriesOrder 的编号文章：索引页等无编号页面也带 series，不该计入「共 N 期」
+  seriesPosts = allPosts.filter(p => p.data.series === series && p.data.seriesOrder);
   const idx = seriesPosts.findIndex(p => p.id.replace(/\.md$/, '') === currentSlug);
   
   if (idx > 0) prevPost = seriesPosts[idx - 1];
@@ -133,3 +134,4 @@ if (series && seriesOrder) {
     .nav-next { text-align: left; }
   }
 </style>
+
