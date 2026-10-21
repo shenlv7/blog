@@ -1,7 +1,7 @@
 ---
-title: "📚 AI 核心概念 · 学习路径（01–57 分组索引）"
-description: "57 篇概念卡片没有目录。按主题分 8 组，标出前置与难度，给三条读法：实用派 / 工程派 / 研究派。"
-pubDate: 2026-10-20
+title: "📚 AI 核心概念 · 学习路径（01–58 分组索引）"
+description: "58 篇概念卡片没有目录。按主题分 8 组，标出前置与难度，给三条读法：实用派 / 工程派 / 研究派。"
+pubDate: 2026-10-21
 tags: ["索引", "学习路径", "ai-concepts"]
 difficulty: "beginner"
 series: "ai-concepts"
@@ -12,7 +12,7 @@ slug: "ai-concepts-study-path"
 
 ## 为什么有这一页
 
-57 篇卡片是按天写下来的，编号顺序 ≈ 写作顺序，**不是学习顺序**。从首页点进来，看不出从哪篇开始、哪些篇需要前置知识。
+58 篇卡片是按天写下来的，编号顺序 ≈ 写作顺序，**不是学习顺序**。从首页点进来，看不出从哪篇开始、哪些篇需要前置知识。
 
 这一页做三件事：**按主题分组、标出前置、给三条读法**。
 
@@ -23,8 +23,8 @@ slug: "ai-concepts-study-path"
 | 路线 | 给谁 | 顺序 | 篇数 |
 |---|---|---|---|
 | 🛠 实用派 | 产品 / 运营 / 独立开发者，想把 AI 用好 | A → B → F → H | 25 篇 |
-| ⚙️ 工程派 | 做推理部署、要压成本 | A → C → D → F → H | 33 篇 |
-| 🔬 研究派 | 读论文、做机制实验 | A → C → D → G → E | 38 篇 |
+| ⚙️ 工程派 | 做推理部署、要压成本 | A → C → D → F → H | 34 篇 |
+| 🔬 研究派 | 读论文、做机制实验 | A → C → D → G → E | 39 篇 |
 
 三条路线共用 A 组。C 组只有 3 篇，却是全部后续内容的地基 —— **跳过它，后面的名词会一直悬着**。
 
@@ -72,12 +72,12 @@ Attention / Transformer / 位置编码。读 D、E、G 之前必须先过这组�
 - [08 · Transformer：改变一切的架构](/blog/posts/ai-concepts-08-transformer/) · *硬*
 - [26 · 旋转位置编码 RoPE：为什么转一下向量，比加一个位置更管用](/blog/posts/ai-concepts-26-rope/) · *进阶*
 
-### D · 推理效率：省显存、省时间（14 篇）
+### D · 推理效率：省显存、省时间（15 篇）
 
-全系列最硬的一组。KV cache 是贯穿线：量化、GQA、PagedAttention、prefix caching、P/D 分离、MLA、KV 量化都在围着它转。
+全系列最硬的一组。两条线：一条是三条量化（权重 / 激活 / KV），一条是调度（PagedAttention、prefix caching、chunked prefill、P/D 分离、GQA、MLA）。
 
 - **前置**：C 组（必须）
-- **读完能回答**：一个 token 的 KV 值多少显存；为什么 decode 是带宽瓶颈而不是算力瓶颈。
+- **读完能回答**：一个 token 的 KV 值多少显存；为什么 decode 是带宽瓶颈；为什么量化权重大体免费、量化激活丢 3 个 bit。
 
 - [20 · 专家混合 MoE：671B 参数只算 37B——我把 4 个专家塞进 numpy，看它们怎么分工](/blog/posts/ai-concepts-20-moe/) · *进阶*
 - [21 · 量化 Quantization：把 16 位压成 4 位，模型凭什么还能用](/blog/posts/ai-concepts-21-quantization/) · *进阶*
@@ -93,6 +93,7 @@ Attention / Transformer / 位置编码。读 D、E、G 之前必须先过这组�
 - [42 · 解码策略：greedy / beam / top-k / top-p —— 同一批 logits，五种花法，账都在细节里](/blog/posts/ai-concepts-42-decoding-strategies/) · *进阶*
 - [47 · Multi-head Latent Attention（MLA）：把 KV 压成一个潜向量，代价是你得先学会那个子空间](/blog/posts/ai-concepts-47-multi-head-latent-attention/) · *硬*
 - [56 · KV Cache 量化：K 按通道、V 按 token，这个不对称值 3.7 倍](/blog/posts/ai-concepts-56-kv-cache-quantization/) · *硬*
+- [58 · 同一个 INT8，压在权重上 42.7 dB，压在激活上 24.5 dB——255 个格子，普通通道只用到 9 个](/blog/posts/ai-concepts-58-activation-outliers/) · *硬*
 
 ### E · 训练与对齐：怎么改模型（8 篇）
 
@@ -153,7 +154,7 @@ Attention / Transformer / 位置编码。读 D、E、G 之前必须先过这组�
 
 ## 怎么追更
 
-每天 09:00 一篇，编号连续（当前到 57，下一篇 58）。想顺藤摸瓜就读相邻编号 —— 同一天写的东西往往前后脚。
+每天 09:00 一篇，编号连续（当前到 58，下一篇 59）。想顺藤摸瓜就读相邻编号 —— 同一天写的东西往往前后脚。
 
 每篇的写法是一致的：**结论先写在标题里 → 一个可复现的最小实验 → 明确写出「这篇不能证明什么」**。所有实验都在本机跑，不用 GPU、不调云 API，你照着代码能复现出同一批数字。
 
