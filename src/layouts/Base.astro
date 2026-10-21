@@ -91,6 +91,35 @@ const navItems = [
             }, { passive: true });
           }
 
+          // 毛玻璃 + 指针交互：自动给内容卡片打类，页面不用逐个改
+          const hoverable = window.matchMedia('(hover: hover)').matches;
+          const cardSel = '.concept-card, .concept-preview-card, .post-card, .series-card, .shell-card, .tip-card, .skill-card, .stat-card, .roadmap-item, .idea-card, .invention-card, .featured-card, .hero';
+          document.querySelectorAll(cardSel).forEach(function (el) {
+            el.classList.add('glass');
+          });
+          if (hoverable) {
+            document.querySelectorAll(cardSel).forEach(function (el) {
+              el.classList.add('tilt', 'glass-glow');
+              let raf = 0;
+              el.addEventListener('pointermove', function (e) {
+                if (raf) return;
+                raf = requestAnimationFrame(function () {
+                  const r = el.getBoundingClientRect();
+                  const x = e.clientX - r.left, y = e.clientY - r.top;
+                  el.style.setProperty('--mx', x + 'px');
+                  el.style.setProperty('--my', y + 'px');
+                  el.style.setProperty('--rx', ((0.5 - y / r.height) * 5).toFixed(2) + 'deg');
+                  el.style.setProperty('--ry', ((x / r.width - 0.5) * 5).toFixed(2) + 'deg');
+                  raf = 0;
+                });
+              });
+              el.addEventListener('pointerleave', function () {
+                el.style.setProperty('--rx', '0deg');
+                el.style.setProperty('--ry', '0deg');
+              });
+            });
+          }
+
           const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           const items = document.querySelectorAll('.reveal, main > section');
           items.forEach(function (el) { if (!el.classList.contains('reveal')) el.classList.add('reveal'); });
@@ -205,6 +234,12 @@ const navItems = [
     --mono: ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, monospace;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    /* 玻璃 */
+    --glass: rgba(13, 22, 31, 0.55);
+    --glass-strong: rgba(13, 22, 31, 0.78);
+    --glass-border: rgba(255, 255, 255, 0.075);
+    --glass-border-hi: rgba(34, 211, 238, 0.35);
+    --glass-blur: 18px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -222,6 +257,19 @@ const navItems = [
       linear-gradient(90deg, var(--grid) 1px, transparent 1px);
     background-size: 64px 64px;
     background-attachment: fixed;
+  }
+
+  /* ---------- 光场：给毛玻璃提供可折射的底色 ---------- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(58rem 38rem at 8% -12%, rgba(34, 211, 238, 0.13), transparent 62%),
+      radial-gradient(46rem 34rem at 96% 4%, rgba(118, 100, 255, 0.12), transparent 60%),
+      radial-gradient(42rem 30rem at 52% 112%, rgba(245, 165, 36, 0.06), transparent 60%);
   }
 
   ::selection { background: rgba(34, 211, 238, 0.25); color: #fff; }
@@ -255,8 +303,8 @@ const navItems = [
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
     transition: transform 0.3s var(--ease), opacity 0.3s var(--ease),
                 border-color 0.25s, background 0.25s;
     will-change: transform;
@@ -375,7 +423,9 @@ const navItems = [
 
   /* ---------- 页脚 ---------- */
   footer {
-    background: var(--bg-2);
+    background: var(--glass-strong);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
     border-top: 1px solid var(--border);
     margin-top: 5rem;
   }
@@ -456,8 +506,11 @@ const navItems = [
   main :is(.concept-card, .concept-preview-card, .post-card, .series-card, .shell-card,
            .tip-card, .skill-card, .stat-card, .roadmap-item, .list-item,
            .tag-cloud-item, .idea-card, .invention-card, .post-item, .featured-card) {
-    background: var(--panel);
-    border: 1px solid var(--border);
+    background: var(--glass);
+    backdrop-filter: blur(12px) saturate(145%);
+    -webkit-backdrop-filter: blur(12px) saturate(145%);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
   }
   main :is(.concept-card, .concept-preview-card, .post-card, .series-card, .shell-card,
            .tip-card, .skill-card, .roadmap-item, .featured-card):hover {
@@ -467,6 +520,63 @@ const navItems = [
   pre { background: var(--code-bg) !important; border: 1px solid var(--border); }
   blockquote { border-left: 2px solid var(--accent); }
   table th { background: var(--panel-2) !important; }
+
+  /* 玻璃要能透出光场：清掉页面自带的实心底色（否则 backdrop-filter 无从折射） */
+  main .section,
+  main .concept-section,
+  main .featured-column,
+  main section:not(.no-clear) {
+    background: transparent !important;
+  }
+
+  /* ---------- 毛玻璃面板 ---------- */
+  .glass {
+    position: relative;
+    /* 用 !important 压过 Astro 的 scoped 页面样式（.hero.astro-xxx 优先级更高） */
+    background: var(--glass) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+  }
+  /* 顶部一道 1px 高光：玻璃的"厚度" */
+  .glass::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+    pointer-events: none;
+  }
+  .glass:hover { border-color: var(--glass-border-hi); }
+
+  /* 光标高光：指针位置的柔光，告诉你"焦点在哪" */
+  .glass-glow { position: relative; }
+  .glass-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s;
+    background: radial-gradient(
+      18rem 18rem at var(--mx, 50%) var(--my, 50%),
+      rgba(34, 211, 238, 0.10),
+      transparent 70%
+    );
+  }
+  .glass-glow:hover::after { opacity: 1; }
+
+  /* 3D 微倾斜：hover 时按指针位置轻微转向，幅度克制 */
+  .tilt {
+    transition: transform 0.4s var(--ease);
+    transform-style: preserve-3d;
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .tilt:hover { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-3px); }
+  }
 
   /* 等宽小标签：给元数据统一语境 */
   .mono {
