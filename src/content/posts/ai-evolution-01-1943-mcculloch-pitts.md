@@ -143,4 +143,4 @@ return 1 if net >= theta else 0
 
 ---
 
-*完整 demo 见仓库 `ai-evolution-01-1943.py`，可直接运行。*
+*完整可运行脚本：[demos/ai-evolution-01-1943.py](https://github.com/shenlv7/blog/blob/main/demos/ai-evolution-01-1943.py)。本机 `python3` 直接跑，输出与上文逐行一致。*
