@@ -5,6 +5,7 @@ export async function GET(context: APIContext) {
   const posts = await getCollection('posts');
   const ideas = await getCollection('ideas');
   const inventions = await getCollection('inventions');
+  const harmony = await getCollection('harmony');
 
   const items = [
     ...posts.map(post => ({
@@ -22,6 +23,14 @@ export async function GET(context: APIContext) {
       type: 'idea' as const,
       tags: idea.data.tags || [],
       date: idea.data.pubDate.toLocaleDateString('zh-CN'),
+    })),
+    ...harmony.map(h => ({
+      title: h.data.title,
+      description: h.data.description,
+      url: `/blog/harmony/${h.id.replace(/\.md$/, '')}/`,
+      type: 'harmony' as const,
+      tags: h.data.tags || [],
+      date: h.data.pubDate.toLocaleDateString('zh-CN'),
     })),
     ...inventions.map(inv => ({
       title: inv.data.title,

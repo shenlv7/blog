@@ -56,4 +56,17 @@ const shell = defineCollection({
   }),
 });
 
-export const collections = { posts, ideas, inventions, shell };
+const harmony = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    tags: z.array(z.string()).optional(),
+    track: z.enum(['guide', 'course']),
+    order: z.number(),
+    minutes: z.number().optional(),
+  }),
+});
+
+export const collections = { posts, ideas, inventions, shell, harmony };

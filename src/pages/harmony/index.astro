@@ -1,0 +1,152 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const items = await getCollection('harmony');
+const course = items.filter(i => i.data.track === 'course').sort((a, b) => a.data.order - b.data.order);
+const guide = items.filter(i => i.data.track === 'guide').sort((a, b) => a.data.order - b.data.order);
+const base = import.meta.env.BASE_URL || '/';
+const totalMin = items.reduce((s, i) => s + i.data.minutes, 0);
+
+const path = [
+  ['01', '装环境'], ['02', 'ArkTS'], ['03', '声明式 UI'], ['04', '状态驱动'],
+  ['05', '列表'], ['06', '页面跳转'], ['07', '持久化'], ['08', '网络异步'],
+  ['09', '通知权限'], ['10', '状态管理 V2'], ['11', '打包上架'], ['12', '你自己的 App'],
+];
+---
+
+<Base title="鸿蒙开发学习 — 从零做出自己的 HarmonyOS App">
+  <section class="hm-hero">
+    <p class="hm-kicker">// HARMONYOS · 学习路径</p>
+    <h1>鸿蒙开发学习</h1>
+    <p class="hm-lead">
+      从没写过一行 ArkTS，到能独立做出并发布一个属于自己的鸿蒙 App。
+      一条横向的手册用来查，一条纵向的课程用来做，共用同一个主线项目「习惯打卡」。
+    </p>
+    <div class="hm-stats">
+      <div><b>{items.length}</b><span>篇</span></div>
+      <div><b>2</b><span>条路线</span></div>
+      <div><b>{totalMin}</b><span>分钟通读</span></div>
+      <div><b>API 12</b><span>基线版本</span></div>
+    </div>
+  </section>
+
+  <section class="hm-path">
+    {path.map(([n, t]) => (
+      <div class="hm-step"><i>{n}</i><span>{t}</span></div>
+    ))}
+  </section>
+
+  <section class="hm-block">
+    <div class="hm-block-head">
+      <h2>实战 12 讲</h2>
+      <p>纵向递进，每讲加一块功能，讲完手里有一个能跑的 App。主线项目：习惯打卡。</p>
+    </div>
+    <div class="hm-grid">
+      {course.map(item => (
+        <a class="hm-card" href={`${base}harmony/${item.id.replace(/\.md$/, '')}/`}>
+          <div class="hm-card-top">
+            <span class="hm-num">/ {String(item.data.order).padStart(2, '0')}</span>
+            <span class="hm-min">{item.data.minutes} min</span>
+          </div>
+          <h3>{item.data.title}</h3>
+          <p>{item.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="hm-block">
+    <div class="hm-block-head">
+      <h2>小白指南 13 章</h2>
+      <p>按主题横向铺开：某个 API、某个配置、某个坑怎么处理，留着查。</p>
+    </div>
+    <div class="hm-list">
+      {guide.map(item => (
+        <a class="hm-row" href={`${base}harmony/${item.id.replace(/\.md$/, '')}/`}>
+          <span class="hm-row-num">{String(item.data.order).padStart(2, '0')}</span>
+          <span class="hm-row-title">{item.data.title}</span>
+          <span class="hm-row-desc">{item.data.description}</span>
+          <span class="hm-row-min">{item.data.minutes}′</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="hm-note">
+    <h2>怎么用这两份东西</h2>
+    <ol>
+      <li>先读<b>手册前 5 章</b>建立地图：工具链、语言、工程结构、声明式 UI、路由。</li>
+      <li>然后按<b>课程 1 → 12 讲</b>往下做，每讲都有产出，别跳。</li>
+      <li>卡住时回手册查对应章节；手册是索引，不是读物。</li>
+    </ol>
+    <p class="hm-caveat">
+      基线：DevEco Studio 5.0+ / API 12（HarmonyOS 5.0.0）/ Stage 模型 / ArkTS。
+      第 9 讲的通知必须用真机验证 —— 模拟器不模拟通知栏和提醒代理。
+    </p>
+  </section>
+</Base>
+
+<style>
+  .hm-hero { max-width: 860px; margin: 0 auto 2.5rem; }
+  .hm-kicker { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 0.8rem; }
+  .hm-hero h1 { font-size: 2.4rem; line-height: 1.2; margin-bottom: 0.9rem; }
+  .hm-lead { color: var(--text-dim); font-size: 1.05rem; line-height: 1.8; max-width: 720px; }
+  .hm-stats { display: flex; gap: 2.2rem; margin-top: 1.6rem; flex-wrap: wrap; }
+  .hm-stats div { display: flex; align-items: baseline; gap: 0.35rem; }
+  .hm-stats b { font-family: var(--mono); font-size: 1.5rem; color: var(--accent); }
+  .hm-stats span { font-size: 0.8rem; color: var(--muted); }
+
+  .hm-path {
+    display: flex; flex-wrap: wrap; gap: 0.4rem; row-gap: 1rem; padding: 1rem 0 1.4rem;
+    max-width: 860px; margin: 0 auto;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .hm-step { flex: 0 0 auto; display: flex; flex-direction: column; gap: 0.3rem; padding-right: 1.1rem; position: relative; }
+  .hm-step:not(:last-child)::after {
+    content: '›'; position: absolute; right: 0.45rem; top: 0.6rem; color: var(--border-hi);
+  }
+  .hm-step i { font-family: var(--mono); font-style: normal; font-size: 0.7rem; color: var(--accent); }
+  .hm-step span { font-size: 0.82rem; color: var(--text-dim); white-space: nowrap; }
+
+  .hm-block { max-width: 1000px; margin: 3rem auto 0; }
+  .hm-block-head h2 { font-size: 1.35rem; margin-bottom: 0.4rem; }
+  .hm-block-head p { color: var(--muted); font-size: 0.92rem; margin-bottom: 1.3rem; }
+
+  .hm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.9rem; }
+  .hm-card {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    padding: 1.1rem 1.2rem; text-decoration: none;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    transition: all 0.25s var(--ease);
+  }
+  .hm-card:hover { border-color: var(--glass-border-hi); transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+  .hm-card-top { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .hm-num { color: var(--accent); }
+  .hm-card h3 { font-size: 0.98rem; line-height: 1.45; color: var(--text); margin: 0; }
+  .hm-card p { font-size: 0.85rem; line-height: 1.65; color: var(--muted); margin: 0; }
+
+  .hm-list { display: flex; flex-direction: column; border-top: 1px solid var(--border); }
+  .hm-row {
+    display: grid; grid-template-columns: 2.4rem minmax(180px, 1.1fr) 2fr 3rem;
+    gap: 1rem; align-items: center; padding: 0.85rem 0.4rem;
+    border-bottom: 1px solid var(--border); text-decoration: none;
+    transition: background 0.2s;
+  }
+  .hm-row:hover { background: rgba(34, 211, 238, 0.04); }
+  .hm-row-num { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); }
+  .hm-row-title { color: var(--text); font-size: 0.92rem; }
+  .hm-row-desc { color: var(--muted); font-size: 0.83rem; line-height: 1.5; }
+  .hm-row-min { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); text-align: right; }
+  @media (max-width: 720px) {
+    .hm-row { grid-template-columns: 2rem 1fr 2.6rem; }
+    .hm-row-desc { display: none; }
+  }
+
+  .hm-note { max-width: 860px; margin: 3.5rem auto 0; padding: 1.5rem 1.7rem;
+    background: var(--panel); border: 1px solid var(--border); border-left: 2px solid var(--accent); border-radius: 10px; }
+  .hm-note h2 { font-size: 1.05rem; margin-bottom: 0.8rem; }
+  .hm-note ol { margin: 0 0 1rem 1.1rem; padding: 0; color: var(--text-dim); font-size: 0.92rem; line-height: 1.9; }
+  .hm-note b { color: var(--text); }
+  .hm-caveat { color: var(--muted); font-size: 0.85rem; line-height: 1.7; margin: 0; padding-top: 0.8rem; border-top: 1px dashed var(--border); }
+</style>

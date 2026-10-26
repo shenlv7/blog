@@ -25,7 +25,7 @@
     title: string;
     description: string;
     url: string;
-    type: 'post' | 'idea' | 'invention';
+    type: 'post' | 'idea' | 'invention' | 'harmony';
     tags: string[];
     date: string;
   }
@@ -73,7 +73,8 @@
     const typeLabels: Record<string, string> = {
       post: '📝 文章',
       idea: '💡 灵感',
-      invention: '🔧 发明'
+      invention: '🔧 发明',
+      harmony: '📚 鸿蒙'
     };
 
     container.innerHTML = results.map(item => `
