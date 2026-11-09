@@ -43,7 +43,7 @@ slug: "ai-evolution"
 | 03 | 1950 | [图灵测试是一道概率题，单局做不出结论](/blog/posts/ai-evolution-03-1950-turing-test/) | 图灵判据（Mind 59:433–460）/ ELIZA（1966） | ✅ 已发 |
 | 04 | 1956 | [「人工智能」这个词出自一份被砍半预算的申请书](/blog/posts/ai-evolution-04-1956-dartmouth/) | 提案（1955-08-31，17 页）+ 达特茅斯会议 + Logic Theorist（38/52） | ✅ 已发 |
 | 05 | 1957 | [感知机只加分不扣分：样本看多了，准确率从 0.74 掉到 0.69](/blog/posts/ai-evolution-05-1957-perceptron/) | 报告 85-460-1（58 页）+ IBM 704 上的模拟；Mark I（1959-06 组装，1960-06-23 首次演示，400 光电池 / 512 A / 8 R） | ✅ 已发 |
-| 06 | 1969 | 一本书证明它做不了 XOR，以及这个结论被误读得有多厉害 | 《感知机》 | ⬜ 待写 |
+| 06 | 1969 | [一本书证明它做不了 XOR，以及这个结论被误读得有多厉害](/blog/posts/ai-evolution-06-1969-perceptrons/) | 《Perceptrons: An Introduction to Computational Geometry》（MIT Press，1969）+ Theorem 3.1.1 / 5.1 | ✅ 已发 |
 
 ### 第二幕 · 符号与退潮（1970–1990）
 
@@ -99,6 +99,7 @@ slug: "ai-evolution"
 ---
 
 *本栏目与 `ai-concepts` 概念卡片互为纵横：这一栏讲"怎么走到今天的"，那一栏讲"今天的东西是怎么造的"。*
+
 
 
 
