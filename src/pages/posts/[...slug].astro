@@ -33,7 +33,7 @@ const seriesNames: Record<string, string> = {
   'ai-learning-01': 'AI学习之路',
 };
 const seriesName = series ? seriesNames[series] || series : null;
-const totalInSeries = series ? allPosts.filter(p => p.data.series === series).length : 0;
+const totalInSeries = series ? allPosts.filter(p => p.data.series === series && p.data.seriesOrder).length : 0;
 ---
 
 <Base title={post.data.title} description={post.data.description} type="article">
