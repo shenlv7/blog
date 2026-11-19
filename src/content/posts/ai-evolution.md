@@ -51,7 +51,7 @@ slug: "ai-evolution"
 |---|---|---|---|---|
 | 07 | 1970s | [MYCIN 用 450 条 if-then 赢了盲测，却一天也没进过病房](/blog/posts/ai-evolution-07-1970s-mycin-expert-systems/) | DENDRAL（1964 立项，CONGEN 完备枚举）/ MYCIN（1976 论文，约 450 条规则，1978 封存）/ EMYCIN 空壳 / XCON（1980 投产，1986：8 万张订单、95–98%、年省约 2500 万美元） | ✅ 已发 |
 | 08 | 1986 | [隐藏层不知道该怪谁，这个死结从 1969 挂到 1986](/blog/posts/ai-evolution-08-1986-backprop/) | 反向传播（Nature 323:533–536，1986-10-09）/ PDP 两卷（MIT Press，1986） | ✅ 已发 |
-| 09 | 1990s | 从"造大脑"退到"解优化" | SVM / 统计学习理论 | ⬜ 待写 |
+| 09 | 1990s | [把「造大脑」换成「解凸优化」，错误率从 12.0% 掉到 4.2%](/blog/posts/ai-evolution-09-1990s-svm/) | SVM（COLT 1992 核技巧 / Machine Learning 20:273–297：USPS 12.0%→4.2%）+《The Nature of Statistical Learning Theory》(1995) + SMO (1998) | ✅ 已发 |
 
 ### 第三幕 · 深水区（1997–2017）
 
@@ -99,6 +99,7 @@ slug: "ai-evolution"
 ---
 
 *本栏目与 `ai-concepts` 概念卡片互为纵横：这一栏讲"怎么走到今天的"，那一栏讲"今天的东西是怎么造的"。*
+
 
 
 
