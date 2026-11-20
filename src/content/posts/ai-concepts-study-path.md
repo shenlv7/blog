@@ -132,7 +132,7 @@ Attention / Transformer / 位置编码 / 注意力打分的尺度。读 D、E、
 - [81 · batch 从 32 加到 2048：步数少 13.6 倍，样本多花 4.7 倍——免费区间到 128 就断了，切断它的是 B_noise=257](/blog/posts/ai-concepts-81-critical-batch-size/) · *硬*
 - [83 · λ 从 0.001 调到 100，参数走的还是同一条路：第 87 步过零、翻 3 次符号——Adam 的 L2 项被 1/√v̂ 吃掉了，同样的 λ=0.1 下，低梯度那 4 个权重只长到真值的 0.181，高梯度那 4 个到 0.959](/blog/posts/ai-concepts-83-decoupled-weight-decay/) · *硬*
 - [87 · 改一条事实，同一主语的另外 7 条事实 cosine 从 0.92 掉到 0.64；串行批量编辑 20 条只有最后一条生效](/blog/posts/ai-concepts-87-model-editing-rome/) · *硬*
-- [88 · ai-concepts-88-compute-optimal-scaling](/blog/posts/ai-concepts-88-compute-optimal-scaling/) · **
+- [88 · 同样的算力，论文自己的拟合式给出的最优解是 32B 参数配 3.0T token——不是 20 token/param](/blog/posts/ai-concepts-88-compute-optimal-scaling/) · *硬*
 
 ### F · 检索与调度：系统层（9 篇）
 
