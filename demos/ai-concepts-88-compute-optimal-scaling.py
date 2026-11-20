@@ -1,1 +1,98 @@
-IyEvdXNyL2Jpbi9lbnYgcHl0aG9uMwoiIiI4OCDigJQgQ2hpbmNoaWxsYSDlj4LmlbDljJbnvKnmlL7lvovvvJrmiororrrmlocgRXEuKDEwKSDnmoTns7vmlbDku6Plm57nuqbmnZ/kvJjljJbjgIIKCkwoTixEKSA9IDEuNjkgKyA0MDYuNC9OXjAuMzQgKyA0MTAuNy9EXjAuMjggICAgICAgIChIb2ZmbWFubiBldCBhbC4gMjAyMiwgRXEuIDEwKQrnuqbmnZ8gICAgQyA9IDYgTiBEICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoS2FwbGFuIGV0IGFsLiAyMDIwLCDnqKDlr4YgVHJhbnNmb3JtZXIpCgrovpPlh7rvvJoKICAxLiDpl63lvI/op6MgdnMg572R5qC85pCc57Si77yI6aqM6K+B6Kej5p6Q5byP5rKh5o6o6ZSZ77yJCiAgMi4g5ZCE566X5Yqb6aKE566X5LiL55qEIE4qIC8gRCogLyB0b2tlbnMtcGVyLXBhcmFtIC8g5o2f5aSxCiAgMy4g5LiO6K665paH6ZmE5b2VIFRhYmxlIEEz77yIQXBwcm9hY2ggMiAvIDPvvInnmoTlr7nnhacKICA0LiDmjIfmlbDmlY/mhJ/mgKfvvJphbHBoYS9iZXRhIOWKqCDCsTAuMDLvvIx0b2tlbi9wYXJhbSDlj5jlpJrlsJEK5pegIEdQVe+8jOe6r+a1rueCuei/kOeul++8m+S4jeaYr+iuree7g+Wunua1i++8jOaYr+iuuuaWh+aLn+WQiOW8j+eahOmHjeaWsOS7o+WFpeOAggoiIiIKaW1wb3J0IG1hdGgKCkUsIEEsIEIsIEFMUEhBLCBCRVRBID0gMS42OSwgNDA2LjQsIDQxMC43LCAwLjM0LCAwLjI4CgoKZGVmIGxvc3MoTiwgRCwgZT1FLCBhPUEsIGI9QiwgYWw9QUxQSEEsIGJlPUJFVEEpOgogICAgcmV0dXJuIGUgKyBhIC8gTiAqKiBhbCArIGIgLyBEICoqIGJlCgoKZGVmIGNsb3NlZF9mb3JtKEMsIGFsPUFMUEhBLCBiZT1CRVRBLCBhPUEsIGI9Qik6CiAgICAiIiLmi4nmoLzmnJfml6Xop6PvvJptaW4gTCBzLnQuIDZORD1DICA9PiAgTiogPSAoYWxwaGFBL2JldGFCKV4oMS8oYWxwaGErYmV0YSkpICogKEMvNileKGJldGEvKGFscGhhK2JldGEpKSIiIgogICAgcyA9IGFsICsgYmUKICAgIEcgPSAoYWwgKiBhIC8gKGJlICogYikpICoqICgxLjAgLyBzKQogICAgTiA9IEcgKiAoQyAvIDYuMCkgKiogKGJlIC8gcykKICAgIHJldHVybiBOLCBDIC8gKDYuMCAqIE4pCgoKZGVmIGdyaWRfb3B0KEMsIGxvPTYuMCwgaGk9MTMuMCwgc3RlcHM9NzAwKToKICAgIGJlc3QgPSBOb25lCiAgICBmb3IgaSBpbiByYW5nZShzdGVwcyArIDEpOgogICAgICAgIE4gPSAxMCAqKiAobG8gKyAoaGkgLSBsbykgKiBpIC8gc3RlcHMpCiAgICAgICAgRCA9IEMgLyAoNi4wICogTikKICAgICAgICBMID0gbG9zcyhOLCBEKQogICAgICAgIGlmIGJlc3QgaXMgTm9uZSBvciBMIDwgYmVzdFswXToKICAgICAgICAgICAgYmVzdCA9IChMLCBOLCBEKQogICAgcmV0dXJuIGJlc3QKCgpkZWYgaHVtYW4oeCwgdW5pdD0iIik6CiAgICBmb3IgZGl2LCBzdWYgaW4gKCgxZTEyLCAiVCIpLCAoMWU5LCAiQiIpLCAoMWU2LCAiTSIpKToKICAgICAgICBpZiB4ID49IGRpdjoKICAgICAgICAgICAgcmV0dXJuIGYie3gvZGl2OjYuMmZ9e3N1Zn17dW5pdH0iCiAgICByZXR1cm4gZiJ7eDo2LjJmfXt1bml0fSIKCgpwcmludCgiPSIgKiA3OCkKcHJpbnQoIjEpIOmXreW8j+inoyB2cyDnvZHmoLzmkJzntKLvvIjlkIzkuIDpooTnrpfkuIvnvZHmoLzmnIDlsI/lgLznmoQgTiDlupTkuI7op6PmnpAgTiog6YeN5ZCI77yJIikKcHJpbnQoIj0iICogNzgpCnByaW50KGYieyfnrpflipsgQyAoRkxPUHMpJzo+MTR9IHsnTiog6Kej5p6QJzo+MTB9IHsnTiDnvZHmoLwnOj4xMH0geyflt64nOj43fSB7J0wg6Kej5p6QJzo+OH0geydMIOe9keagvCc6Pjh9IikKZm9yIEMgaW4gKDFlMTksIDFlMjEsIDFlMjMsIDUuNzZlMjMsIDFlMjUpOgogICAgTmMsIERjID0gY2xvc2VkX2Zvcm0oQykKICAgIExnLCBOZywgXyA9IGdyaWRfb3B0KEMpCiAgICBnYXAgPSBhYnMoTmcgLyBOYyAtIDEpICogMTAwCiAgICBwcmludChmIntDOjE0LjJlfSB7aHVtYW4oTmMpOj4xMH0ge2h1bWFuKE5nKTo+MTB9IHtnYXA6Ni4yZn0lIHtsb3NzKE5jLCBEYyk6OC40Zn0ge0xnOjguNGZ9IikKCnByaW50KCkKcHJpbnQoIj0iICogNzgpCnByaW50KCIyKSDlkITpooTnrpfnmoTmnIDkvJjop6PvvIjorrrmlocgRXEuMTAg57O75pWw77yMQz02TkQg57qm5p2f77yJIikKcHJpbnQoIj0iICogNzgpCnByaW50KGYieydDIChGTE9QcyknOj4xMn0geydOKic6Pjl9IHsnRConOj45fSB7J0QvTic6Pjh9IHsnTConOj43fSB7J+iuree7g+WkqeaVsEAxZTIxIEZMT1Avcyc6PjEwfSIpCmZvciBDIGluICgxZTE5LCAxZTIwLCAxZTIxLCAxZTIyLCAxZTIzLCA1Ljc2ZTIzLCAxZTI0LCAxZTI1KToKICAgIE4sIEQgPSBjbG9zZWRfZm9ybShDKQogICAgZGF5cyA9IEMgLyAxZTIxIC8gODY0MDAKICAgIHByaW50KGYie0M6MTIuMWV9IHtodW1hbihOKTo+OX0ge2h1bWFuKEQpOj45fSB7RC9OOjguMWZ9IHtsb3NzKE4sIEQpOjcuNGZ9IHtkYXlzOjEwLjFmfSIpCgpwcmludCgpCnByaW50KCI9IiAqIDc4KQpwcmludCgiMykg5LiO6K665paH6ZmE5b2VIFRhYmxlIEEzIOeahOWvueeFp++8iEFwcHJvYWNoIDIgLyBBcHByb2FjaCAzIOeahOaKleW9seihjO+8iSIpCnByaW50KCI9IiAqIDc4KQpwcmludCgi6K665paHIFRhYmxlIEEzIOWOn+aWh++8miIpCnByaW50KCIgIEFwcHJvYWNoIDIgIDY3QiAgLT4gIDYuODhlMjMgRkxPUHMsIDEuN1QgdG9rZW5zICAoMjUgdG9rZW4vcGFyYW0pIikKcHJpbnQoIiAgQXBwcm9hY2ggMyAgNjdCICAtPiAgMS43MWUyNCBGTE9QcywgNC4xVCB0b2tlbnMgICg2MSB0b2tlbi9wYXJhbSkiKQpwcmludCgiICBBcHByb2FjaCAxIDY3QiAgLT4gIDEuNVQgdG9rZW5zIChUYWJsZSAzKSAgICAgICAgKDIyIHRva2VuL3BhcmFtKSIpCnByaW50KCIgIENoaW5jaGlsbGEg5a6e6ZmFICA3MEIgeCAxLjRUID0gNS44OGUyMyBGTE9QcyAgICAgICgyMCB0b2tlbi9wYXJhbSkiKQpwcmludCgpCmZvciBDLCB0YWcgaW4gKCg2Ljg4ZTIzLCAiQXBwcm9hY2ggMiDpooTnrpciKSwgKDEuNzFlMjQsICJBcHByb2FjaCAzIOmihOeulyIpKToKICAgIE4sIEQgPSBjbG9zZWRfZm9ybShDKQogICAgcHJpbnQoZiIgIOaKiiBFcS4xMCDns7vmlbDku6PlhaUge3RhZ30gQz17QzouMmV9OiAgTio9e2h1bWFuKE4pfSAgRCo9e2h1bWFuKEQpfSAgIgogICAgICAgICAgZiJ7RC9OOi4wZn0gdG9rZW4vcGFyYW0gIEwqPXtsb3NzKE4sIEQpOi40Zn0iKQpOQywgREMgPSA3MGU5LCAxLjRlMTIKcHJpbnQoZiJcbiAgQ2hpbmNoaWxsYSDlrp7phY0gNzBCIHggMS40VCDnmoTmjZ/lpLEgPSB7bG9zcyhOQywgREMpOi40Zn0iKQpOMiwgRDIgPSBjbG9zZWRfZm9ybSg2ICogTkMgKiBEQykKcHJpbnQoZiIgIOWQjOmihOeul+S4iyBFcS4xMCDorqTkuLroh6rlt7Hmm7TkvJjnmoTngrkgPSB7aHVtYW4oTjIpfSB4IHtodW1hbihEMil9ICBMPXtsb3NzKE4yLCBEMik6LjRmfSIKICAgICAgZiIgICjmr5Tlrp7phY3kvY4ge2xvc3MoTkMsIERDKSAtIGxvc3MoTjIsIEQyKTouNGZ9KSIpCgpwcmludCgpCnByaW50KCI9IiAqIDc4KQpwcmludCgiNCkg5oyH5pWw5pWP5oSf5oCn77yaRC9OIOaYryAoYWxwaGEsYmV0YSkg55qE5Ye95pWw77yM5LiN5piv5bi45pWwIikKcHJpbnQoIj0iICogNzgpCnByaW50KGYieydhbHBoYSc6PjZ9IHsnYmV0YSc6PjZ9IHsnTiDmjIfmlbAgYSc6Pjl9IHsnQz0xZTIxIOeahCBEL04nOj4xNH0geydDPTUuNzZlMjMg55qEIEQvTic6PjE3fSIpCmZvciBhbCBpbiAoMC4zMiwgMC4zNCwgMC4zNik6CiAgICBmb3IgYmUgaW4gKDAuMjYsIDAuMjgsIDAuMzApOgogICAgICAgIE4xLCBEMSA9IGNsb3NlZF9mb3JtKDFlMjEsIGFsPWFsLCBiZT1iZSkKICAgICAgICBOMl8sIEQyXyA9IGNsb3NlZF9mb3JtKDUuNzZlMjMsIGFsPWFsLCBiZT1iZSkKICAgICAgICBwcmludChmInthbDo2LjJmfSB7YmU6Ni4yZn0ge2JlLyhhbCtiZSk6OS4zZn0ge0QxL04xOjE0LjFmfSB7RDJfL04yXzoxNy4xZn0iKQo=
+#!/usr/bin/env python3
+"""88 — Chinchilla 参数化缩放律：把论文 Eq.(10) 的系数代回约束优化。
+
+L(N,D) = 1.69 + 406.4/N^0.34 + 410.7/D^0.28        (Hoffmann et al. 2022, Eq. 10)
+约束    C = 6 N D                                   (Kaplan et al. 2020, 稠密 Transformer)
+
+输出：
+  1. 闭式解 vs 网格搜索（验证解析式没推错）
+  2. 各算力预算下的 N* / D* / tokens-per-param / 损失
+  3. 与论文附录 Table A3（Approach 2 / 3）的对照
+  4. 指数敏感性：alpha/beta 动 ±0.02，token/param 变多少
+无 GPU，纯浮点运算；不是训练实测，是论文拟合式的重新代入。
+"""
+import math
+
+E, A, B, ALPHA, BETA = 1.69, 406.4, 410.7, 0.34, 0.28
+
+
+def loss(N, D, e=E, a=A, b=B, al=ALPHA, be=BETA):
+    return e + a / N ** al + b / D ** be
+
+
+def closed_form(C, al=ALPHA, be=BETA, a=A, b=B):
+    """拉格朗日解：min L s.t. 6ND=C  =>  N* = (alphaA/betaB)^(1/(alpha+beta)) * (C/6)^(beta/(alpha+beta))"""
+    s = al + be
+    G = (al * a / (be * b)) ** (1.0 / s)
+    N = G * (C / 6.0) ** (be / s)
+    return N, C / (6.0 * N)
+
+
+def grid_opt(C, lo=6.0, hi=13.0, steps=700):
+    best = None
+    for i in range(steps + 1):
+        N = 10 ** (lo + (hi - lo) * i / steps)
+        D = C / (6.0 * N)
+        L = loss(N, D)
+        if best is None or L < best[0]:
+            best = (L, N, D)
+    return best
+
+
+def human(x, unit=""):
+    for div, suf in ((1e12, "T"), (1e9, "B"), (1e6, "M")):
+        if x >= div:
+            return f"{x/div:6.2f}{suf}{unit}"
+    return f"{x:6.2f}{unit}"
+
+
+print("=" * 78)
+print("1) 闭式解 vs 网格搜索（同一预算下网格最小值的 N 应与解析 N* 重合）")
+print("=" * 78)
+print(f"{'算力 C (FLOPs)':>14} {'N* 解析':>10} {'N 网格':>10} {'差':>7} {'L 解析':>8} {'L 网格':>8}")
+for C in (1e19, 1e21, 1e23, 5.76e23, 1e25):
+    Nc, Dc = closed_form(C)
+    Lg, Ng, _ = grid_opt(C)
+    gap = abs(Ng / Nc - 1) * 100
+    print(f"{C:14.2e} {human(Nc):>10} {human(Ng):>10} {gap:6.2f}% {loss(Nc, Dc):8.4f} {Lg:8.4f}")
+
+print()
+print("=" * 78)
+print("2) 各预算的最优解（论文 Eq.10 系数，C=6ND 约束）")
+print("=" * 78)
+print(f"{'C (FLOPs)':>12} {'N*':>9} {'D*':>9} {'D/N':>8} {'L*':>7} {'训练天数@1e21 FLOP/s':>10}")
+for C in (1e19, 1e20, 1e21, 1e22, 1e23, 5.76e23, 1e24, 1e25):
+    N, D = closed_form(C)
+    days = C / 1e21 / 86400
+    print(f"{C:12.1e} {human(N):>9} {human(D):>9} {D/N:8.1f} {loss(N, D):7.4f} {days:10.1f}")
+
+print()
+print("=" * 78)
+print("3) 与论文附录 Table A3 的对照（Approach 2 / Approach 3 的投影行）")
+print("=" * 78)
+print("论文 Table A3 原文：")
+print("  Approach 2  67B  ->  6.88e23 FLOPs, 1.7T tokens  (25 token/param)")
+print("  Approach 3  67B  ->  1.71e24 FLOPs, 4.1T tokens  (61 token/param)")
+print("  Approach 1 67B  ->  1.5T tokens (Table 3)        (22 token/param)")
+print("  Chinchilla 实际  70B x 1.4T = 5.88e23 FLOPs      (20 token/param)")
+print()
+for C, tag in ((6.88e23, "Approach 2 预算"), (1.71e24, "Approach 3 预算")):
+    N, D = closed_form(C)
+    print(f"  把 Eq.10 系数代入 {tag} C={C:.2e}:  N*={human(N)}  D*={human(D)}  "
+          f"{D/N:.0f} token/param  L*={loss(N, D):.4f}")
+NC, DC = 70e9, 1.4e12
+print(f"\n  Chinchilla 实配 70B x 1.4T 的损失 = {loss(NC, DC):.4f}")
+N2, D2 = closed_form(6 * NC * DC)
+print(f"  同预算下 Eq.10 认为自己更优的点 = {human(N2)} x {human(D2)}  L={loss(N2, D2):.4f}"
+      f"  (比实配低 {loss(NC, DC) - loss(N2, D2):.4f})")
+
+print()
+print("=" * 78)
+print("4) 指数敏感性：D/N 是 (alpha,beta) 的函数，不是常数")
+print("=" * 78)
+print(f"{'alpha':>6} {'beta':>6} {'N 指数 a':>9} {'C=1e21 的 D/N':>14} {'C=5.76e23 的 D/N':>17}")
+for al in (0.32, 0.34, 0.36):
+    for be in (0.26, 0.28, 0.30):
+        N1, D1 = closed_form(1e21, al=al, be=be)
+        N2_, D2_ = closed_form(5.76e23, al=al, be=be)
+        print(f"{al:6.2f} {be:6.2f} {be/(al+be):9.3f} {D1/N1:14.1f} {D2_/N2_:17.1f}")

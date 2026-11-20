@@ -1,1 +1,128 @@
-LS0tCnRpdGxlOiAi5ZCM5qC355qE566X5Yqb77yM6K665paH6Ieq5bex55qE5ouf5ZCI5byP57uZ5Ye655qE5pyA5LyY6Kej5pivIDMyQiDlj4LmlbDphY0gMy4wVCB0b2tlbuKAlOKAlOS4jeaYryAyMCB0b2tlbi9wYXJhbSIKZGVzY3JpcHRpb246ICLmioogQ2hpbmNoaWxsYSDorrrmlofpmYTlvZUgRXEuKDEwKSDnmoTns7vmlbDvvIhFPTEuNjksIEE9NDA2LjQsIEI9NDEwLjcsIM6xPTAuMzQsIM6yPTAuMjjvvInku6Plm54gNk5EIOe6puadn+WBmue6puadn+S8mOWMlu+8muWcqCA1Ljc2w5cxMMKywrMgRkxPUHMg5LiK77yM5pyA5LyY6Kej5pivIDMyLjJCIOWPguaVsOmFjSAyLjk4VCB0b2tlbu+8jDkyLjYgdG9rZW4vcGFyYW3vvIzmr5Tlrp7pmYXorq3nu4PnmoQgNzBCw5cxLjRUIOaNn+WkseS9jiAwLjAwNjfjgILorrrmlofoh6rlt7HnmoTkuInkuKrmlrnms5XlnKjlkIzkuIDmqKHlnovop4TmqKHkuIvnu5kgMjIgLyAyNSAvIDYxIHRva2VuL3BhcmFt77yb6ICMIDIwIOi/meS4quaVsOWtl+WcqOato+aWh+mHjOayoeacieiiq+WGmeaIkOWFrOW8j+OAgs6x44CBzrIg5ZCE5YqoIDAuMDLvvIzmnIDkvJggdG9rZW4vcGFyYW0g5LuOIDE5IOWPmOWIsCA0OTHjgIIiCnB1YkRhdGU6IDIwMjYtMTEtMjAKdGFnczogWyJBSeaguOW/g+amguW/tSIsICLnvKnmlL7lvosiLCAiQ2hpbmNoaWxsYSIsICLnrpflipvpooTnrpciLCAi6K6t57uD562W55WlIiwgIuaLieagvOacl+aXpSJdCmRpZmZpY3VsdHk6IGFkdmFuY2VkCnNlcmllczogImFpLWNvbmNlcHRzIgpzZXJpZXNPcmRlcjogODgKc2x1ZzogImFpLWNvbmNlcHRzLTg4LWNvbXB1dGUtb3B0aW1hbC1zY2FsaW5nIgotLS0KCj4gIjIwIHRva2VuIHBlciBwYXJhbWV0ZXIiIOaYryBDaGluY2hpbGxhIOS5i+WQjuacgOW4uOiiq+W8leeUqOeahOaVsOWtl+OAguWug+S4jeWcqOiuuuaWh+eahOS7u+S9leS4gOadoeWFrOW8j+mHjOKAlOKAlOWug+aYr+S7jiBUYWJsZSAzIOeahOaKleW9seihjOWSjOS4gOasoeWunumFje+8iDcwQiDDlyAxLjRU77yJ6YeM6K+75Ye65p2l55qE44CCCj4g5oqK6K665paH6ZmE5b2VIEVxLigxMCkg6YKj57uE5ouf5ZCI57O75pWw5Luj5Zue5ZCM5LiA5Liq57qm5p2fICRDID0gNk5EJCDmsYLmnoHlsI/vvIzlvpfliLDnmoTmmK/lj6bkuIDkuKrngrnvvJrlkIzmoLcgJDUuNzZcdGltZXMxMF57MjN9JCBGTE9Qc++8jOacgOS8mOaYryAqKjMyLjJCIOWPguaVsCDDlyAyLjk4VCB0b2tlbioq77yIOTIuNiB0b2tlbi9wYXJhbe+8ie+8jOaNn+WksSAxLjkzMDfvvIzmr5Tlrp7pmYXorq3nu4PnmoQgNzBCIMOXIDEuNFQg5L2OIDAuMDA2N+OAggo+IOS4pOS4qumFjeavlOW3riA0LjYg5YCN77yM5o2f5aSx5Y+q5beu5Y2D5YiG5LmL5LiD44CC6L+Z6K+05piOIDZORCDov5nmnaHlj4zmm7Lnur/lnKjmnIDkvJjpmYTku7bpnZ7luLjlubPigJTigJTkuZ/or7TmmI4iMjAi5LiN5piv5a6a5b6L55qE5bi45pWw6aG577yM6ICM5piv5oyH5pWw5LmL5beu55qE5Ye95pWw44CCCgror7vov5nnr4fopoHkvJrvvJrkuqTlj4nnhrXmjZ/lpLEgLyDmi4nmoLzmnJfml6XkuZjlrZDms5UgLyDluYLlvovlnKjlr7nmlbDlnZDmoIfph4zmmK/nm7Tnur/jgIIKCiMjIPCfjq8gNk5EIOaYr+eslOmihOeul++8jOS4jeaYr+aKiuWwuuWtkAoK5LiA5Liq56ig5a+GIFRyYW5zZm9ybWVyIOeahOiuree7g+eul+WKm+aMiSAkQyBcYXBwcm94IDZORCQg5Lyw77ya5q+P5Liq5Y+C5pWw5q+P5LiqIHRva2VuIOWJjeWQkSAyIEZMT1Bz77yI5LiA5qyh5LmY5Yqg77yJ77yM5Y+N5ZCRIDQgRkxPUHPvvIjnrpfmnYPph43nmoTmoq/luqbjgIHnrpfkvKDkuIvljrvnmoTmoq/luqblkITkuIDmrKHnn6npmLXkuZjvvInvvIzlkIjotbfmnaUgNuOAgue7meWumiAkQyTvvIwkTiQg5ZKMICREJCDlj6rog73msr/kuIDmnaHlj4zmm7Lnur/kupLmjaLigJTigJTov5nlsLHmmK/lhajpg6jnmoTkuqTmmJPjgIIKCuWbm+S4quecn+WunumFjee9ruaUvuWcqOi/meadoeabsue6v+eahOS4jeWQjOS9jee9ru+8mgoKfCDmqKHlnosgfCDlj4LmlbAgfCDorq3nu4MgdG9rZW4gfCB0b2tlbi9wYXJhbSB8ICQ2TkQkIChGTE9QcykgfAp8LS0tfC0tLXwtLS18LS0tfC0tLXwKfCBHUFQtMyB8IDE3NUIgfCAzMDBCIHwgMS43IHwgJDMuMlx0aW1lczEwXnsyM30kIHwKfCBHb3BoZXIgfCAyODBCIHwgMzAwQiB8IDEuMSB8ICQ1LjBcdGltZXMxMF57MjN9JCB8CnwgQ2hpbmNoaWxsYSB8IDcwQiB8IDEuNFQgfCAyMCB8ICQ1LjlcdGltZXMxMF57MjN9JCB8CnwgTGxhbWEgMyA4QiB8IDhCIHwgMTVUIHwgMTg3NSB8ICQ3LjJcdGltZXMxMF57MjN9JCB8CgrlkIzkuIDmoaPpooTnrpfvvIx0b2tlbi9wYXJhbSDku44gMS4xIOWIsCAxODc177yM6Leo5LiJ5Liq5pWw6YeP57qn44CC5omA5LulIuWkmuWwkSB0b2tlbiDmiY3lpJ8i6L+Z56eN6Zeu5rOV5rKh5pyJ6L6555WM4oCU4oCU5b+F6aG75YWI5Zu65a6aICRDJOOAgkNoaW5jaGlsbGEg55qE6LSh54yu5LiN5piv5Y+R5piO5LqGIDIw77yM5piv5oqK6L+Z5qGj6aKE566X55qE5pyA5LyY54K55LuO5Y+M5puy57q/55qE5bem56uv77yI5aSn5qih5Z6L44CB5bCR5pWw5o2u77yJ5oyq5Yiw5LqG5Lit6Ze044CCCgojIyDwn5SsIOaKiuaNn+WkseWGmeaIkOS4pOS4quW5guW+i+mhue+8jOacgOS8mOino+WwseaciemXreW8jwoK6K665paHIEFwcHJvYWNoIDMg55qE6LW354K55piv5LiA5Liq6aOO6Zmp5YiG6Kej77ya5LiN5Y+v57qm55qE54a144CB5pyJ6ZmQ5a656YeP5bim5p2l55qE6L+R5Ly86K+v5beu44CB5pyJ6ZmQ5q2l5pWw5bim5p2l55qE5LyY5YyW6K+v5beu44CC5YaZ5oiQCgpgYGAKTChOLCBEKSA9IDEuNjkgKyA0MDYuNCAvIE5eMC4zNCArIDQxMC43IC8gRF4wLjI4ICAgICAgICAoRXEuIDEwKQpzLnQuICAgICA2IE4gRCA9IEMKYGBgCgrkuKTkuKogJDAuMzQk44CBJDAuMjgkIOmDveS4jeaYr+aLjeeahO+8muS9nOiAheaKiiA0MDAg5aSa5qyh6K6t57uD77yINzBN4oCTMTZCIOWPguaVsOOAgTVC4oCTNTAwQiB0b2tlbu+8ieeahOe7iOeCueaNn+WkseaLvyBIdWJlciDmjZ/lpLHmi5/lkIjlh7rmnaXnmoTvvIzotbfmiYvnlKggJChcYWxwaGEsXGJldGEpJCDnmoTnvZHmoLzlgZrlpJrotbfngrkgTC1CRkdT44CCCgrlr7nov5nkuKrnm67moIflhpnmi4nmoLzmnJfml6XkuZjlrZDvvIzkuKTkuKrkuIDpmLbmnaHku7bnm7jpmaTlj6/ku6XmtojmjonkuZjlrZDvvIzlvpfliLAKCmBgYApOKiA9ICjOsUEgLyDOskIpXigxLyjOsSvOsikpIMK3IChDLzYpXijOsi8ozrErzrIpKQpEKiA9IChDLzYpXijOsS8ozrErzrIpKSAvICjOsUEgLyDOskIpXigxLyjOsSvOsikpCkQqL04qID0gKEMvNileKCjOseKIks6yKS8ozrErzrIpKSAvICjOsUEgLyDOskIpXigyLyjOsSvOsikpCmBgYAoK56ys5LiJ6KGM5piv5YWo6YOo5LqJ6K6u55qE5p2l5rqQ77yaKirmnIDkvJggdG9rZW4vcGFyYW0g5piv566X5Yqb55qE5bmC5Ye95pWw77yM5oyH5pWw5pivICQoXGFscGhhLVxiZXRhKS8oXGFscGhhK1xiZXRhKSTvvIzkuI3mmK/luLjmlbDjgIIqKiDku6Pov5vljrvvvJokXGFscGhhLVxiZXRhID0gMC4wNiTvvIwkXGFscGhhK1xiZXRhID0gMC42MiTvvIzmjIfmlbAgMC4wOTY44oCU4oCU566X5Yqb5raoIDU3NiDlgI3vvIx0b2tlbi9wYXJhbSDlj6rmtqggJDU3Nl57MC4wOTY4fSA9IDEuODUkIOWAjeOAguWPjei/h+adpe+8jOWmguaenCAkXGFscGhhID0gXGJldGEk77yM6L+Z5Liq5oyH5pWw5bCx5pivIDDvvIzmr5TnjoflvbvlupXkuI7op4TmqKHml6DlhbPvvIwiMjAiIOaJjeiDveWPq+W4uOaVsOOAggoK55u06KeJ77yaJFxhbHBoYSA+IFxiZXRhJCDmhI/lkbPnnYDlj4LmlbDpgqPkuIDkvqfppbHlkozlvpfmm7Tlv6vigJTigJTmjZ/lpLHlr7nlj4LmlbDnmoTovrnpmYXmlLbnm4rmjIkgJE5eey0oMStcYWxwaGEpfSQg5o6J77yM5q+U5pWw5o2u5L6n55qEICREXnstKDErXGJldGEpfSQg5o6J5b6X5oCl44CC6ICMICREID0gQy8oNk4pJCDlj4jlvLrliLYi5aSa5Lmw5Y+C5pWw5bCx5b6X5oyJ5q+U5L6L56CNIHRva2VuIu+8iOegjeaOieeahOaYr+aMh+aVsOabtOWwj+eahOmCo+S4gOS+p++8jOS9huegjeeahOW5heW6puaYr+e6v+aAp+eahO+8ieOAguS4pOi+ueWQiOi1t+adpe+8jOacgOS8mOeCueWPquiDvemaj+inhOaooeW+gOaVsOaNruS+p+a8guOAgkVxLigxMCkg55qE57O75pWw57uZ5Ye655qE5ryC56e76YCf5bqm5piv5q+PIDEwIOWAjeeul+WKm+aKiiB0b2tlbi9wYXJhbSDmiqzpq5ggMS4yNSDlgI3vvIgkMTBeezAuMDk2OH0k77yJ77yaJDEwXnsxOX0kIOS4iuWug+aYryAzMu+8jCQxMF57MjV9JCDkuIrmmK8gMTIy44CCCgojIyDwn4+X77iPIOiuuuaWh+iHquW3seeahOS4ieS4quaWueazle+8jOWcqOWQjOS4gOaooeWei+inhOaooeS4iuW3riAyLjQg5YCNCgrorrrmlofnlKjkuInmnaHot6/kvLDlkIzkuIDkuKrkuJzopb/vvJrlm7rlrprmqKHlnovlj5jlpKcgdG9rZW7vvIhBcHByb2FjaCAx77yJ44CB5Lmd5qGj6aKE566X55qEIGlzb0ZMT1Ag5YmW6Z2i77yIQXBwcm9hY2ggMu+8ieOAgeaLn+WQiOWPguaVsOWMluaNn+Wkse+8iEFwcHJvYWNoIDPvvInjgILkuInmnaHot6/nu5nnmoTmnIDkvJjlj4LmlbDop4TmqKHmjIfmlbDliIbliKvmmK8gMC41MCAvIDAuNDkgLyAwLjQ277yIVGFibGUgMu+8ie+8jOiAjOWug+S7rOWQhOiHquaKleW9seWIsCA2N0Ig5Y+C5pWw5LiK55qEIHRva2VuIOaVsOaYr++8mgoKfCDmlrnms5UgfCA2N0Ig5Y+C5pWw55qE6YWN5aWXIHRva2VuIHwgdG9rZW4vcGFyYW0gfCDlr7nlupTnmoQgRkxPUHMgfAp8LS0tfC0tLXwtLS18LS0tfAp8IEFwcHJvYWNoIDHvvIhUYWJsZSAzIOaKleW9se+8iSB8IDEuNVQgfCAyMiB8ICQ2LjBcdGltZXMxMF57MjN9JCB8CnwgQXBwcm9hY2ggMu+8iFRhYmxlIEEz77yJIHwgMS43VCB8IDI1IHwgJDYuOVx0aW1lczEwXnsyM30kIHwKfCBBcHByb2FjaCAz77yIVGFibGUgQTPvvIkgfCA0LjFUIHwgNjEgfCAkMS43XHRpbWVzMTBeezI0fSQgfAp8IENoaW5jaGlsbGEg5a6e6ZmF6K6t57uDIHwgMS40VCB8IDIwIHwgJDUuOVx0aW1lczEwXnsyM30kIHwKCuS5n+WwseaYr+ivtO+8jCIyMCB0b2tlbi9wYXJhbSIg56uZ5Zyo6K665paH5YaF6YOo5pyA55yBIHRva2VuIOeahOmCo+S4gOerr++8jOiAjOWQjOS4gOS4qumZhOW9lemHjOeahOWPguaVsOWMluaLn+WQiOaMh+WQkSA2MeOAguS9nOiAheacgOWQjuaLv+ecn+eul+WKm+WBmuS6huijgeWGs++8muWcqCAkMTBeezIxfSQgRkxPUHMg5LiK77yMS2FwbGFuIOetie+8iDIwMjDvvInnmoTlvovpooTmtYvmnIDkvJggNC42OELvvIxBcHByb2FjaCAxIOmihOa1iyAyLjg2Qu+8jOS7luS7rOiuree7g+S6hiA0Ljc0QiDlkowgMi44MEIg5Lik5Liq5qih5Z6L5a+55oiY77yM5bCP55qE6YKj5Liq6LWi5LqG77yb5ZyoIEdvcGhlciDmoaPpooTnrpfkuIrvvIxDaGluY2hpbGxhIOeUqOWbm+WIhuS5i+S4gOWPguaVsOOAgTQuNyDlgI0gdG9rZW7vvIxNTUxVIOS7jiBHb3BoZXIg55qEIDYwLjAlIOWNh+WIsCA2Ny41JeOAgui/meS6m+aYr+ecn+mHkeeZvemTtueahOWunua1i++8jOadg+mHjeivpee7meWug+S7rOKAlOKAlOiAjOS4jeaYr+e7meS7u+S9leS4gOS4quaLn+WQiOW8j+eahOaKleW9seOAggoKIyMg8J+SuyDmioogRXEuKDEwKSDku6Plm57nuqbmnZ/vvIznnIvlroPoh6rlt7HorqTkuLrnmoTmnIDkvJjngrnlnKjlk6oKCmBgYHB5dGhvbgpFLCBBLCBCLCBBTFBIQSwgQkVUQSA9IDEuNjksIDQwNi40LCA0MTAuNywgMC4zNCwgMC4yOAoKZGVmIGxvc3MoTiwgRCk6CiAgICByZXR1cm4gRSArIEEgLyBOKipBTFBIQSArIEIgLyBEKipCRVRBCgpkZWYgY2xvc2VkX2Zvcm0oQywgYWw9QUxQSEEsIGJlPUJFVEEsIGE9QSwgYj1CKToKICAgIHMgPSBhbCArIGJlCiAgICBHID0gKGFsICogYSAvIChiZSAqIGIpKSAqKiAoMSAvIHMpCiAgICBOID0gRyAqIChDIC8gNikgKiogKGJlIC8gcykKICAgIHJldHVybiBOLCBDIC8gKDYgKiBOKQoKIyDmoKHpqozvvJrlr7nnvZHmoLzmkJzntKLnmoTmnIDlsI/lgLzkuI7op6PmnpDop6PvvIjmraXplb8gMSXvvIzlupTph43lkIjliLAgMSUg5YaF77yJCmZvciBDIGluICgxZTIxLCAxZTIzLCA1Ljc2ZTIzKToKICAgIE5jLCBEYyA9IGNsb3NlZF9mb3JtKEMpCiAgICAuLi4KYGBgCgrot5Hlh7rmnaXvvIjohJrmnKzlkKsgNzAwIOeCuee9keagvOagoemqjO+8ie+8mgoKYGBgCueul+WKmyBDICAgICAgICAgTiogICAgICAgIEQqICAgICAgIEQvTiAgICAgIEwqCjEuMGUrMjEgICAgIDEuODJCICAgIDkxLjM2QiAgICAgNTAuMSAgIDIuMzI4OQoxLjBlKzIzICAgIDE0LjYwQiAgICAgMS4xNFQgICAgIDc4LjIgICAyLjAwNTAKNS43NmUrMjMgICAzMi4xOUIgICAgIDIuOThUICAgICA5Mi42ICAgMS45MzA3CjEuMGUrMjUgICAxMTYuODJCICAgIDE0LjI3VCAgICAxMjIuMSAgIDEuODQ1MwoKQ2hpbmNoaWxsYSDlrp7phY0gNzBCIHggMS40VCAgICAgICAgICAgIEwgPSAxLjkzNjYK5ZCM6aKE566X5LiLIEVxLjEwIOiupOS4uueahOabtOS8mOeCuSAzMi41QiB4IDMuMFQgIEwgPSAxLjkzMDAgICAo5L2OIDAuMDA2NykKYGBgCgrnvZHmoLzmnIDlsI/lgLzkuI7pl63lvI/op6PlnKjkupTkuKrpooTnrpfkuIrlhajpg6jokL3lnKggMSUg5Lul5YaF77yI5q2l6ZW/5omA6ZmQ77yJ77yM6Kej5p6Q5byP5rKh5o6o6ZSZ44CC54S25ZCO5piv5Lik5Liq5Y+N55u06KeJ55qE57uT5p6c77yaCgotIOWcqCBDaGluY2hpbGxhIOeahOmihOeul+S4iu+8jEVxLigxMCkg6KaB55qE5pivIDMyQiDogIzkuI3mmK8gNzBC77yMdG9rZW4g6KaBIDNUIOiAjOS4jeaYryAxLjRU77ybCi0g5ZyoIEFwcHJvYWNoIDIg6Ieq5bex55qE6aKE566XICQ2LjlcdGltZXMxMF57MjN9JCDkuIrvvIxFcS4oMTApIOimgSAzNC45QiDDlyAzLjI5VO+8iDk0IHRva2VuL3BhcmFt77yJ77yM6ICMIEFwcHJvYWNoIDIg6KGo6YeM5YaZ55qE5pivIDY3QiDDlyAxLjdU44CCCgrkuZ/lsLHmmK/or7TvvIxBcHBlbmRpeCDph4zpgqPlvKDmipXlvbHooajlkozlkIzkuIDnr4forrrmlofnmoQgRXEuKDEwKSDlr7nkuI3kuIrigJTigJTkuI3mmK/oiI3lhaXor6/lt67nmoTph4/nuqfvvIzmmK8gMiDlgI3nmoTlj4LmlbDjgIEyIOWAjeeahOaVsOaNruOAggoKIyMg8J+SoSDkuInkuKrlj6/nlKjnmoTmjqjorroKCioq5LiA44CBMjAg5piv6K+75pWw6YeP57qn77yM5LiN5piv5bi45pWw44CCKiogzrHjgIHOsiDlkITliqggMC4wMu+8iOmDveWcqOaLn+WQiOeahOe9ruS/oeWMuumXtOWGhe+8ie+8jOWQjOS4gOS4qiA1Ljc2ZTIzIOmihOeul+S4i+eahOacgOS8mCB0b2tlbi9wYXJhbe+8mgoKfCDOsSBcIM6yIHwgMC4yNiB8IDAuMjggfCAwLjMwIHwKfC0tLXwtLS18LS0tfC0tLXwKfCAwLjMyIHwgMTIxIHwgMjMgfCA0LjYgfAp8IDAuMzQgfCA0OTEgfCAqKjkyLjYqKiB8IDE5LjEgfAp8IDAuMzYgfCAxODQ0IHwgMzUyIHwgNzMuMCB8CgrkuIDkuKrlnKjkuInkvY3lsI/mlbDkuIrnmoTmjIfmlbDvvIzmiornu5Porrrku44i5q+P5Liq5Y+C5pWwIDQuNiDkuKogdG9rZW4i5o6o5YiwIjE4NDQg5LiqIHRva2VuIuOAgjIwIOaBsOWlveiQveWcqOe9keagvOeahOW3puS4i+inkumZhOi/ke+8jOWug+aYr+afkOS4queJueWumuaVsOaNrueahOaLn+WQiOe7k+aenO+8jOS4jeaYr+WPr+enu+akjeeahOW4uOivhuOAggoKKirkuozjgIHov5nku7bkuovlt7Lnu4/ooqvlhazlvIDlpI3njrDov4fjgIIqKiBFcG9jaCBBSSDnmoQgQmVzaXJvZ2x1IOetie+8iGFyWGl2IDI0MDQuMTAxMDLvvIwyMDI077yJ5LuO6K665paH5Zu+6YeM6YeN5bu65pWw5o2u44CB6YeN5ouf5ZCI5ZCM5LiA5Liq5Y+C5pWw5YyW5qih5Z6L77yM57uT6K665pyJ5LiJ5p2h77ya5Y6f5ouf5ZCI5a+56YeN5bu65pWw5o2u5ouf5ZCI5b6X5LiN5aW977yb5Y6f5paH5oql5ZGK55qE572u5L+h5Yy66Ze056qE5Yiw5LiN546w5a6e77yI57qmIDQwMCDkuKrop4LmtYvkuI3lj6/og73nu5nlh7rpgqPnp43ljLrpl7TvvInvvJvnlLHor6Xmi5/lkIjpmpDlkKvnmoTnrZbnlaXkuI7orrrmloflhbbku5bmlrnms5XjgIHku6Xlj4ogQ2hpbmNoaWxsYSDoh6rlt7HnmoQgMjAgdG9rZW4vcGFyYW0g5LiN5LiA6Ie044CC5LuW5Lus6YeN5Lyw55qE54mI5pys57uZ5Ye65pu05aSn55qE5pWw5o2u5oyH5pWw5ZKM5pu06auY55qE5LiN5Y+v57qm5o2f5aSx44CC6L+Z5q2j5piv5LiK6Z2i5Lik5p2h566X5byP55qE5Y+m5LiA56eN6K+05rOV44CCCgoqKuS4ieOAgeWPguaVsOWMluW+i+eahOeUqOmAlOS4jeaYr+aJviLmnIDkvJgi77yM5piv566XIuaAu+i0piLjgIIqKiDnlJ/kuqfmqKHlnovopoHku5jmjqjnkIbotLnvvIzmiororq3nu4MgKyDmjqjnkIbpooTnrpflkIjotbfmnaXnrpfvvIzmnIDkvJjngrnkvJrmmL7okZflgY/lkJHmm7TlsI/nmoTmqKHlnovjgIHmm7TlpJrnmoQgdG9rZW7vvIhTYXJkYW5hIOetie+8jGFyWGl2IDI0MDEuMDA0NDgg5YGa5LqG6L+Z5Liq5omp5bGV77ybTGxhbWEgMyA4QiDnlKggMTVUIHRva2VuIOiuree7g+WNsyAxODc1IHRva2VuL3BhcmFt77yM5piv6L+Z5Liq5pa55ZCR55qE5p6B56uv54mI5pys77yJ44CC5omA5LulIuiuree7g+S4jei2syLlnKggMjAyMiDlubTmmK/plJnor6/vvIzlnKggMjAyNCDlubTkuYvlkI7mmK/mnInmhI/nmoTpgInmi6nigJTigJTliKTmja7lvpfnnIvmjqjnkIbph4/vvIzkuI3nnIvorrrmlofpobXnoIHjgIIKCioq6L+Z5Lqb5pWw5a2X55qE6L6555WMKirvvJpFcS4oMTApIOaYr+WcqCA3ME3igJMxNkIg5Y+C5pWw44CBNULigJM1MDBCIHRva2VuIOS4iuaLn+WQiOeahO+8jOWkluaOqOWIsCAkNS43Nlx0aW1lczEwXnsyM30kIOaYr+S4pOS4quaVsOmHj+e6p+eahOWkluaOqO+8m+acrOaWh+aJgOacieaVsOWtl+aYr+aKiuivpeW8j+S7o+WbniA2TkQg57qm5p2f55qE5rWu54K56K6h566X77yM5LiN5piv5Lu75L2V6K6t57uD5a6e5rWL44CCNk5EIOacrOi6q+W/veeVpSBhdHRlbnRpb24g55qEICRPKExeMiBkKSQg6aG55LiO5r+A5rS76YeN566X77yM5Zyo6ZW/5bqP5YiX5LiK5Lya5L2O5Lyw566X5Yqb44CC55yf5a6e55qE5pyA5LyY6YWN5q+U6L+Y5Y+X5pWw5o2u6LSo6YeP44CB6YeN5aSNIGVwb2NoIOaVsOOAgeWtpuS5oOeOh+iwg+W6puW9seWTje+8jEVxLigxMCkg6L+Z5LiJ5Liq5Y+Y6YeP5LiA5Liq6YO95rKh5pyJ44CCCgrlrozmlbTohJrmnKzvvIjpl63lvI/op6MgKyDnvZHmoLzmoKHpqowgKyDmjIfmlbDmlY/mhJ/mgKcgKyBUYWJsZSBBMyDlr7nnhafvvInvvJoKW2RlbW9zL2FpLWNvbmNlcHRzLTg4LWNvbXB1dGUtb3B0aW1hbC1zY2FsaW5nLnB5XShodHRwczovL2dpdGh1Yi5jb20vc2hlbmx2Ny9ibG9nL2Jsb2IvbWFpbi9kZW1vcy9haS1jb25jZXB0cy04OC1jb21wdXRlLW9wdGltYWwtc2NhbGluZy5weSkK
+---
+title: "同样的算力，论文自己的拟合式给出的最优解是 32B 参数配 3.0T token——不是 20 token/param"
+description: "把 Chinchilla 论文附录 Eq.(10) 的系数（E=1.69, A=406.4, B=410.7, α=0.34, β=0.28）代回 6ND 约束做约束优化：在 5.76×10²³ FLOPs 上，最优解是 32.2B 参数配 2.98T token，92.6 token/param，比实际训练的 70B×1.4T 损失低 0.0067。论文自己的三个方法在同一模型规模下给 22 / 25 / 61 token/param；而 20 这个数字在正文里没有被写成公式。α、β 各动 0.02，最优 token/param 从 19 变到 491。"
+pubDate: 2026-11-20
+tags: ["AI核心概念", "缩放律", "Chinchilla", "算力预算", "训练策略", "拉格朗日"]
+difficulty: advanced
+series: "ai-concepts"
+seriesOrder: 88
+slug: "ai-concepts-88-compute-optimal-scaling"
+---
+
+> "20 token per parameter" 是 Chinchilla 之后最常被引用的数字。它不在论文的任何一条公式里——它是从 Table 3 的投影行和一次实配（70B × 1.4T）里读出来的。
+> 把论文附录 Eq.(10) 那组拟合系数代回同一个约束 $C = 6ND$ 求极小，得到的是另一个点：同样 $5.76\times10^{23}$ FLOPs，最优是 **32.2B 参数 × 2.98T token**（92.6 token/param），损失 1.9307，比实际训练的 70B × 1.4T 低 0.0067。
+> 两个配比差 4.6 倍，损失只差千分之七。这说明 6ND 这条双曲线在最优附件非常平——也说明"20"不是定律的常数项，而是指数之差的函数。
+
+读这篇要会：交叉熵损失 / 拉格朗日乘子法 / 幂律在对数坐标里是直线。
+
+## 🎯 6ND 是笔预算，不是把尺子
+
+一个稠密 Transformer 的训练算力按 $C \approx 6ND$ 估：每个参数每个 token 前向 2 FLOPs（一次乘加），反向 4 FLOPs（算权重的梯度、算传下去的梯度各一次矩阵乘），合起来 6。给定 $C$，$N$ 和 $D$ 只能沿一条双曲线互换——这就是全部的交易。
+
+四个真实配置放在这条曲线的不同位置：
+
+| 模型 | 参数 | 训练 token | token/param | $6ND$ (FLOPs) |
+|---|---|---|---|---|
+| GPT-3 | 175B | 300B | 1.7 | $3.2\times10^{23}$ |
+| Gopher | 280B | 300B | 1.1 | $5.0\times10^{23}$ |
+| Chinchilla | 70B | 1.4T | 20 | $5.9\times10^{23}$ |
+| Llama 3 8B | 8B | 15T | 1875 | $7.2\times10^{23}$ |
+
+同一档预算，token/param 从 1.1 到 1875，跨三个数量级。所以"多少 token 才够"这种问法没有边界——必须先固定 $C$。Chinchilla 的贡献不是发明了 20，是把这档预算的最优点从双曲线的左端（大模型、少数据）挪到了中间。
+
+## 🔬 把损失写成两个幂律项，最优解就有闭式
+
+论文 Approach 3 的起点是一个风险分解：不可约的熵、有限容量带来的近似误差、有限步数带来的优化误差。写成
+
+```
+L(N, D) = 1.69 + 406.4 / N^0.34 + 410.7 / D^0.28        (Eq. 10)
+s.t.     6 N D = C
+```
+
+两个 $0.34$、$0.28$ 都不是拍的：作者把 400 多次训练（70M–16B 参数、5B–500B token）的终点损失拿 Huber 损失拟合出来的，起手用 $(\alpha,\beta)$ 的网格做多起点 L-BFGS。
+
+对这个目标写拉格朗日乘子，两个一阶条件相除可以消掉乘子，得到
+
+```
+N* = (αA / βB)^(1/(α+β)) · (C/6)^(β/(α+β))
+D* = (C/6)^(α/(α+β)) / (αA / βB)^(1/(α+β))
+D*/N* = (C/6)^((α−β)/(α+β)) / (αA / βB)^(2/(α+β))
+```
+
+第三行是全部争议的来源：**最优 token/param 是算力的幂函数，指数是 $(\alpha-\beta)/(\alpha+\beta)$，不是常数。** 代进去：$\alpha-\beta = 0.06$，$\alpha+\beta = 0.62$，指数 0.0968——算力涨 576 倍，token/param 只涨 $576^{0.0968} = 1.85$ 倍。反过来，如果 $\alpha = \beta$，这个指数就是 0，比率彻底与规模无关，"20" 才能叫常数。
+
+直觉：$\alpha > \beta$ 意味着参数那一侧饱和得更快——损失对参数的边际收益按 $N^{-(1+\alpha)}$ 掉，比数据侧的 $D^{-(1+\beta)}$ 掉得急。而 $D = C/(6N)$ 又强制"多买参数就得按比例砍 token"（砍掉的是指数更小的那一侧，但砍的幅度是线性的）。两边合起来，最优点只能随规模往数据侧漂。Eq.(10) 的系数给出的漂移速度是每 10 倍算力把 token/param 抬高 1.25 倍（$10^{0.0968}$）：$10^{19}$ 上它是 32，$10^{25}$ 上是 122。
+
+## 🏗️ 论文自己的三个方法，在同一模型规模上差 2.4 倍
+
+论文用三条路估同一个东西：固定模型变大 token（Approach 1）、九档预算的 isoFLOP 剖面（Approach 2）、拟合参数化损失（Approach 3）。三条路给的最优参数规模指数分别是 0.50 / 0.49 / 0.46（Table 2），而它们各自投影到 67B 参数上的 token 数是：
+
+| 方法 | 67B 参数的配套 token | token/param | 对应的 FLOPs |
+|---|---|---|---|
+| Approach 1（Table 3 投影） | 1.5T | 22 | $6.0\times10^{23}$ |
+| Approach 2（Table A3） | 1.7T | 25 | $6.9\times10^{23}$ |
+| Approach 3（Table A3） | 4.1T | 61 | $1.7\times10^{24}$ |
+| Chinchilla 实际训练 | 1.4T | 20 | $5.9\times10^{23}$ |
+
+也就是说，"20 token/param" 站在论文内部最省 token 的那一端，而同一个附录里的参数化拟合指向 61。作者最后拿真算力做了裁决：在 $10^{21}$ FLOPs 上，Kaplan 等（2020）的律预测最优 4.68B，Approach 1 预测 2.86B，他们训练了 4.74B 和 2.80B 两个模型对战，小的那个赢了；在 Gopher 档预算上，Chinchilla 用四分之一参数、4.7 倍 token，MMLU 从 Gopher 的 60.0% 升到 67.5%。这些是真金白银的实测，权重该给它们——而不是给任何一个拟合式的投影。
+
+## 💻 把 Eq.(10) 代回约束，看它自己认为的最优点在哪
+
+```python
+E, A, B, ALPHA, BETA = 1.69, 406.4, 410.7, 0.34, 0.28
+
+def loss(N, D):
+    return E + A / N**ALPHA + B / D**BETA
+
+def closed_form(C, al=ALPHA, be=BETA, a=A, b=B):
+    s = al + be
+    G = (al * a / (be * b)) ** (1 / s)
+    N = G * (C / 6) ** (be / s)
+    return N, C / (6 * N)
+
+# 校验：对网格搜索的最小值与解析解（步长 1%，应重合到 1% 内）
+for C in (1e21, 1e23, 5.76e23):
+    Nc, Dc = closed_form(C)
+    ...
+```
+
+跑出来（脚本含 700 点网格校验）：
+
+```
+算力 C         N*        D*       D/N      L*
+1.0e+21     1.82B    91.36B     50.1   2.3289
+1.0e+23    14.60B     1.14T     78.2   2.0050
+5.76e+23   32.19B     2.98T     92.6   1.9307
+1.0e+25   116.82B    14.27T    122.1   1.8453
+
+Chinchilla 实配 70B x 1.4T            L = 1.9366
+同预算下 Eq.10 认为的更优点 32.5B x 3.0T  L = 1.9300   (低 0.0067)
+```
+
+网格最小值与闭式解在五个预算上全部落在 1% 以内（步长所限），解析式没推错。然后是两个反直觉的结果：
+
+- 在 Chinchilla 的预算上，Eq.(10) 要的是 32B 而不是 70B，token 要 3T 而不是 1.4T；
+- 在 Approach 2 自己的预算 $6.9\times10^{23}$ 上，Eq.(10) 要 34.9B × 3.29T（94 token/param），而 Approach 2 表里写的是 67B × 1.7T。
+
+也就是说，Appendix 里那张投影表和同一篇论文的 Eq.(10) 对不上——不是舍入误差的量级，是 2 倍的参数、2 倍的数据。
+
+## 💡 三个可用的推论
+
+**一、20 是读数量级，不是常数。** α、β 各动 0.02（都在拟合的置信区间内），同一个 5.76e23 预算下的最优 token/param：
+
+| α \ β | 0.26 | 0.28 | 0.30 |
+|---|---|---|---|
+| 0.32 | 121 | 23 | 4.6 |
+| 0.34 | 491 | **92.6** | 19.1 |
+| 0.36 | 1844 | 352 | 73.0 |
+
+一个在三位小数上的指数，把结论从"每个参数 4.6 个 token"推到"1844 个 token"。20 恰好落在网格的左下角附近，它是某个特定数据的拟合结果，不是可移植的常识。
+
+**二、这件事已经被公开复现过。** Epoch AI 的 Besiroglu 等（arXiv 2404.10102，2024）从论文图里重建数据、重拟合同一个参数化模型，结论有三条：原拟合对重建数据拟合得不好；原文报告的置信区间窄到不现实（约 400 个观测不可能给出那种区间）；由该拟合隐含的策略与论文其他方法、以及 Chinchilla 自己的 20 token/param 不一致。他们重估的版本给出更大的数据指数和更高的不可约损失。这正是上面两条算式的另一种说法。
+
+**三、参数化律的用途不是找"最优"，是算"总账"。** 生产模型要付推理费，把训练 + 推理预算合起来算，最优点会显著偏向更小的模型、更多的 token（Sardana 等，arXiv 2401.00448 做了这个扩展；Llama 3 8B 用 15T token 训练即 1875 token/param，是这个方向的极端版本）。所以"训练不足"在 2022 年是错误，在 2024 年之后是有意的选择——判据得看推理量，不看论文页码。
+
+**这些数字的边界**：Eq.(10) 是在 70M–16B 参数、5B–500B token 上拟合的，外推到 $5.76\times10^{23}$ 是两个数量级的外推；本文所有数字是把该式代回 6ND 约束的浮点计算，不是任何训练实测。6ND 本身忽略 attention 的 $O(L^2 d)$ 项与激活重算，在长序列上会低估算力。真实的最优配比还受数据质量、重复 epoch 数、学习率调度影响，Eq.(10) 这三个变量一个都没有。
+
+完整脚本（闭式解 + 网格校验 + 指数敏感性 + Table A3 对照）：
+[demos/ai-concepts-88-compute-optimal-scaling.py](https://github.com/shenlv7/blog/blob/main/demos/ai-concepts-88-compute-optimal-scaling.py)
