@@ -88,20 +88,20 @@ const items = [
     })),
   },
   {
-    key: 'harmony',
-    path: 'harmony / index',
+    key: 'dev',
+    path: 'dev / index',
     kicker: 'TRACK · 03 / 04',
-    range: 'ARKTS · HARMONYOS',
-    icon: 'device',
-    title: '鸿蒙开发实战',
-    desc: '按「用户侧可用」验收：从 ArkTS 声明式 UI 到 PC 北向适配，每一步都要能编译、能安装、能在真机上跑。',
-    short: '从 ArkTS 到上架，目标是一个真能装的 App',
-    href: `${base}harmony/`,
-    linkLabel: '进入板块',
+    range: 'BUILD & SHIP',
+    icon: 'code',
+    title: '开发实战',
+    desc: '不止鸿蒙：鸿蒙、Web、嵌入式、工具链都归这里。每个方向先定一个能验收的产出——能装的 App、能跑的服务、能亮的屏。',
+    short: '鸿蒙起步，后续加入 Web / 嵌入式 / 工具链',
+    href: `${base}dev/`,
+    linkLabel: '进入开发',
     metrics: [
-      { v: String(harmonyPosts.length), l: '已发讲次' },
-      { v: '2', l: '学习轨道' },
-      { v: `${harmonyAvg} min`, l: '单讲时长' },
+      { v: String(harmonyPosts.length), l: '已发篇数' },
+      { v: '4', l: '规划方向' },
+      { v: `${harmonyAvg} min`, l: '单篇均读' },
     ],
     tags: topTags(harmonyPosts),
     rows: latestHarmony.slice(0, 4).map((p) => ({
@@ -180,10 +180,11 @@ const first = items[0];
                       <path d="M4 16.5L12 21l8-4.5" />
                     </>
                   )}
-                  {it.icon === 'device' && (
+                  {it.icon === 'code' && (
                     <>
-                      <rect x="7" y="3" width="10" height="18" rx="2" />
-                      <path d="M10.5 18.2h3" />
+                      <path d="M9 8l-4 4 4 4" />
+                      <path d="M15 8l4 4-4 4" />
+                      <path d="M13 5l-2 14" />
                     </>
                   )}
                   {it.icon === 'chip' && (
@@ -247,7 +248,7 @@ const first = items[0];
                   <svg viewBox="0 0 24 24">
                     {it.icon === 'trend' && <path d="M3 17l5-5 4 4 8-8" />}
                     {it.icon === 'layers' && <path d="M12 4l7 3.8-7 3.8-7-3.8L12 4zM5 12.4l7 3.8 7-3.8M5 16.6l7 3.8 7-3.8" />}
-                    {it.icon === 'device' && <rect x="8" y="3" width="8" height="18" rx="2" />}
+                    {it.icon === 'code' && <path d="M9 8l-4 4 4 4M15 8l4 4-4 4" />}
                     {it.icon === 'chip' && <rect x="7" y="7" width="10" height="10" rx="2" />}
                   </svg>
                 </span>
@@ -763,7 +764,7 @@ const first = items[0];
     const railIcons = Array.from(root.querySelectorAll<HTMLElement>('.hc-ri[data-i]'));
     const pathEl = root.querySelector<HTMLElement>('.hc-path');
 
-    const PATHS = ['posts / ai-evolution', 'concepts / index', 'harmony / index', 'shell / index'];
+    const PATHS = ['posts / ai-evolution', 'concepts / index', 'dev / index', 'shell / index'];
     const DUR = 5200;
     let idx = 0;
     let timer: number | null = null;

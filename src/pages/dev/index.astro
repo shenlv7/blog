@@ -1,0 +1,209 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const items = await getCollection('harmony');
+const recent = [...items].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 8);
+const totalMin = items.reduce((s, i) => s + (i.data.minutes || 0), 0);
+const base = import.meta.env.BASE_URL || '/';
+
+const tracks = [
+  {
+    key: 'harmony',
+    label: '已上线',
+    live: true,
+    title: '鸿蒙开发',
+    sub: 'HarmonyOS · ArkTS · API 12',
+    desc: '两条路线共用同一个主线项目「习惯打卡」：小白指南用来查，实战 12 讲用来做，做完手里有一个能装到自己手机上的 App。',
+    meta: [`${items.length} 篇`, '13 章指南 + 12 讲实战', `${totalMin} 分钟`],
+    href: `${base}harmony/`,
+  },
+  {
+    key: 'web',
+    label: '筹备中',
+    live: false,
+    title: 'Web 前端与全栈',
+    sub: 'TypeScript · Astro · 接口与部署',
+    desc: '从静态页面到能上线的小产品：路由、数据、鉴权、部署。正在整理本站在用的这套工具链。',
+    meta: ['下一个方向', '内容整理中'],
+    href: '',
+  },
+  {
+    key: 'embedded',
+    label: '筹备中',
+    live: false,
+    title: '嵌入式与驱动',
+    sub: 'ESP32 · 屏驱动 · 传感器',
+    desc: '躯壳计划里那些接线、刷机、驱动适配的过程，抽成可复现的步骤：从点亮第一块屏到接上麦克风。',
+    meta: ['与躯壳计划联动', '内容整理中'],
+    href: '',
+  },
+  {
+    key: 'tooling',
+    label: '筹备中',
+    live: false,
+    title: '工具链与自动化',
+    sub: 'CLI · CI · 本地模型',
+    desc: '把重复动作变成脚本：构建、发布、巡检、本地推理。跑得稳的留下，跑不稳的写清楚为什么。',
+    meta: ['脚本与流水线', '内容整理中'],
+    href: '',
+  },
+];
+---
+
+<Base title="开发实战 — 鸿蒙、Web、嵌入式与工具链" description="按「能不能真跑通」验收的开发记录：鸿蒙应用、Web 全栈、嵌入式与工具链。">
+  <section class="dv-hero">
+    <p class="dv-kicker">// DEV · 开发实战</p>
+    <h1>开发实战</h1>
+    <p class="dv-lead">
+      所有「把东西真做出来」的记录都在这里。方向不止一个，标准只有一条：
+      能在真机、真环境里跑通，并且步骤可复现。
+    </p>
+    <div class="dv-stats">
+      <div><b>{items.length}</b><span>已发篇数</span></div>
+      <div><b>1 / 4</b><span>方向已上线</span></div>
+      <div><b>{totalMin}</b><span>分钟通读</span></div>
+    </div>
+  </section>
+
+  <section class="dv-tracks">
+    {tracks.map(t => t.live ? (
+      <a class="dv-track live" href={t.href}>
+        <div class="dv-track-top">
+          <span class="dv-badge ok">{t.label}</span>
+          <span class="dv-sub">{t.sub}</span>
+        </div>
+        <h2>{t.title}</h2>
+        <p>{t.desc}</p>
+        <div class="dv-meta">
+          {t.meta.map(m => <span>{m}</span>)}
+          <span class="dv-go">进入 →</span>
+        </div>
+      </a>
+    ) : (
+      <div class="dv-track">
+        <div class="dv-track-top">
+          <span class="dv-badge">{t.label}</span>
+          <span class="dv-sub">{t.sub}</span>
+        </div>
+        <h2>{t.title}</h2>
+        <p>{t.desc}</p>
+        <div class="dv-meta">
+          {t.meta.map(m => <span>{m}</span>)}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section class="dv-block">
+    <div class="dv-block-head">
+      <h2>最近更新</h2>
+      <p>目前上线的是鸿蒙方向，新内容按「方向 → 路线 → 篇」归档，不混在一起。</p>
+    </div>
+    <div class="dv-list">
+      {recent.map(item => (
+        <a class="dv-row" href={`${base}harmony/${item.id.replace(/\.md$/, '')}/`}>
+          <span class="dv-row-num">{item.data.track === 'guide' ? 'G' : 'C'}{String(item.data.order).padStart(2, '0')}</span>
+          <span class="dv-row-title">{item.data.title}</span>
+          <span class="dv-row-desc">{item.data.description}</span>
+          <span class="dv-row-min">{item.data.minutes}′</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="dv-note">
+    <h2>这栏怎么长</h2>
+    <ol>
+      <li>每个方向先定一个<b>可验收的产出</b>：一个能装的 App、一个能跑的服务、一块能亮的屏。</li>
+      <li>再拆成两条线：<b>手册</b>横向查、<b>课程</b>纵向做，别写成纯概念文章。</li>
+      <li>新方向成熟一个就开一个，没做的标「筹备中」，不占位、不虚报。</li>
+    </ol>
+  </section>
+</Base>
+
+<style>
+  .dv-hero { max-width: 860px; margin: 0 auto 2.5rem; }
+  .dv-kicker { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 0.8rem; }
+  .dv-hero h1 { font-size: 2.4rem; line-height: 1.2; margin-bottom: 0.9rem; }
+  .dv-lead { color: var(--text-dim); font-size: 1.05rem; line-height: 1.8; max-width: 720px; }
+  .dv-stats { display: flex; gap: 2.2rem; margin-top: 1.6rem; flex-wrap: wrap; }
+  .dv-stats div { display: flex; align-items: baseline; gap: 0.35rem; }
+  .dv-stats b { font-family: var(--mono); font-size: 1.5rem; color: var(--accent); }
+  .dv-stats span { font-size: 0.8rem; color: var(--muted); }
+
+  .dv-tracks {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .dv-track {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.2rem 1.3rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s var(--ease);
+  }
+  .dv-track.live:hover { border-color: var(--glass-border-hi); transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+  .dv-track.live { border-left: 2px solid var(--accent); }
+  .dv-track-top { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+  .dv-badge {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    border: 1px solid var(--border-hi);
+    border-radius: 100px;
+    padding: 0.1rem 0.5rem;
+  }
+  .dv-badge.ok { color: var(--accent); border-color: rgba(34, 211, 238, 0.4); background: rgba(34, 211, 238, 0.06); }
+  .dv-sub { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.04em; color: var(--muted); }
+  .dv-track h2 { font-size: 1.08rem; margin: 0.1rem 0 0; color: var(--text); }
+  .dv-track p { font-size: 0.85rem; line-height: 1.7; color: var(--muted); margin: 0; }
+  .dv-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: auto; padding-top: 0.4rem; }
+  .dv-meta span { font-family: var(--mono); font-size: 0.64rem; color: #7f95a7; }
+  .dv-meta span + span::before { content: '·'; margin-right: 0.5rem; color: var(--border-hi); }
+  .dv-go { margin-left: auto; color: var(--accent) !important; }
+  .dv-go::before { content: none !important; }
+
+  .dv-block { max-width: 1000px; margin: 3rem auto 0; }
+  .dv-block-head h2 { font-size: 1.35rem; margin-bottom: 0.4rem; }
+  .dv-block-head p { color: var(--muted); font-size: 0.92rem; margin-bottom: 1.3rem; }
+
+  .dv-list { display: flex; flex-direction: column; border-top: 1px solid var(--border); }
+  .dv-row {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(180px, 1.1fr) 2fr 3rem;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.85rem 0.4rem;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .dv-row:hover { background: rgba(34, 211, 238, 0.04); }
+  .dv-row-num { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); }
+  .dv-row-title { color: var(--text); font-size: 0.92rem; }
+  .dv-row-desc { color: var(--muted); font-size: 0.83rem; line-height: 1.5; }
+  .dv-row-min { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); text-align: right; }
+
+  .dv-note { max-width: 860px; margin: 3.5rem auto 0; padding: 1.5rem 1.7rem;
+    background: var(--panel); border: 1px solid var(--border); border-left: 2px solid var(--accent); border-radius: 10px; }
+  .dv-note h2 { font-size: 1.05rem; margin-bottom: 0.8rem; }
+  .dv-note ol { margin: 0 0 0 1.1rem; padding: 0; color: var(--text-dim); font-size: 0.92rem; line-height: 1.9; }
+  .dv-note b { color: var(--text); }
+
+  @media (max-width: 720px) {
+    .dv-tracks { grid-template-columns: 1fr; }
+    .dv-row { grid-template-columns: 2.2rem 1fr 2.6rem; }
+    .dv-row-desc { display: none; }
+    .dv-hero h1 { font-size: 2rem; }
+  }
+</style>
