@@ -1,0 +1,848 @@
+---
+import { getCollection } from 'astro:content';
+
+const base = '/blog/';
+const posts = await getCollection('posts');
+const harmonyPosts = await getCollection('harmony');
+const shells = await getCollection('shell');
+
+const byDate = (a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+const trimTitle = (t: string) => t.replace(/^\d+\s*\|\s*/, '');
+
+const evo = posts
+  .filter((p) => p.data.series === 'ai-evolution' && p.data.seriesOrder)
+  .sort((a, b) => (b.data.seriesOrder || 0) - (a.data.seriesOrder || 0));
+const concepts = posts.filter((p) => p.data.series === 'ai-concepts');
+const latestConcepts = [...concepts].sort(byDate).slice(0, 3);
+const latestHarmony = [...harmonyPosts].sort((a, b) => b.data.order - a.data.order).slice(0, 3);
+const latestShells = [...shells].sort((a, b) => b.data.shellNumber - a.data.shellNumber).slice(0, 3);
+
+const tags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
+
+function topTags(list: any[], n = 4) {
+  const freq = new Map<string, number>();
+  list.forEach((p) => (p.data.tags || []).forEach((t: string) => freq.set(t, (freq.get(t) || 0) + 1)));
+  return [...freq.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([t]) => t);
+}
+
+function avgMinutes(list: { body?: string }[]) {
+  if (!list.length) return 0;
+  const mins = list.map((p) => {
+    const chars = ((p.body || '').match(/[\u4e00-\u9fff]/g) || []).length;
+    return Math.max(1, Math.ceil(chars / 450));
+  });
+  return Math.round(mins.reduce((a, b) => a + b, 0) / mins.length);
+}
+
+const evoAvg = avgMinutes(evo);
+const conceptAvg = avgMinutes(concepts);
+const harmonyAvg = Math.round(
+  harmonyPosts.reduce((a, p) => a + (p.data.minutes || 0), 0) / Math.max(1, harmonyPosts.length)
+);
+
+const items = [
+  {
+    key: 'evolution',
+    path: 'posts / ai-evolution',
+    kicker: 'SERIES · 01 / 04',
+    range: '1943 → 2026',
+    icon: 'trend',
+    title: 'AI 的进化之路',
+    desc: '纵向讲因果：从第一个神经元到大模型，16 篇编年，每篇只讲三件事——那一年卡在哪、谁拧开了它、它变成了什么。',
+    short: '16 篇编年，纵向讲因果：卡点 → 机制 → 产物',
+    href: `${base}posts/ai-evolution/`,
+    linkLabel: '进入专栏',
+    metrics: [
+      { v: String(evo.length), l: '已发篇数' },
+      { v: '16', l: '编年规划' },
+      { v: `${evoAvg} min`, l: '单篇均读' },
+    ],
+    tags: topTags(evo),
+    rows: evo.slice(0, 4).map((p) => ({
+      idx: String(p.data.seriesOrder).padStart(2, '0'),
+      title: trimTitle(p.data.title),
+      state: '已发',
+    })),
+  },
+  {
+    key: 'concepts',
+    path: 'concepts / index',
+    kicker: 'SERIES · 02 / 04',
+    range: 'CORE MECHANISMS',
+    icon: 'layers',
+    title: 'AI 核心概念',
+    desc: '横向拆零件：把 Transformer、KV Cache、RAG、量化这些词拆到能自己写一遍，每个概念配一段能跑通的代码。',
+    short: '横向拆零件：每个概念都配能跑通的代码',
+    href: `${base}concepts/`,
+    linkLabel: '浏览概念',
+    metrics: [
+      { v: String(concepts.length), l: '已发概念' },
+      { v: '8', l: '学习分组' },
+      { v: `${conceptAvg} min`, l: '单篇均读' },
+    ],
+    tags: topTags(concepts),
+    rows: latestConcepts.slice(0, 4).map((p) => ({
+      idx: String(p.data.seriesOrder ?? '—').padStart(2, '0'),
+      title: trimTitle(p.data.title),
+      state: '已发',
+    })),
+  },
+  {
+    key: 'harmony',
+    path: 'harmony / index',
+    kicker: 'TRACK · 03 / 04',
+    range: 'ARKTS · HARMONYOS',
+    icon: 'device',
+    title: '鸿蒙开发实战',
+    desc: '按「用户侧可用」验收：从 ArkTS 声明式 UI 到 PC 北向适配，每一步都要能编译、能安装、能在真机上跑。',
+    short: '从 ArkTS 到上架，目标是一个真能装的 App',
+    href: `${base}harmony/`,
+    linkLabel: '进入板块',
+    metrics: [
+      { v: String(harmonyPosts.length), l: '已发讲次' },
+      { v: '2', l: '学习轨道' },
+      { v: `${harmonyAvg} min`, l: '单讲时长' },
+    ],
+    tags: topTags(harmonyPosts),
+    rows: latestHarmony.slice(0, 4).map((p) => ({
+      idx: String(p.data.order).padStart(2, '0'),
+      title: p.data.title,
+      state: p.data.track === 'guide' ? '指南' : '课程',
+    })),
+  },
+  {
+    key: 'shell',
+    path: 'shell / index',
+    kicker: 'LAB · 04 / 04',
+    range: 'HARDWARE',
+    icon: 'chip',
+    title: '躯壳计划',
+    desc: '当 AI 开始拥有物理感官：OLED 是眼睛、麦克风是耳朵、灯带是心跳。每个方案都给出接线、固件与实测延迟。',
+    short: 'ESP32、摄像头、板端推理的实测记录',
+    href: `${base}shell/`,
+    linkLabel: '查看方案',
+    metrics: [
+      { v: String(shells.length), l: '硬件方案' },
+      { v: String(tags.length), l: '技术标签' },
+      { v: String(posts.length), l: '全部文章' },
+    ],
+    tags: topTags(shells),
+    rows: latestShells.slice(0, 4).map((p) => ({
+      idx: String(p.data.shellNumber).padStart(2, '0'),
+      title: p.data.title,
+      state: p.data.status === 'done' ? '完成' : p.data.status === 'building' ? '搭建中' : '规划中',
+    })),
+  },
+];
+
+const first = items[0];
+---
+
+<section class="hc" id="hc" aria-labelledby="hc-title">
+  <div class="hc-glow" aria-hidden="true"></div>
+  <div class="hc-noise" aria-hidden="true"></div>
+  <div class="hc-spot" id="hcSpot" aria-hidden="true"></div>
+
+  <div class="hc-wrap">
+    <!-- 文案 / 轮播 -->
+    <div class="hc-copy">
+      <p class="hc-eyebrow">赛博阿漆 · 个人技术站</p>
+      <h1 class="hc-title" id="hc-title">
+        在代码中理解 AI<span class="hc-sep" aria-hidden="true"></span><em>在实践中掌握原理</em>
+      </h1>
+      <p class="hc-sub">
+        {posts.length} 篇文章<span class="hc-dot">/</span>{concepts.length} 个核心概念<span class="hc-dot">/</span
+        >每个概念配可运行 Demo<span class="hc-sub-extra"><span class="hc-dot">/</span>Prompt → Agent 全链路</span>
+      </p>
+      <div class="hc-rule" aria-hidden="true"></div>
+
+      <div class="hc-reel" id="hcReel">
+        {
+          items.map((it, i) => (
+            <a
+              class:list={['hc-item', { act: i === 0 }]}
+              href={it.href}
+              data-i={i}
+              aria-label={`${it.title}：${it.desc}`}
+            >
+              <span class="hc-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  {it.icon === 'trend' && (
+                    <>
+                      <path d="M3 17l5-5 4 4 8-8" />
+                      <path d="M3 21h18" />
+                    </>
+                  )}
+                  {it.icon === 'layers' && (
+                    <>
+                      <path d="M12 3l8 4.5-8 4.5-8-4.5L12 3z" />
+                      <path d="M4 12l8 4.5 8-4.5" />
+                      <path d="M4 16.5L12 21l8-4.5" />
+                    </>
+                  )}
+                  {it.icon === 'device' && (
+                    <>
+                      <rect x="7" y="3" width="10" height="18" rx="2" />
+                      <path d="M10.5 18.2h3" />
+                    </>
+                  )}
+                  {it.icon === 'chip' && (
+                    <>
+                      <rect x="7" y="7" width="10" height="10" rx="2" />
+                      <path d="M11 3v2M13 3v2M11 19v2M13 19v2M3 11h2M3 13h2M19 11h2M19 13h2" />
+                    </>
+                  )}
+                </svg>
+              </span>
+              <span class="hc-item-body">
+                <span class="hc-item-title">
+                  {it.title}
+                  <span class="hc-badge">{it.kicker.split('·')[1]?.trim()}</span>
+                </span>
+                <span class="hc-item-desc">{it.short}</span>
+              </span>
+              <i class="hc-bar" aria-hidden="true"></i>
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="hc-next">
+        <span class="hc-next-tag">NEXT · <b>即将上线</b></span>
+        <p>交互式概念图谱：把核心概念连成一张可点开的依赖网络，点任意节点直接跳到对应文章与 Demo。</p>
+        <div class="hc-chips">
+          <span>概念依赖图</span><span>点击跳转</span><span>全站搜索</span><span>离线可用</span>
+        </div>
+      </div>
+
+      <div class="hc-cta">
+        <div class="hc-nums">
+          <div><b>{posts.length}</b><span>文章</span></div>
+          <div><b>{concepts.length}</b><span>概念</span></div>
+          <div><b>{evo.length}</b><span>编年</span></div>
+        </div>
+        <a class="hc-btn" href={`${base}concepts/`}>从核心概念开始读 →</a>
+      </div>
+    </div>
+
+    <!-- 面板：随右侧联动 -->
+    <div class="hc-visual">
+      <div class="hc-console" id="hcConsole">
+        <i class="hc-hud tl" aria-hidden="true"></i>
+        <i class="hc-hud tr" aria-hidden="true"></i>
+        <i class="hc-hud bl" aria-hidden="true"></i>
+        <i class="hc-hud br" aria-hidden="true"></i>
+
+        <div class="hc-cbar">
+          <span class="hc-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="hc-path">{first.path}</span>
+          <span class="hc-live">LIVE</span>
+        </div>
+
+        <div class="hc-cbody">
+          <div class="hc-rail" aria-hidden="true">
+            {
+              items.map((it, i) => (
+                <span class:list={['hc-ri', { on: i === 0 }]} data-i={i}>
+                  <svg viewBox="0 0 24 24">
+                    {it.icon === 'trend' && <path d="M3 17l5-5 4 4 8-8" />}
+                    {it.icon === 'layers' && <path d="M12 4l7 3.8-7 3.8-7-3.8L12 4zM5 12.4l7 3.8 7-3.8M5 16.6l7 3.8 7-3.8" />}
+                    {it.icon === 'device' && <rect x="8" y="3" width="8" height="18" rx="2" />}
+                    {it.icon === 'chip' && <rect x="7" y="7" width="10" height="10" rx="2" />}
+                  </svg>
+                </span>
+              ))
+            }
+            <span class="hc-rail-gap"></span>
+          </div>
+
+          {
+            items.map((it, i) => (
+              <div class:list={['hc-pane', { on: i === 0 }]} data-i={i}>
+                <div class="hc-krow">
+                  <span class="hc-k">{it.kicker}</span>
+                  <span class="hc-v">{it.range}</span>
+                </div>
+                <h2 class="hc-pane-title">{it.title}</h2>
+                <p class="hc-pane-desc">{it.desc}</p>
+                <div class="hc-metrics">
+                  {it.metrics.map((m) => (
+                    <div>
+                      <b>{m.v}</b>
+                      <span>{m.l}</span>
+                    </div>
+                  ))}
+                </div>
+                <div class="hc-tags">
+                  {it.tags.map((t: string) => <span>{t}</span>)}
+                </div>
+                <div class="hc-recent">
+                  <span class="hc-k">最近发布</span>
+                  {it.rows.map((r) => (
+                    <div class="hc-row">
+                      <span class="hc-idx">{r.idx}</span>
+                      <span class="hc-nm">{r.title}</span>
+                      <span class="hc-st">{r.state}</span>
+                    </div>
+                  ))}
+                </div>
+                <a class="hc-more" href={it.href}>{it.linkLabel} →</a>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <p class="hc-caption">PREVIEW · 随右侧栏目联动</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hc {
+    position: relative;
+    overflow-x: clip;
+    margin: -0.5rem 0 3.5rem;
+    padding: 1.5rem 0 0;
+    isolation: isolate;
+  }
+  .hc-glow {
+    position: absolute;
+    inset: -16rem -12rem auto -12rem;
+    height: 46rem;
+    z-index: -2;
+    background:
+      radial-gradient(44% 46% at 50% 18%, rgba(34, 211, 238, 0.14), transparent 70%),
+      radial-gradient(30% 34% at 84% 26%, rgba(118, 100, 255, 0.09), transparent 72%);
+    pointer-events: none;
+  }
+  .hc-noise {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.16;
+    mix-blend-mode: overlay;
+    mask-image: radial-gradient(92% 82% at 50% 30%, #000 26%, transparent 86%);
+    -webkit-mask-image: radial-gradient(92% 82% at 50% 30%, #000 26%, transparent 86%);
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+  }
+  .hc-spot {
+    position: absolute;
+    width: 620px;
+    height: 620px;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+    transition: opacity 0.6s ease;
+    background: radial-gradient(circle at center, rgba(34, 211, 238, 0.1), rgba(34, 211, 238, 0.03) 40%, transparent 68%);
+    will-change: transform;
+  }
+  .hc.ptr .hc-spot { opacity: 1; }
+
+  .hc-wrap {
+    display: grid;
+    grid-template-columns: 1.06fr 0.94fr;
+    gap: 2.4rem;
+    align-items: center;
+  }
+  .hc-visual { order: -1; }
+
+  /* ---------- 左：文案 ---------- */
+  .hc-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    border-radius: 100px;
+    padding: 0.34rem 0.8rem;
+  }
+  .hc-eyebrow::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+  }
+  .hc-title {
+    margin: 1rem 0 0;
+    font-size: clamp(1.7rem, 3.1vw, 2.55rem);
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    color: #f0f7fc;
+  }
+  .hc-title em {
+    display: block;
+    font-style: normal;
+    background: linear-gradient(96deg, #eafcff, #22d3ee 48%, #69f0ae);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hc-sep { display: none; }
+  .hc-sub {
+    margin-top: 0.85rem;
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.85;
+  }
+  .hc-dot { color: #3d5265; margin: 0 0.45em; }
+  .hc-rule {
+    height: 1px;
+    margin: 1.1rem 0 0.35rem;
+    background: linear-gradient(90deg, var(--border-hi), rgba(47, 66, 86, 0.25) 62%, transparent);
+  }
+
+  /* ---------- 特性列表 ---------- */
+  .hc-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 0.75rem;
+    padding: 0.62rem 0.75rem;
+    border-radius: 10px;
+    color: inherit;
+    text-decoration: none;
+    overflow: hidden;
+    transition: background 0.3s var(--ease);
+  }
+  .hc-item + .hc-item { margin-top: 1px; }
+  .hc-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12%;
+    bottom: 12%;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--accent), #69f0ae);
+    opacity: 0;
+    transform: scaleY(0.4);
+    transition: 0.35s var(--ease);
+  }
+  .hc-item:hover { background: rgba(34, 211, 238, 0.045); }
+  .hc-item.act {
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.1), rgba(34, 211, 238, 0.022) 62%, transparent 92%);
+  }
+  .hc-item.act::before { opacity: 1; transform: scaleY(1); }
+  .hc-ic { display: grid; place-items: center; width: 20px; height: 20px; margin-top: 0.18rem; opacity: 0.45; transition: 0.3s; }
+  .hc-ic svg {
+    width: 18px; height: 18px; fill: none; stroke: #a8bccb; stroke-width: 1.5;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .hc-item:hover .hc-ic, .hc-item.act .hc-ic { opacity: 1; }
+  .hc-item.act .hc-ic svg { stroke: var(--accent); }
+  .hc-item-body { display: block; min-width: 0; }
+  .hc-item-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #b6c7d6;
+    transition: color 0.3s;
+  }
+  .hc-item.act .hc-item-title, .hc-item:hover .hc-item-title { color: #fff; }
+  .hc-badge {
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #8fa3b3;
+    border: 1px solid rgba(120, 160, 190, 0.24);
+    border-radius: 4px;
+    padding: 0.1rem 0.32rem;
+  }
+  .hc-item-desc {
+    display: block;
+    margin-top: 0.18rem;
+    font-size: 0.74rem;
+    line-height: 1.55;
+    color: #6d8296;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.3s;
+  }
+  .hc-item.act .hc-item-desc { color: #9db2c3; }
+  .hc-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 0;
+    background: linear-gradient(90deg, var(--accent), rgba(34, 211, 238, 0));
+  }
+  .hc-item.act .hc-bar { animation: hcFill var(--dur, 5200ms) linear forwards; }
+  @keyframes hcFill { from { width: 0; } to { width: 100%; } }
+
+  /* ---------- 即将上线 ---------- */
+  .hc-next {
+    margin-top: 1.1rem;
+    position: relative;
+    border: 1px dashed rgba(120, 160, 190, 0.28);
+    border-radius: 11px;
+    padding: 0.85rem 1rem 0.8rem;
+    background: linear-gradient(180deg, rgba(17, 27, 37, 0.45), rgba(11, 17, 25, 0.15));
+  }
+  .hc-next-tag {
+    position: absolute;
+    top: -0.46rem;
+    left: 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    background: var(--bg);
+    padding: 0 0.4rem;
+    color: var(--text-dim);
+  }
+  .hc-next-tag b { color: var(--accent-2); font-weight: 500; }
+  .hc-next p { font-size: 0.76rem; line-height: 1.7; color: #8fa4b5; }
+  .hc-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.55rem; }
+  .hc-chips span {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.03em;
+    color: #a9bccb;
+    border: 1px solid rgba(120, 160, 190, 0.22);
+    border-radius: 100px;
+    padding: 0.12rem 0.5rem;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* ---------- CTA ---------- */
+  .hc-cta { display: flex; align-items: stretch; gap: 0.7rem; margin-top: 1rem; }
+  .hc-nums {
+    flex: 0 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 1.1rem;
+    align-items: center;
+    border: 1px solid rgba(120, 160, 190, 0.2);
+    border-radius: 11px;
+    padding: 0.55rem 1rem;
+    background: linear-gradient(180deg, rgba(24, 36, 48, 0.66), rgba(13, 20, 28, 0.6));
+  }
+  .hc-nums div { display: flex; flex-direction: column; align-items: center; }
+  .hc-nums b { font-family: var(--mono); font-size: 1.02rem; color: #dceef8; font-weight: 500; }
+  .hc-nums span { font-size: 0.6rem; color: #7b90a2; letter-spacing: 0.05em; }
+  .hc-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: #04141b;
+    background: linear-gradient(135deg, #3ee6c0, #22d3ee 58%, #38bdf8);
+    box-shadow: 0 10px 26px -14px rgba(34, 211, 238, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition: 0.22s var(--ease);
+    padding: 0.6rem 1rem;
+  }
+  .hc-btn:hover { transform: translateY(-1px); color: #04141b; box-shadow: 0 16px 34px -16px rgba(34, 211, 238, 0.85); }
+  .hc-btn:active { transform: translateY(0) scale(0.995); }
+
+  /* ---------- 右：控制台面板 ---------- */
+  .hc-visual { position: relative; perspective: 1200px; }
+  .hc-console {
+    position: relative;
+    border-radius: 14px;
+    border: 1px solid rgba(150, 200, 220, 0.16);
+    background: linear-gradient(180deg, rgba(23, 36, 48, 0.94), rgba(12, 19, 27, 0.97));
+    box-shadow: 0 40px 80px -44px rgba(0, 0, 0, 0.95), 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.5s var(--ease);
+    will-change: transform;
+  }
+  .hc-console::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 14px;
+    background: linear-gradient(118deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.015) 24%, transparent 44%);
+    mix-blend-mode: screen;
+  }
+  .hc-cbar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid rgba(120, 160, 190, 0.12);
+    background: linear-gradient(180deg, rgba(30, 46, 60, 0.5), rgba(16, 25, 34, 0.3));
+  }
+  .hc-lights { display: flex; gap: 4px; }
+  .hc-lights i { width: 6px; height: 6px; border-radius: 50%; background: #3f5a6d; }
+  .hc-path { font-family: var(--mono); font-size: 0.63rem; color: #7e94a6; }
+  .hc-live {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    color: #6f8798;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .hc-live::before {
+    content: '';
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: hcPulse 2.6s ease-out infinite;
+  }
+  @keyframes hcPulse {
+    0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.5); }
+    70% { box-shadow: 0 0 0 7px rgba(34, 211, 238, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+  }
+
+  .hc-cbody { display: grid; grid-template-columns: 46px 1fr; min-height: 30rem; }
+  .hc-rail {
+    border-right: 1px solid rgba(120, 160, 190, 0.1);
+    padding: 0.8rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    background: linear-gradient(180deg, rgba(18, 28, 38, 0.45), rgba(11, 17, 25, 0.2));
+  }
+  .hc-ri { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; opacity: 0.35; position: relative; }
+  .hc-ri svg { width: 14px; height: 14px; fill: none; stroke: #a9bccb; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .hc-ri.on { opacity: 1; background: rgba(34, 211, 238, 0.1); box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.22); }
+  .hc-ri.on::before {
+    content: '';
+    position: absolute;
+    left: -11px; top: 5px; bottom: 5px;
+    width: 2px; border-radius: 2px;
+    background: var(--accent);
+  }
+  .hc-ri.on svg { stroke: var(--accent); }
+  .hc-ri.dim { opacity: 0.22; }
+  .hc-rail-gap { flex: 1; }
+  .hc-pane-title { font-size: 1.22rem; }
+
+  .hc-pane {
+    display: none;
+    padding: 1.15rem 1.15rem 1.1rem;
+    min-width: 0;
+  }
+  .hc-pane.on { display: flex; flex-direction: column; animation: hcSwap 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  @keyframes hcSwap { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .hc-krow { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .hc-k { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.18em; color: #6f8798; text-transform: uppercase; }
+  .hc-v { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; color: #8ea5b6; }
+  .hc-pane-title { margin: 0.55rem 0 0.4rem; font-size: 1.18rem; font-weight: 700; color: #eaf4fb; }
+  .hc-pane-desc { font-size: 0.75rem; line-height: 1.75; color: #8ea3b4; }
+  .hc-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.15rem 0 0.55rem; }
+  .hc-tags span {
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.02em;
+    color: #93a8ba;
+    border: 1px solid rgba(120, 160, 190, 0.2);
+    border-radius: 100px;
+    padding: 0.06rem 0.42rem;
+    background: rgba(255, 255, 255, 0.015);
+  }
+  .hc-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.45rem; margin: 0.9rem 0 0.8rem; }
+  .hc-metrics div {
+    border: 1px solid rgba(120, 160, 190, 0.13);
+    border-radius: 8px;
+    padding: 0.45rem 0.55rem;
+    background: rgba(255, 255, 255, 0.015);
+  }
+  .hc-metrics b { display: block; font-family: var(--mono); font-size: 0.92rem; color: #d9ecf6; font-weight: 500; }
+  .hc-metrics span { font-size: 0.6rem; color: #7b90a2; letter-spacing: 0.04em; }
+  .hc-recent { display: flex; flex-direction: column; gap: 1px; }
+  .hc-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.42rem 0.4rem;
+    border-radius: 6px;
+    font-size: 0.71rem;
+    color: #93a8ba;
+    transition: 0.2s;
+  }
+  .hc-row + .hc-row { margin-top: 1px; }
+  .hc-row .hc-idx { font-family: var(--mono); font-size: 0.6rem; color: #5f7789; width: 1.2rem; flex: 0 0 auto; }
+  .hc-nm { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hc-st {
+    flex: 0 0 auto;
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.06em;
+    color: #6f8798;
+    border: 1px solid rgba(120, 160, 190, 0.16);
+    border-radius: 100px;
+    padding: 0.02rem 0.34rem;
+  }
+  .hc-more {
+    display: inline-block;
+    margin-top: 0.85rem;
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+
+  .hc-hud { position: absolute; width: 14px; height: 14px; border: 0 solid rgba(34, 211, 238, 0.5); z-index: 4; }
+  .hc-hud.tl { top: -1px; left: -1px; border-top-width: 1.5px; border-left-width: 1.5px; border-top-left-radius: 3px; }
+  .hc-hud.tr { top: -1px; right: -1px; border-top-width: 1.5px; border-right-width: 1.5px; border-top-right-radius: 3px; }
+  .hc-hud.bl { bottom: -1px; left: -1px; border-bottom-width: 1.5px; border-left-width: 1.5px; border-bottom-left-radius: 3px; }
+  .hc-hud.br { bottom: -1px; right: -1px; border-bottom-width: 1.5px; border-right-width: 1.5px; border-bottom-right-radius: 3px; }
+
+  .hc-caption {
+    margin-top: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+    color: #5e7688;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 1080px) {
+    .hc-wrap { grid-template-columns: 1fr; gap: 1.8rem; }
+    .hc-visual { order: 0; }
+    .hc-glow { inset: -8rem 0 auto 0; }
+    .hc-spot { display: none; }
+    .hc-cbody { min-height: 0; }
+    .hc-title em { display: inline; }
+    .hc-sep {
+      display: inline-block;
+      width: 1px;
+      height: 0.8em;
+      margin: 0 0.35em;
+      vertical-align: -0.06em;
+      background: linear-gradient(transparent, rgba(160, 190, 210, 0.5), transparent);
+    }
+  }
+  @media (max-width: 640px) {
+    .hc { margin-top: -0.25rem; }
+    .hc-title em { display: block; }
+    .hc-sep { display: none; }
+    .hc-sub { font-size: 0.76rem; }
+    .hc-sub-extra { display: none; }
+    .hc-item { padding: 0.55rem 0.5rem; }
+    .hc-item-desc { font-size: 0.7rem; }
+    .hc-cta { flex-direction: column; }
+    .hc-nums { justify-content: space-around; }
+    .hc-cbody { grid-template-columns: 38px 1fr; }
+    .hc-pane { padding: 0.8rem 0.75rem 0.85rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hc-item.act .hc-bar { animation: none; width: 100%; }
+    .hc-pane.on { animation: none; }
+  }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('hc');
+    if (!root) return;
+    const reel = document.getElementById('hcReel');
+    const consoleEl = document.getElementById('hcConsole');
+    const spot = document.getElementById('hcSpot');
+    if (!reel || !consoleEl) return;
+
+    const items = Array.from(reel.querySelectorAll<HTMLElement>('.hc-item'));
+    const panes = Array.from(root.querySelectorAll<HTMLElement>('.hc-pane'));
+    const railIcons = Array.from(root.querySelectorAll<HTMLElement>('.hc-ri[data-i]'));
+    const pathEl = root.querySelector<HTMLElement>('.hc-path');
+
+    const PATHS = ['posts / ai-evolution', 'concepts / index', 'harmony / index', 'shell / index'];
+    const DUR = 5200;
+    let idx = 0;
+    let timer: number | null = null;
+    let paused = false;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function paint(i: number) {
+      items.forEach((el, k) => el.classList.toggle('act', k === i));
+      panes.forEach((el, k) => el.classList.toggle('on', k === i));
+      railIcons.forEach((el, k) => el.classList.toggle('on', k === i));
+      if (pathEl) pathEl.textContent = PATHS[i] || '';
+      items.forEach((el) => el.style.setProperty('--dur', DUR + 'ms'));
+      const bar = items[i]?.querySelector<HTMLElement>('.hc-bar');
+      if (bar) {
+        bar.style.animation = 'none';
+        void bar.offsetWidth;
+        bar.style.animation = '';
+      }
+    }
+
+    function go(i: number) {
+      idx = (i + items.length) % items.length;
+      paint(idx);
+    }
+
+    function stop() {
+      if (timer) {
+        window.clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    function start() {
+      stop();
+      if (paused || reduce) return;
+      timer = window.setInterval(() => go(idx + 1), DUR);
+    }
+
+    items.forEach((el, i) => {
+      el.addEventListener('mouseenter', () => go(i));
+      el.addEventListener('focus', () => go(i));
+      el.addEventListener('mouseleave', () => start());
+    });
+
+    root.addEventListener('mouseenter', () => { paused = false; });
+    root.addEventListener('mouseleave', () => { start(); });
+
+    reel.addEventListener('mouseenter', () => { paused = true; stop(); });
+    reel.addEventListener('mouseleave', () => { paused = false; start(); });
+    reel.addEventListener('focusin', () => { paused = true; stop(); });
+    reel.addEventListener('focusout', () => { paused = false; start(); });
+
+    // 指针高光 + 面板 3D 微倾斜（有焦点含义，不做常驻动画）
+    let raf: number | null = null;
+    let px = 0;
+    let py = 0;
+    root.addEventListener('pointermove', (e) => {
+      if (reduce) return;
+      root.classList.add('ptr');
+      const r = root.getBoundingClientRect();
+      const sx = e.clientX - r.left;
+      const sy = e.clientY - r.top;
+      if (spot) spot.style.transform = `translate3d(${sx - 310}px, ${sy - 310}px, 0)`;
+      const c = consoleEl.getBoundingClientRect();
+      px = Math.max(-1, Math.min(1, (e.clientX - (c.left + c.width / 2)) / c.width));
+      py = Math.max(-1, Math.min(1, (e.clientY - (c.top + c.height / 2)) / c.height));
+      if (!raf) {
+        raf = window.requestAnimationFrame(() => {
+          raf = null;
+          consoleEl.style.transform = `rotateX(${(-py * 3).toFixed(2)}deg) rotateY(${(px * 4).toFixed(2)}deg)`;
+        });
+      }
+    }, { passive: true });
+    root.addEventListener('pointerleave', () => {
+      root.classList.remove('ptr');
+      consoleEl.style.transform = '';
+    });
+
+    paint(0);
+    start();
+  })();
+</script>
