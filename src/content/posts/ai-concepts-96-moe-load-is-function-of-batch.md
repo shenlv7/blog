@@ -81,7 +81,7 @@ B=1 是 3.1%，B=32 是 63.8%，B=256 才接近 1。模拟值与解析式在 9 �
 所以「加批量」在 MoE 上的真实作用是：让同一份专家权重被更多 token 分摊。均匀路由下 batch 从 1 到 256，每个被唤醒的专家平均收到的 token 从 1 个涨到 8 个（2048 次投递 ÷ 256），算术强度从 0.67 抬到约 5.4 FLOP/byte——离 295 还差两个数量级，但每条读出来的权重多干了 8 倍的活，这就是吞吐曲线随批量上升的机制，而不是「GPU 更忙了」。
 
 ```python
-# 96-moe-load-vs-batch.py 的核心（完整脚本见仓库 demos/）
+# 96-moe-load-vs-batch.py 的核心（完整脚本见文末链接）
 import numpy as np
 E, K, TRIALS, BS = 256, 8, 400, [1, 2, 4, 8, 16, 32, 64, 128, 256]
 
@@ -101,6 +101,8 @@ def coverage(bias_sigma, seed=96):
 for s in (0.0, 0.7, 1.2):
     print(f"-- bias sigma={s}"); coverage(s)
 ```
+
+完整脚本（三种偏置强度 × 9 个 batch size × 400 次重复，外加 EP 载荷与专家权重的成本模型）：[demos/96-moe-load-vs-batch.py](https://github.com/shenlv7/blog/blob/main/demos/96-moe-load-vs-batch.py)。
 
 ## 💡 落地清单
 
