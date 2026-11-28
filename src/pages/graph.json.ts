@@ -77,6 +77,16 @@ export async function GET(context: APIContext) {
     count: g.nums.filter(n => byNum.has(n)).length,
   }));
 
+  // 未分组的新卡片也要进图：单独一簇「待归类」，否则它会静默消失
+  const ungrouped = nodes.filter(n => !groups.some(g => g.key === n.group));
+  if (ungrouped.length) {
+    groups.push({
+      key: 'X', name: '待归类', desc: '已发布、尚未加入主题分组',
+      color: '#8497a9', prereq: [], count: ungrouped.length,
+    } as any);
+    ungrouped.forEach(n => { n.group = 'X'; });
+  }
+
   const routes = CONCEPT_ROUTES.map(r => ({
     ...r,
     count: r.groups.reduce((s, k) => s + (groups.find(g => g.key === k)?.count || 0), 0),
