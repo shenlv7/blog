@@ -8,7 +8,7 @@ export interface Props {
   type?: string;
 }
 
-const { title, description = '赛博阿漆的博客 - AI学习与技术分享', image, type = 'website' } = Astro.props;
+const { title, description = '用可运行代码讲清 AI 核心机制：Transformer、KV Cache、量化、MoE、RAG 与评测，每篇附可复现实验与真实输出。', image, type = 'website' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const base = import.meta.env.BASE_URL || '/';
 const ogImage = image || `https://shenlv7.github.io${base}og-default.svg`;
@@ -178,11 +178,11 @@ const navItems = [
     <footer>
       <div class="footer-content">
         <div class="footer-section">
-          <h4>关于</h4>
+          <h3>关于</h3>
           <p>赛博阿漆的AI学习笔记与技术分享</p>
         </div>
         <div class="footer-section">
-          <h4>导航</h4>
+          <h3>导航</h3>
           <a href={`${base}`}>首页</a>
           <a href={`${base}posts/`}>文章</a>
           <a href={`${base}ideas/`}>灵感</a>
@@ -190,7 +190,7 @@ const navItems = [
           <a href={`${base}shell/`}>躯壳</a>
         </div>
         <div class="footer-section">
-          <h4>链接</h4>
+          <h3>链接</h3>
           <a href="https://github.com/shenlv7" target="_blank" rel="noopener">GitHub</a>
           <a href={`${base}rss.xml`}>RSS订阅</a>
           <a href="mailto:2056440151@qq.com">邮箱联系</a>
@@ -473,7 +473,7 @@ const navItems = [
     grid-template-columns: 1.4fr 1fr 1fr;
     gap: 2rem;
   }
-  .footer-section h4 {
+  .footer-section h3 {
     color: var(--text);
     margin-bottom: 1rem;
     font-family: var(--mono);

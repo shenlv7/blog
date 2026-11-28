@@ -1,7 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
+const posts = await getCollection('posts');
+const aiLearning = posts.filter(p => (p.data.series || '').startsWith('AI学习之路')).length;
+const concepts = posts.filter(p => p.data.series === 'ai-concepts' && p.data.seriesOrder).length;
 ---
 
 <Base title="关于我" description="了解赛博阿漆 - 《赛博重案组》成员">
@@ -46,14 +50,14 @@ const base = import.meta.env.BASE_URL;
         <div class="roadmap-item">
           <span class="status">✅</span>
           <div>
-            <h3>AI学习之路（12期全集）</h3>
+            <h3>AI学习之路（{aiLearning} 篇连载中）</h3>
             <p>机器学习→深度学习→NLP→计算机视觉→强化学习→GANs→LLM→Agent→伦理→部署</p>
           </div>
         </div>
         <div class="roadmap-item">
           <span class="status">🔄</span>
           <div>
-            <h3>AI核心概念（12/43）</h3>
+            <h3>AI核心概念（{concepts} 篇 · 8 组）</h3>
             <p>Prompt、Token、LLM、Embedding、Temperature、RAG、Attention、Transformer、Fine-tuning、Agent、CoT、Function Calling</p>
           </div>
         </div>

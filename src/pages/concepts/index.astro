@@ -1,16 +1,31 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
+import { CONCEPT_GROUPS } from '../../data/concept-groups';
 
 const allPosts = await getCollection('posts');
 const base = '/blog/';
 
-// 筛选AI核心概念系列
+// 只算编号卡片：系列索引页（ai-concepts-study-path）也带 series，但不该计入篇数
 const conceptPosts = allPosts
-  .filter(p => p.data.series === 'ai-concepts')
+  .filter(p => p.data.series === 'ai-concepts' && p.data.seriesOrder)
   .sort((a, b) => (a.data.seriesOrder || 0) - (b.data.seriesOrder || 0));
 
-// 难度映射
+const byNum = new Map(conceptPosts.map(p => [p.data.seriesOrder as number, p]));
+const groupedNums = new Set(CONCEPT_GROUPS.flatMap(g => g.nums));
+const ungrouped = conceptPosts.filter(p => !groupedNums.has(p.data.seriesOrder as number));
+
+const groups = CONCEPT_GROUPS.map(g => ({
+  ...g,
+  posts: g.nums.map(n => byNum.get(n)).filter(Boolean) as typeof conceptPosts,
+}));
+
+const total = conceptPosts.length;
+const demoCount = conceptPosts.filter(p =>
+  (p.body || '').includes('github.com/shenlv7/blog/blob/main/demos/')
+).length;
+const codeCount = conceptPosts.filter(p => /```(python|py)/.test(p.body || '')).length;
+
 const difficultyConfig: Record<string, { label: string; color: string; bg: string }> = {
   beginner: { label: '入门', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
   intermediate: { label: '进阶', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)' },
@@ -23,283 +38,126 @@ function estimateReadingTime(content: string): number {
   return Math.ceil(chineseChars / 450 + englishWords / 200);
 }
 
-function getPostsInRange(start: number, end: number) {
-  return conceptPosts.filter(p => {
-    const order = p.data.seriesOrder;
-    return order !== undefined && order >= start && order <= end;
-  });
+const avgMinutes = total
+  ? Math.round(conceptPosts.reduce((s, p) => s + estimateReadingTime(p.body || ''), 0) / total)
+  : 0;
+
+function hasPublicDemo(body: string) {
+  return body.includes('github.com/shenlv7/blog/blob/main/demos/');
 }
-
-const totalConcepts = 43;
-const publishedCount = conceptPosts.length;
-const progressPercent = Math.round((publishedCount / totalConcepts) * 100);
-
-// 分类数据
-const cat1 = getPostsInRange(1, 8);
-const cat2 = getPostsInRange(9, 16);
-const cat3 = getPostsInRange(17, 24);
-const cat4 = getPostsInRange(25, 32);
-const cat5 = getPostsInRange(33, 37);
-const cat6 = getPostsInRange(38, 43);
 ---
 
-<Base title="AI核心概念 - 43个概念，每个配可运行Demo">
+<Base
+  title={`AI 核心概念 · ${total} 篇机制笔记与可运行代码 | 赛博阿漆`}
+  description={`${total} 篇 AI 核心概念卡片，按 8 个主题分组：从 Prompt、Embedding 到 KV Cache、MoE、量化与评测。每篇给出可复现实验与真实输出。`}
+>
   <div class="concepts-page">
     <!-- Hero -->
     <section class="hero">
-      <div class="hero-badge">🔬 技术深度向</div>
+      <div class="hero-badge">// 技术深度向</div>
       <h1>AI核心概念</h1>
-      <p class="hero-desc">43个核心概念，每个配可运行代码Demo。<br/>不只是"是什么"，更要理解"怎么实现的"。</p>
-      
-      <div class="progress-section">
-        <div class="progress-info">
-          <span>发布进度</span>
-          <span class="progress-num">{publishedCount} / {totalConcepts}</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" style={`width: ${progressPercent}%`}></div>
-        </div>
-      </div>
+      <p class="hero-desc">
+        {total} 篇机制笔记，按 {groups.length} 个主题分组。不只是"是什么"，而是把它拆到能自己写一遍。<br />
+        {codeCount} 篇附可复现代码；<a href={`${base}posts/ai-concepts-study-path/`}>学习路径 →</a>
+      </p>
 
       <div class="hero-stats">
         <div class="stat-item">
-          <span class="stat-num">{publishedCount}</span>
+          <span class="stat-num">{total}</span>
           <span class="stat-label">已发布</span>
         </div>
         <div class="stat-item">
-          <span class="stat-num">{totalConcepts - publishedCount}</span>
-          <span class="stat-label">待发布</span>
+          <span class="stat-num">{groups.length}</span>
+          <span class="stat-label">主题分组</span>
         </div>
         <div class="stat-item">
-          <span class="stat-num">6</span>
-          <span class="stat-label">分类板块</span>
+          <span class="stat-num">{avgMinutes}</span>
+          <span class="stat-label">单篇均读(分钟)</span>
         </div>
       </div>
     </section>
 
-    <!-- 基础概念 -->
-    <section class="category-section">
-      <div class="category-header" style="border-left: 4px solid #3b82f6">
-        <div class="category-title">
-          <span class="cat-emoji">🧠</span>
-          <h2>基础概念</h2>
-          <span class="cat-count">{cat1.length}/8</span>
+    {groups.map(group => (
+      <section class="category-section">
+        <div class="category-header" style={`border-left: 4px solid ${group.color}`}>
+          <div class="category-title">
+            <span class="cat-emoji">{group.key}</span>
+            <h2>{group.name}</h2>
+            <span class="cat-count" style={`background: ${group.color}`}>{group.posts.length} 篇</span>
+          </div>
+          <p class="cat-desc">{group.desc}</p>
         </div>
-        <p class="cat-desc">理解AI的最小知识集</p>
-      </div>
-      <div class="concepts-grid">
-        {cat1.map(post => {
-          const slug = post.id.replace(/\.md$/, '');
-          const diff = post.data.difficulty || 'beginner';
-          const diffInfo = difficultyConfig[diff];
-          const readTime = estimateReadingTime(post.body || '');
-          return (
-            <article class="concept-card">
-              <div class="card-top">
-                <span class="card-number" style="background: #3b82f6">{String(post.data.seriesOrder).padStart(2, '0')}</span>
-                <span class="card-difficulty" style={`color: ${diffInfo.color}; background: ${diffInfo.bg}`}>{diffInfo.label}</span>
-              </div>
-              <h3><a href={`${base}posts/${slug}/`}>{post.data.title.replace(/^\d+\s*\|\s*/, '')}</a></h3>
-              <p class="card-desc">{post.data.description}</p>
-              <div class="card-footer">
-                <span class="card-time">📖 {readTime}分钟</span>
-                <a href={`${base}posts/${slug}/`} class="card-link">阅读 + Demo →</a>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-    </section>
+        {group.posts.length > 0 ? (
+          <div class="concepts-grid">
+            {group.posts.map(post => {
+              const slug = post.id.replace(/\.md$/, '');
+              const diff = post.data.difficulty || 'beginner';
+              const diffInfo = difficultyConfig[diff] || difficultyConfig.beginner;
+              const readTime = estimateReadingTime(post.body || '');
+              return (
+                <article class="concept-card">
+                  <div class="card-top">
+                    <span class="card-number" style={`background: ${group.color}`}>
+                      {String(post.data.seriesOrder).padStart(2, '0')}
+                    </span>
+                    <span class="card-difficulty" style={`color: ${diffInfo.color}; background: ${diffInfo.bg}`}>
+                      {diffInfo.label}
+                    </span>
+                  </div>
+                  <h3>
+                    <a href={`${base}posts/${slug}/`}>{post.data.title.replace(/^\d+\s*\|\s*/, '')}</a>
+                  </h3>
+                  <p class="card-desc">{post.data.description}</p>
+                  <div class="card-footer">
+                    <span class="card-time">{readTime} 分钟</span>
+                    <a href={`${base}posts/${slug}/`} class="card-link">
+                      {hasPublicDemo(post.body || '') ? '阅读 + 公开脚本 →' : '阅读全文 →'}
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <div class="empty-category"><p>该分组撰写中。</p></div>
+        )}
+      </section>
+    ))}
 
-    <!-- 模型架构 -->
-    <section class="category-section">
-      <div class="category-header" style="border-left: 4px solid #8b5cf6">
-        <div class="category-title">
-          <span class="cat-emoji">🏗️</span>
-          <h2>模型架构</h2>
-          <span class="cat-count">{cat2.length}/8</span>
+    {ungrouped.length > 0 && (
+      <section class="category-section">
+        <div class="category-header" style="border-left: 4px solid var(--muted)">
+          <div class="category-title">
+            <span class="cat-emoji">NEW</span>
+            <h2>新近发布 · 待归类</h2>
+            <span class="cat-count">{ungrouped.length} 篇</span>
+          </div>
+          <p class="cat-desc">已发布但还没加进主题分组，编号照样可读</p>
         </div>
-        <p class="cat-desc">打开引擎盖看内部</p>
-      </div>
-      {cat2.length > 0 ? (
         <div class="concepts-grid">
-          {cat2.map(post => {
+          {[...ungrouped].reverse().map(post => {
             const slug = post.id.replace(/\.md$/, '');
-            const diff = post.data.difficulty || 'beginner';
-            const diffInfo = difficultyConfig[diff];
-            const readTime = estimateReadingTime(post.body || '');
+            const diffInfo = difficultyConfig[post.data.difficulty || 'beginner'] || difficultyConfig.beginner;
             return (
               <article class="concept-card">
                 <div class="card-top">
-                  <span class="card-number" style="background: #8b5cf6">{String(post.data.seriesOrder).padStart(2, '0')}</span>
-                  <span class="card-difficulty" style={`color: ${diffInfo.color}; background: ${diffInfo.bg}`}>{diffInfo.label}</span>
+                  <span class="card-number">{String(post.data.seriesOrder).padStart(2, '0')}</span>
+                  <span class="card-difficulty" style={`color: ${diffInfo.color}; background: ${diffInfo.bg}`}>
+                    {diffInfo.label}
+                  </span>
                 </div>
                 <h3><a href={`${base}posts/${slug}/`}>{post.data.title.replace(/^\d+\s*\|\s*/, '')}</a></h3>
                 <p class="card-desc">{post.data.description}</p>
                 <div class="card-footer">
-                  <span class="card-time">📖 {readTime}分钟</span>
-                  <a href={`${base}posts/${slug}/`} class="card-link">阅读 + Demo →</a>
+                  <span class="card-time">{estimateReadingTime(post.body || '')} 分钟</span>
+                  <a href={`${base}posts/${slug}/`} class="card-link">阅读全文 →</a>
                 </div>
               </article>
             );
           })}
         </div>
-      ) : (
-        <div class="empty-category"><p>📝 该板块文章撰写中，敬请期待...</p></div>
-      )}
-    </section>
-
-    <!-- 训练与优化 -->
-    <section class="category-section">
-      <div class="category-header" style="border-left: 4px solid #f59e0b">
-        <div class="category-title">
-          <span class="cat-emoji">🔧</span>
-          <h2>训练与优化</h2>
-          <span class="cat-count">{cat3.length}/8</span>
-        </div>
-        <p class="cat-desc">模型是怎么炼出来的</p>
-      </div>
-      {cat3.length > 0 ? (
-        <div class="concepts-grid">
-          {cat3.map(post => {
-            const slug = post.id.replace(/\.md$/, '');
-            const diff = post.data.difficulty || 'beginner';
-            const diffInfo = difficultyConfig[diff];
-            const readTime = estimateReadingTime(post.body || '');
-            return (
-              <article class="concept-card">
-                <div class="card-top">
-                  <span class="card-number" style="background: #f59e0b">{String(post.data.seriesOrder).padStart(2, '0')}</span>
-                  <span class="card-difficulty" style={`color: ${diffInfo.color}; background: ${diffInfo.bg}`}>{diffInfo.label}</span>
-                </div>
-                <h3><a href={`${base}posts/${slug}/`}>{post.data.title.replace(/^\d+\s*\|\s*/, '')}</a></h3>
-                <p class="card-desc">{post.data.description}</p>
-                <div class="card-footer">
-                  <span class="card-time">📖 {readTime}分钟</span>
-                  <a href={`${base}posts/${slug}/`} class="card-link">阅读 + Demo →</a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        <div class="empty-category"><p>📝 该板块文章撰写中，敬请期待...</p></div>
-      )}
-    </section>
-
-    <!-- 推理与应用 -->
-    <section class="category-section">
-      <div class="category-header" style="border-left: 4px solid #10b981">
-        <div class="category-title">
-          <span class="cat-emoji">🚀</span>
-          <h2>推理与应用</h2>
-          <span class="cat-count">{cat4.length}/8</span>
-        </div>
-        <p class="cat-desc">模型怎么用起来</p>
-      </div>
-      {cat4.length > 0 ? (
-        <div class="concepts-grid">
-          {cat4.map(post => {
-            const slug = post.id.replace(/\.md$/, '');
-            const diff = post.data.difficulty || 'beginner';
-            const diffInfo = difficultyConfig[diff];
-            const readTime = estimateReadingTime(post.body || '');
-            return (
-              <article class="concept-card">
-                <div class="card-top">
-                  <span class="card-number" style="background: #10b981">{String(post.data.seriesOrder).padStart(2, '0')}</span>
-                  <span class="card-difficulty" style={`color: ${diffInfo.color}; background: ${diffInfo.bg}`}>{diffInfo.label}</span>
-                </div>
-                <h3><a href={`${base}posts/${slug}/`}>{post.data.title.replace(/^\d+\s*\|\s*/, '')}</a></h3>
-                <p class="card-desc">{post.data.description}</p>
-                <div class="card-footer">
-                  <span class="card-time">📖 {readTime}分钟</span>
-                  <a href={`${base}posts/${slug}/`} class="card-link">阅读 + Demo →</a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        <div class="empty-category"><p>📝 该板块文章撰写中，敬请期待...</p></div>
-      )}
-    </section>
-
-    <!-- 安全与治理 -->
-    <section class="category-section">
-      <div class="category-header" style="border-left: 4px solid #ef4444">
-        <div class="category-title">
-          <span class="cat-emoji">⚠️</span>
-          <h2>安全与治理</h2>
-          <span class="cat-count">{cat5.length}/5</span>
-        </div>
-        <p class="cat-desc">AI的阿喀琉斯之踵</p>
-      </div>
-      {cat5.length > 0 ? (
-        <div class="concepts-grid">
-          {cat5.map(post => {
-            const slug = post.id.replace(/\.md$/, '');
-            const diff = post.data.difficulty || 'beginner';
-            const diffInfo = difficultyConfig[diff];
-            const readTime = estimateReadingTime(post.body || '');
-            return (
-              <article class="concept-card">
-                <div class="card-top">
-                  <span class="card-number" style="background: #ef4444">{String(post.data.seriesOrder).padStart(2, '0')}</span>
-                  <span class="card-difficulty" style={`color: ${diffInfo.color}; background: ${diffInfo.bg}`}>{diffInfo.label}</span>
-                </div>
-                <h3><a href={`${base}posts/${slug}/`}>{post.data.title.replace(/^\d+\s*\|\s*/, '')}</a></h3>
-                <p class="card-desc">{post.data.description}</p>
-                <div class="card-footer">
-                  <span class="card-time">📖 {readTime}分钟</span>
-                  <a href={`${base}posts/${slug}/`} class="card-link">阅读 + Demo →</a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        <div class="empty-category"><p>📝 该板块文章撰写中，敬请期待...</p></div>
-      )}
-    </section>
-
-    <!-- 工程实践 -->
-    <section class="category-section">
-      <div class="category-header" style="border-left: 4px solid #6366f1">
-        <div class="category-title">
-          <span class="cat-emoji">⚙️</span>
-          <h2>工程实践</h2>
-          <span class="cat-count">{cat6.length}/6</span>
-        </div>
-        <p class="cat-desc">从demo到生产的距离</p>
-      </div>
-      {cat6.length > 0 ? (
-        <div class="concepts-grid">
-          {cat6.map(post => {
-            const slug = post.id.replace(/\.md$/, '');
-            const diff = post.data.difficulty || 'beginner';
-            const diffInfo = difficultyConfig[diff];
-            const readTime = estimateReadingTime(post.body || '');
-            return (
-              <article class="concept-card">
-                <div class="card-top">
-                  <span class="card-number" style="background: #6366f1">{String(post.data.seriesOrder).padStart(2, '0')}</span>
-                  <span class="card-difficulty" style={`color: ${diffInfo.color}; background: ${diffInfo.bg}`}>{diffInfo.label}</span>
-                </div>
-                <h3><a href={`${base}posts/${slug}/`}>{post.data.title.replace(/^\d+\s*\|\s*/, '')}</a></h3>
-                <p class="card-desc">{post.data.description}</p>
-                <div class="card-footer">
-                  <span class="card-time">📖 {readTime}分钟</span>
-                  <a href={`${base}posts/${slug}/`} class="card-link">阅读 + Demo →</a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        <div class="empty-category"><p>📝 该板块文章撰写中，敬请期待...</p></div>
-      )}
-    </section>
+      </section>
+    )}
 
     <!-- 学习建议 -->
     <section class="cta-section">
@@ -308,19 +166,20 @@ const cat6 = getPostsInRange(38, 43);
         <div class="tip-card">
           <span class="tip-emoji">🟢</span>
           <h3>入门读者</h3>
-          <p>从基础概念篇开始，按顺序阅读。每篇文章都配有可运行的Python代码，动手跑一遍效果翻倍。</p>
+          <p>从 A 组开始按顺序读。每篇都能独立跑，动手跑一遍效果翻倍。</p>
         </div>
         <div class="tip-card">
           <span class="tip-emoji">🟡</span>
           <h3>有经验的开发者</h3>
-          <p>直接跳到你感兴趣的板块。每个概念独立成篇，不需要按顺序。</p>
+          <p>直接跳到感兴趣的分组。D 组讲推理成本，E 组讲训练与对齐。</p>
         </div>
         <div class="tip-card">
           <span class="tip-emoji">🔴</span>
           <h3>想深入原理</h3>
-          <p>重点关注模型架构篇和训练优化篇，配合论文链接进一步研究。</p>
+          <p>读 C 组再进 D / E / G；三条推荐路线在<a href={`${base}posts/ai-concepts-study-path/`}>学习路径</a>里。</p>
         </div>
       </div>
+      <p class="demo-honest">已发布 {total} 篇，其中 {demoCount} 篇的完整脚本公开在仓库 demos/；其余为文内可复现片段。</p>
     </section>
   </div>
 </Base>
@@ -347,12 +206,7 @@ const cat6 = getPostsInRange(38, 43);
   }
   .hero h1 { font-size: 2.8rem; margin-bottom: 0.8rem; }
   .hero-desc { color: var(--muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem; }
-
-  .progress-section { max-width: 400px; margin: 0 auto 2rem; }
-  .progress-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
-  .progress-num { font-weight: 700; color: var(--accent); }
-  .progress-bar { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 5px; transition: width 1s ease-out; }
+  .hero-desc a { color: var(--accent); }
 
   .hero-stats { display: flex; justify-content: center; gap: 3rem; }
   .stat-item { text-align: center; }
@@ -367,7 +221,7 @@ const cat6 = getPostsInRange(38, 43);
     border-radius: 0 12px 12px 0;
   }
   .category-title { display: flex; align-items: center; gap: 0.75rem; }
-  .cat-emoji { font-size: 1.5rem; }
+  .cat-emoji { font-size: 1.1rem; font-weight: 700; color: var(--muted); font-family: monospace; }
   .category-title h2 { font-size: 1.5rem; margin: 0; }
   .cat-count {
     background: var(--accent);
@@ -402,6 +256,7 @@ const cat6 = getPostsInRange(38, 43);
     margin-bottom: 0.8rem;
   }
   .card-number {
+    background: var(--border-hi);
     color: white;
     padding: 0.2rem 0.7rem;
     border-radius: 20px;
@@ -414,7 +269,7 @@ const cat6 = getPostsInRange(38, 43);
     font-size: 0.75rem;
     font-weight: 600;
   }
-  .concept-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+  .concept-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; line-height: 1.45; }
   .concept-card h3 a { color: var(--text); text-decoration: none; }
   .concept-card h3 a:hover { color: var(--accent); }
   .card-desc {
@@ -463,6 +318,15 @@ const cat6 = getPostsInRange(38, 43);
   .tip-emoji { font-size: 2rem; display: block; margin-bottom: 0.8rem; }
   .tip-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
   .tip-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+  .tip-card a { color: var(--accent); }
+  .demo-honest {
+    margin: 2rem 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
 
   @media (max-width: 768px) {
     .hero h1 { font-size: 2rem; }

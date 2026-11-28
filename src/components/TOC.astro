@@ -2,14 +2,15 @@
 // TOC.astro - 文章目录导航
 interface Props {
   headings: { depth: number; slug: string; text: string }[];
+  inline?: boolean;
 }
 
-const { headings } = Astro.props;
+const { headings, inline = false } = Astro.props;
 const filteredHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 ---
 
 {filteredHeadings.length > 0 && (
-  <nav class="toc" aria-label="文章目录">
+  <nav class:list={['toc', { inline }]} aria-label="文章目录">
     <details open>
       <summary class="toc-title">
         <span>📑 目录</span>
@@ -68,6 +69,12 @@ const filteredHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
     border-radius: 12px;
     padding: 1rem;
     margin-bottom: 1.5rem;
+  }
+  /* 正文内嵌版：不吸顶，避免长文滚动时压住段落 */
+  .toc.inline {
+    position: static;
+    max-height: none;
+    margin-bottom: 2rem;
   }
   .toc-title {
     display: flex;

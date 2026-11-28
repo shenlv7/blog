@@ -22,8 +22,11 @@ const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
 
 const aiSeriesPosts = posts.filter(p => p.data.series === 'AI学习之路');
 const completedCount = aiSeriesPosts.length;
-const conceptPosts = posts.filter(p => p.data.series === 'ai-concepts');
+const conceptPosts = posts
+  .filter(p => p.data.series === 'ai-concepts' && p.data.seriesOrder)
+  .sort((a, b) => (b.data.seriesOrder || 0) - (a.data.seriesOrder || 0));
 const publishedCount = conceptPosts.length;
+const conceptGroups = 8;
 const evoPosts = posts
   .filter(p => p.data.series === 'ai-evolution' && p.data.seriesOrder)
   .sort((a, b) => (b.data.seriesOrder || 0) - (a.data.seriesOrder || 0));
@@ -62,7 +65,7 @@ const inventionStatusMap: Record<string, { label: string; emoji: string }> = {
 const base = '/blog/';
 ---
 
-<Base title="赛博阿漆的AI学习博客">
+<Base title="赛博阿漆 · AI 核心概念与推理优化笔记｜可运行 Demo 的技术博客" description="用可运行代码讲清 AI 核心机制：Prompt、Transformer、KV Cache、量化、MoE、RAG 与评测。每篇给出可复现实验、真实输出与成本账，不讲泛泛的科普。">
   <!-- Hero · 控制台版 -->
   <HeroConsole />
 
@@ -105,7 +108,7 @@ const base = '/blog/';
     <div class="section-header">
       <div class="section-label">NEW SERIES</div>
       <h2>AI核心概念</h2>
-      <p class="section-desc">43个核心概念，每个配可运行代码Demo。不只是"是什么"，更要理解"怎么实现的"。</p>
+      <p class="section-desc">{publishedCount} 篇机制笔记，按 {conceptGroups} 个主题分组。每篇都拆到能自己写一遍，多数附可复现实验。</p>
     </div>
     <div class="concepts-preview">
       {conceptPosts.slice(0, 4).map(post => {
@@ -122,7 +125,7 @@ const base = '/blog/';
       })}
     </div>
     <div class="section-action">
-      <a href={`${base}concepts/`} class="btn btn-outline">查看全部 {publishedCount}/43 个概念 →</a>
+      <a href={`${base}concepts/`} class="btn btn-outline">查看全部 {publishedCount} 个概念 →</a>
     </div>
   </section>
 
@@ -174,12 +177,12 @@ const base = '/blog/';
         <div class="series-icon">🧠</div>
         <div class="series-info">
           <h3>AI核心概念</h3>
-          <p>43个概念 · 每个配可运行Demo</p>
+          <p>{publishedCount} 篇 · {conceptGroups} 个主题分组</p>
           <div class="series-progress">
             <div class="progress-track">
-              <div class="progress-fill" style={`width: ${Math.round((publishedCount / 43) * 100)}%`}></div>
+              <div class="progress-fill" style="width: 100%"></div>
             </div>
-            <span>{publishedCount}/43</span>
+            <span>{publishedCount} 篇已发布</span>
           </div>
         </div>
       </a>
@@ -190,9 +193,9 @@ const base = '/blog/';
           <p>机器学习 · 深度学习 · NLP · CV</p>
           <div class="series-progress">
             <div class="progress-track">
-              <div class="progress-fill" style={`width: ${Math.min(100, (completedCount / 12) * 100)}%`}></div>
+              <div class="progress-fill" style="width: 100%"></div>
             </div>
-            <span>{completedCount}/12</span>
+            <span>{completedCount} 篇已发布</span>
           </div>
         </div>
       </a>
@@ -299,7 +302,7 @@ const base = '/blog/';
               <span class="shell-num">#{String(shell.data.shellNumber).padStart(3, '0')}</span>
               <span class={`status-pill status-${status}`}>{statusInfo.emoji} {statusInfo.label}</span>
             </div>
-            <h4>{shell.data.title}</h4>
+            <h3>{shell.data.title}</h3>
             <p>{shell.data.description}</p>
             {shell.data.budget && <span class="budget">💰 {shell.data.budget}</span>}
           </a>
@@ -600,7 +603,7 @@ const base = '/blog/';
     padding: 0.2rem 0.6rem;
     border-radius: 100px;
   }
-  .shell-card h4 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .shell-card h3 { font-size: 0.95rem; margin-bottom: 0.3rem; }
   .shell-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.4; margin-bottom: 0.5rem; }
   .budget { font-size: 0.75rem; color: #10b981; }
 

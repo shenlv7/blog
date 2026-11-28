@@ -12,7 +12,8 @@ const trimTitle = (t: string) => t.replace(/^\d+\s*\|\s*/, '');
 const evo = posts
   .filter((p) => p.data.series === 'ai-evolution' && p.data.seriesOrder)
   .sort((a, b) => (b.data.seriesOrder || 0) - (a.data.seriesOrder || 0));
-const concepts = posts.filter((p) => p.data.series === 'ai-concepts');
+const concepts = posts.filter((p) => p.data.series === 'ai-concepts' && p.data.seriesOrder);
+const conceptsWithCode = concepts.filter((p) => /```(python|py)/.test(p.body || '')).length;
 const latestConcepts = [...concepts].sort(byDate).slice(0, 3);
 const latestHarmony = [...harmonyPosts].sort((a, b) => b.data.order - a.data.order).slice(0, 3);
 const latestShells = [...shells].sort((a, b) => b.data.shellNumber - a.data.shellNumber).slice(0, 3);
@@ -71,8 +72,8 @@ const items = [
     range: 'CORE MECHANISMS',
     icon: 'layers',
     title: 'AI 核心概念',
-    desc: '横向拆零件：把 Transformer、KV Cache、RAG、量化这些词拆到能自己写一遍，每个概念配一段能跑通的代码。',
-    short: '横向拆零件：每个概念都配能跑通的代码',
+    desc: '横向拆零件：把 Transformer、KV Cache、RAG、量化这些词拆到能自己写一遍，多数配一段能跑通的代码。',
+    short: '横向拆零件：多数概念配能跑通的代码',
     href: `${base}concepts/`,
     linkLabel: '浏览概念',
     metrics: [
@@ -152,7 +153,7 @@ const first = items[0];
       </h1>
       <p class="hc-sub">
         {posts.length} 篇文章<span class="hc-dot">/</span>{concepts.length} 个核心概念<span class="hc-dot">/</span
-        >每个概念配可运行 Demo<span class="hc-sub-extra"><span class="hc-dot">/</span>Prompt → Agent 全链路</span>
+        >{conceptsWithCode} 篇附可复现代码<span class="hc-sub-extra"><span class="hc-dot">/</span>Prompt → Agent 全链路</span>
       </p>
       <div class="hc-rule" aria-hidden="true"></div>
 
@@ -163,7 +164,6 @@ const first = items[0];
               class:list={['hc-item', { act: i === 0 }]}
               href={it.href}
               data-i={i}
-              aria-label={`${it.title}：${it.desc}`}
             >
               <span class="hc-ic" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
@@ -209,10 +209,10 @@ const first = items[0];
       </div>
 
       <div class="hc-next">
-        <span class="hc-next-tag">NEXT · <b>即将上线</b></span>
+        <span class="hc-next-tag">ROADMAP · <b>规划中</b></span>
         <p>交互式概念图谱：把核心概念连成一张可点开的依赖网络，点任意节点直接跳到对应文章与 Demo。</p>
         <div class="hc-chips">
-          <span>概念依赖图</span><span>点击跳转</span><span>全站搜索</span><span>离线可用</span>
+          <span>概念依赖图</span><span>点击跳转</span><span>离线可用</span><span>全站搜索已上线 ⌘K</span>
         </div>
       </div>
 
