@@ -1,0 +1,802 @@
+---
+import Base from '../../layouts/Base.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<Base
+  title="AI 核心概念图谱 · 96 篇笔记的依赖网络 | 赛博阿漆"
+  description="把 96 篇 AI 核心概念连成一张可交互的三维图谱：按 A–H 八组分布，支持按路线筛选、搜索、标记已学，点任意节点直达文章与 Demo。"
+>
+  <style is:global>
+    main:has(.cg-page) { max-width: none; padding: 0; min-height: 0; }
+  </style>
+
+  <div class="cg-page" id="cgPage" data-base={base}>
+    <div id="cgStage"></div>
+
+    <div class="cg-top">
+      <div class="cg-brand"><i></i>CONCEPT GRAPH</div>
+      <div class="cg-stats" id="cgStats">96 NODES · 8 GROUPS</div>
+      <div class="cg-search">
+        <input id="cgSearch" type="search" placeholder="搜索概念 / 标签" autocomplete="off" aria-label="搜索概念" />
+        <kbd>/</kbd>
+      </div>
+      <label class="cg-route">
+        <span>路线</span>
+        <select id="cgRoute" aria-label="按学习路线筛选">
+          <option value="">全部</option>
+        </select>
+      </label>
+      <button class="cg-btn" id="cgReset" type="button">重置视角</button>
+      <button class="cg-btn cg-only-mobile" id="cgToggle" type="button">看图谱</button>
+    </div>
+
+    <aside class="cg-legend" id="cgLegend" aria-label="分组筛选">
+      <div class="cg-legend-hd"><span>CLUSTERS</span><span id="cgLegendCount"></span></div>
+      <div id="cgLegendItems"></div>
+    </aside>
+
+    <aside class="cg-panel" id="cgPanel" aria-live="polite">
+      <button class="cg-close" id="cgClose" type="button" aria-label="关闭">✕</button>
+      <div class="cg-panel-hd"><span id="cgPanelGroup">CLUSTER</span><span id="cgPanelOrder">—</span></div>
+      <h2 id="cgPanelTitle"></h2>
+      <div class="cg-meta" id="cgPanelMeta"></div>
+      <p class="cg-desc" id="cgPanelDesc"></p>
+      <div class="cg-rows">
+        <div>前置<span id="cgPanelPre"></span></div>
+        <div>配套<span id="cgPanelCode"></span></div>
+      </div>
+      <div class="cg-actions">
+        <button class="cg-btn primary" id="cgPath" type="button">高亮本组顺序</button>
+        <button class="cg-btn" id="cgLearn" type="button">标记已学</button>
+      </div>
+      <a class="cg-go" id="cgOpen" href="#"><span>打开文章</span><span>↗</span></a>
+      <a class="cg-go ghost" id="cgDemo" href="#" hidden><span>公开脚本</span><span>↗</span></a>
+    </aside>
+
+    <div class="cg-list" id="cgList"></div>
+    <div class="cg-hint" id="cgHint">拖拽旋转 · 滚轮缩放 · 点击节点</div>
+    <div class="cg-tip" id="cgTip"></div>
+  </div>
+</Base>
+
+<style is:global>
+  .cg-page {
+    position: relative;
+    height: calc(100vh - 64px);
+    height: calc(100dvh - 64px);
+    overflow: hidden;
+    background:
+      radial-gradient(900px 600px at 18% 10%, rgba(34, 211, 238, .10), transparent 65%),
+      radial-gradient(760px 520px at 84% 80%, rgba(139, 92, 246, .09), transparent 65%),
+      var(--bg);
+  }
+  #cgStage { position: absolute; inset: 0; }
+  #cgStage canvas { display: block; }
+
+  .cg-top {
+    position: absolute; z-index: 5; left: 0; right: 0; top: 0;
+    display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+    background: linear-gradient(rgba(11, 17, 25, .92), rgba(11, 17, 25, 0));
+    font: 10px/1.4 var(--mono, ui-monospace, monospace); letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .cg-brand { display: flex; align-items: center; gap: 8px; color: var(--text); letter-spacing: .18em; white-space: nowrap; }
+  .cg-brand i { width: 7px; height: 7px; border-radius: 1px; background: var(--accent); box-shadow: 0 0 10px var(--accent); animation: cg-breathe 3.2s ease-in-out infinite; }
+  @keyframes cg-breathe { 0%, 100% { opacity: .45; transform: scale(.85); } 50% { opacity: 1; transform: scale(1); } }
+  .cg-stats { white-space: nowrap; }
+  .cg-search { position: relative; margin-left: auto; }
+  .cg-search input {
+    width: 200px; padding: 6px 26px 6px 9px; font: 12px/1.4 var(--sans, system-ui, sans-serif);
+    color: var(--text); background: rgba(255, 255, 255, .04);
+    border: 1px solid var(--border); border-radius: 6px; outline: none; letter-spacing: 0;
+    text-transform: none;
+  }
+  .cg-search input:focus { border-color: rgba(34, 211, 238, .55); }
+  .cg-search kbd { position: absolute; right: 8px; top: 6px; font: 10px var(--mono, monospace); color: var(--muted); }
+  .cg-route { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .cg-route select {
+    background: rgba(255, 255, 255, .04); color: var(--text); border: 1px solid var(--border);
+    border-radius: 6px; padding: 5px 7px; font: 11px var(--sans, system-ui, sans-serif); letter-spacing: 0;
+    text-transform: none; outline: none;
+  }
+  .cg-btn {
+    background: rgba(255, 255, 255, .04); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--muted); padding: 6px 10px; font: 11px var(--sans, system-ui, sans-serif);
+    letter-spacing: .02em; text-transform: none; cursor: pointer; white-space: nowrap;
+  }
+  .cg-btn:hover { color: var(--text); border-color: var(--border-hi); }
+  .cg-btn.primary { color: var(--accent); border-color: rgba(34, 211, 238, .4); }
+  .cg-only-mobile { display: none; }
+
+  .cg-legend {
+    position: absolute; z-index: 4; left: 16px; top: 70px; width: 224px; padding: 12px;
+    background: rgba(10, 16, 24, .72); border: 1px solid var(--border); border-radius: 10px;
+    backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+  .cg-legend-hd { display: flex; justify-content: space-between; font: 10px var(--mono, monospace); letter-spacing: .16em; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; }
+  .cg-g { display: flex; align-items: center; gap: 8px; padding: 5px 6px; margin: 0 -6px; border-radius: 5px; border: 1px solid transparent; font-size: 12px; color: var(--muted); cursor: pointer; }
+  .cg-g:hover { background: rgba(34, 211, 238, .06); color: var(--text); }
+  .cg-g.on { background: rgba(34, 211, 238, .1); border-color: rgba(34, 211, 238, .3); color: var(--text); }
+  .cg-g b { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .cg-g .k { font: 10px var(--mono, monospace); width: 10px; }
+  .cg-g .n { margin-left: auto; font: 10px var(--mono, monospace); }
+  .cg-g.clear { display: none; justify-content: center; margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--border); border-radius: 0; color: var(--accent); }
+  .cg-g.clear.show { display: flex; }
+
+  .cg-panel {
+    position: absolute; z-index: 6; right: 16px; top: 70px; width: 336px; max-height: calc(100% - 96px);
+    overflow: auto; padding: 16px; background: rgba(14, 22, 32, .78);
+    border: 1px solid var(--border); border-radius: 12px;
+    backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .45);
+    display: none;
+  }
+  .cg-panel.show { display: block; }
+  .cg-panel-hd { display: flex; justify-content: space-between; padding-right: 22px; font: 10px var(--mono, monospace); letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+  .cg-panel h2 { font-size: 16px; line-height: 1.55; margin: 10px 0 10px; font-weight: 600; color: var(--text); }
+  .cg-close { position: absolute; top: 10px; right: 12px; background: none; border: 0; color: var(--muted); font-size: 15px; cursor: pointer; padding: 4px; }
+  .cg-close:hover { color: var(--text); }
+  .cg-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .cg-meta .tag { font: 10px var(--mono, monospace); letter-spacing: .06em; color: var(--muted); border: 1px solid var(--border-hi); border-radius: 3px; padding: 2px 6px; }
+  .cg-meta .tag.c { color: var(--accent); border-color: rgba(34, 211, 238, .35); }
+  .cg-desc { font-size: 12px; line-height: 1.65; color: var(--muted); margin: 0 0 12px;
+    display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .cg-rows { font-size: 12px; line-height: 1.9; color: var(--muted); }
+  .cg-rows span { color: var(--text); margin-left: 8px; }
+  .cg-actions { display: flex; gap: 8px; margin: 14px 0 10px; }
+  .cg-actions .cg-btn { flex: 1; text-align: center; }
+  .cg-actions .cg-btn.on { color: #4ade80; border-color: rgba(74, 222, 128, .45); }
+  .cg-go { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding: 9px 11px; border: 1px solid rgba(34, 211, 238, .35); border-radius: 7px; color: var(--accent); text-decoration: none; font-size: 12px; }
+  .cg-go:hover { background: rgba(34, 211, 238, .09); }
+  .cg-go.ghost { border-color: var(--border); color: var(--muted); }
+  .cg-go.ghost:hover { color: var(--text); }
+
+  .cg-hint {
+    position: absolute; z-index: 4; left: 50%; bottom: 14px; transform: translateX(-50%);
+    font: 10px var(--mono, monospace); letter-spacing: .12em; color: var(--muted);
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .cg-tip {
+    position: fixed; z-index: 8; pointer-events: none; padding: 4px 8px; border-radius: 4px;
+    background: rgba(8, 14, 21, .94); border: 1px solid var(--border-hi); color: var(--text);
+    font-size: 11px; max-width: 320px; opacity: 0; transition: opacity .12s;
+  }
+  .cg-tip.show { opacity: 1; }
+  .cg-tag {
+    position: fixed; z-index: 3; pointer-events: none; font: 10px var(--mono, monospace);
+    padding: 2px 6px; border-radius: 3px; background: rgba(8, 14, 21, .72);
+    border: 1px solid currentColor; opacity: .78; transform: translate(-50%, -50%); white-space: nowrap;
+  }
+
+  .cg-list { display: none; }
+
+  @media (max-width: 760px) {
+    .cg-page { height: calc(100dvh - 56px); }
+    .cg-top { flex-wrap: wrap; gap: 8px; padding: 10px 12px; }
+    .cg-stats, .cg-route span, .cg-reset-label { display: none; }
+    .cg-search { margin-left: 0; order: 3; width: 100%; }
+    .cg-search input { width: 100%; }
+    .cg-search kbd { display: none; }
+    #cgReset { display: none; }
+    .cg-only-mobile { display: inline-block; order: 2; margin-left: auto; }
+    .cg-legend {
+      left: 8px; right: 8px; top: 74px; width: auto; padding: 8px;
+    }
+    .cg-legend-hd { display: none; }
+    #cgLegendItems { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+    #cgLegendItems::-webkit-scrollbar { display: none; }
+    .cg-g { margin: 0; padding: 5px 9px; border: 1px solid var(--border); background: rgba(10, 16, 24, .7); flex: none; font-size: 11px; }
+    .cg-g .n { display: none; }
+    .cg-g.clear { display: none !important; }
+    .cg-panel { left: 8px; right: 8px; top: auto; bottom: 8px; width: auto; max-height: 52%; }
+    .cg-hint { display: none; }
+    .cg-list {
+      display: block; position: absolute; z-index: 3; inset: 124px 0 0 0; overflow: auto;
+      padding: 12px 12px 24px; background: var(--bg);
+    }
+    .cg-page.show-graph .cg-list { display: none; }
+    .cg-page:not(.show-graph) #cgStage { display: none; }
+    .cg-page:not(.show-graph) .cg-legend { display: none; }
+    .cg-list h3 { font: 11px var(--mono, monospace); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 16px 0 8px; }
+    .cg-list h3:first-child { margin-top: 0; }
+    .cg-item { display: flex; gap: 10px; align-items: baseline; padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px; background: var(--panel); text-decoration: none; }
+    .cg-item:active { border-color: var(--border-hi); }
+    .cg-item b { font: 11px var(--mono, monospace); color: var(--muted); flex: none; }
+    .cg-item span { font-size: 13px; line-height: 1.45; color: var(--text); }
+    .cg-item.learned b { color: #4ade80; }
+    .cg-empty { color: var(--muted); font-size: 12px; padding: 20px 4px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cg-brand i { animation: none; }
+  }
+</style>
+
+<script>
+  const page = document.getElementById('cgPage') as HTMLElement;
+  const base = page.dataset.base || '/blog/';
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const COLORS: Record<string, string> = {};
+  const state: any = {
+    data: null, nodes: [], links: [], groups: [], routes: [],
+    groupFilter: null, route: '', query: '', selected: null, hovered: null,
+    learned: new Set<string>(), showGroupPath: false, camGoal: null,
+  };
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const esc = (s: string) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+
+  try {
+    state.learned = new Set(JSON.parse(localStorage.getItem('aqi-cg-learned') || '[]'));
+  } catch { /* 隐私模式下 localStorage 不可用 */ }
+
+  const data = await (await fetch(`${base}graph.json`)).json();
+  state.data = data;
+  state.groups = data.groups;
+  state.routes = data.routes;
+  data.groups.forEach((g: any) => { COLORS[g.key] = g.color; });
+
+  const isMobile = () => window.matchMedia('(max-width: 760px)').matches;
+
+  /* ---------------- 三维场景 ---------------- */
+  const THREE = await import(`${base}vendor/three/three.module.js`);
+  const { OrbitControls } = await import(`${base}vendor/three/OrbitControls.js`);
+
+  const stage = $('cgStage');
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0b1119, 0.0045);
+  const camera = new THREE.PerspectiveCamera(42, stage.clientWidth / stage.clientHeight, 0.1, 260);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(1);
+  renderer.setSize(stage.clientWidth, stage.clientHeight);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.12;
+  stage.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.06;
+  controls.enablePan = false;
+  controls.minDistance = 10;
+  controls.maxDistance = 90;
+  controls.autoRotate = false;
+  controls.rotateSpeed = 0.62;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const key = new THREE.DirectionalLight(0xbfe9ff, 1.4); key.position.set(6, 12, 9); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x8b5cf6, 0.8); rim.position.set(-9, -6, -8); scene.add(rim);
+
+  // 组锚点：立体环，投影后不压成一团
+  const anchors: Record<string, any> = {};
+  data.groups.forEach((g: any, i: number) => {
+    const a = (i / data.groups.length) * Math.PI * 2 - Math.PI / 2;
+    anchors[g.key] = new THREE.Vector3(
+      Math.cos(a) * 17,
+      Math.sin(a * 2) * 7.2,
+      Math.sin(a) * 17
+    );
+  });
+
+  const nodes = data.nodes.map((n: any, i: number) => {
+    const a = anchors[n.group] || new THREE.Vector3();
+    const seed = (x: number) => { const v = Math.sin(x * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); };
+    return {
+      ...n, idx: i, g: n.group,
+      pos: new THREE.Vector3(
+        a.x + (seed(n.n) - 0.5) * 1.5,
+        a.y + (seed(n.n + 17) - 0.5) * 1.3,
+        a.z + (seed(n.n + 41) - 0.5) * 1.5
+      ),
+      vel: new THREE.Vector3(),
+    };
+  });
+  state.nodes = nodes;
+  const byId = new Map(nodes.map((n: any) => [n.id, n]));
+
+  const links = data.links.map((l: any) => ({ ...l, a: byId.get(l.s), b: byId.get(l.t) })).filter((l: any) => l.a && l.b);
+  state.links = links;
+
+  // 力导向预计算
+  for (let iter = 0; iter < 220; iter++) {
+    const cool = 1 - iter / 240;
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j];
+        const d = a.pos.distanceTo(b.pos) || 0.01;
+        const f = 0.85 / (d * d);
+        const dir = a.pos.clone().sub(b.pos).multiplyScalar(f / d);
+        a.vel.add(dir.multiplyScalar(cool));
+        b.vel.sub(dir.multiplyScalar(cool));
+      }
+      const anchor = anchors[a.group];
+      if (anchor) a.vel.add(anchor.clone().sub(a.pos).multiplyScalar(0.095 * cool));
+      a.vel.add(a.pos.clone().multiplyScalar(-0.0009));
+      a.vel.multiplyScalar(0.86);
+      a.pos.add(a.vel);
+    }
+    links.filter((l: any) => l.kind === 'order').forEach((l: any) => {
+      const d = l.a.pos.distanceTo(l.b.pos);
+      const pull = (d - 2.0) * 0.0026 * cool;
+      const dir = l.b.pos.clone().sub(l.a.pos).normalize().multiplyScalar(pull);
+      l.a.vel.add(dir); l.b.vel.sub(dir);
+    });
+  }
+
+  const glowTex = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 128;
+    const ctx = c.getContext('2d')!;
+    const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(0.25, 'rgba(255,255,255,.55)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  })();
+
+  const nodeGroup = new THREE.Group(); scene.add(nodeGroup);
+  const hitGroup = new THREE.Group(); scene.add(hitGroup);
+  const orderGroup = new THREE.Group(); scene.add(orderGroup);
+  const semGroup = new THREE.Group(); scene.add(semGroup);
+  const trunkGroup = new THREE.Group(); scene.add(trunkGroup);
+
+  const sphereGeo = new THREE.SphereGeometry(1, 16, 16);
+  const baseR = (n: any) => 0.2 + Math.min(n.minutes, 20) * 0.008;
+  nodes.forEach((n: any) => {
+    const col = new THREE.Color(COLORS[n.group] || '#8497a9');
+    const r = baseR(n);
+    const mat = new THREE.MeshStandardMaterial({
+      color: col, emissive: col, emissiveIntensity: .95,
+      roughness: .35, metalness: .1, transparent: true, opacity: .96,
+    });
+    const mesh = new THREE.Mesh(sphereGeo, mat);
+    mesh.scale.setScalar(r);
+    mesh.position.copy(n.pos);
+    mesh.userData.idx = n.idx;
+    nodeGroup.add(mesh);
+    n.mesh = mesh;
+
+    const hit = new THREE.Mesh(
+      new THREE.SphereGeometry(0.62, 8, 8),
+      new THREE.MeshBasicMaterial({ visible: false })
+    );
+    hit.position.copy(n.pos);
+    hit.userData.idx = n.idx;
+    hitGroup.add(hit);
+    n.hit = hit;
+
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: glowTex, color: col, transparent: true, opacity: .4,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    }));
+    halo.scale.setScalar(r * 6.4);
+    halo.position.copy(n.pos);
+    nodeGroup.add(halo);
+    n.halo = halo;
+
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(r * 1.9, 0.012, 6, 32),
+      new THREE.MeshBasicMaterial({ color: 0x4ade80, transparent: true, opacity: .95 })
+    );
+    ring.position.copy(n.pos);
+    ring.rotation.x = Math.PI / 2;
+    ring.visible = state.learned.has(n.id);
+    nodeGroup.add(ring);
+    n.ring = ring;
+  });
+
+  const line = (a: any, b: any, color: number, opacity: number) => new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints([a.clone(), b.clone()]),
+    new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthWrite: false })
+  );
+
+  links.forEach((l: any) => {
+    const isSem = l.kind === 'semantic';
+    const obj = line(l.a.pos, l.b.pos, isSem ? 0x64d6b0 : 0x3a6c85, isSem ? 0 : .22);
+    (isSem ? semGroup : orderGroup).add(obj);
+    l.obj = obj;
+  });
+
+  // 组级前置主干
+  const trunks: any[] = [];
+  data.groups.forEach((g: any) => {
+    (g.prereq || []).forEach((from: string) => {
+      if (!anchors[from] || !anchors[g.key]) return;
+      const mid = anchors[from].clone().add(anchors[g.key]).multiplyScalar(0.5);
+      mid.y += 3.2; mid.multiplyScalar(1.06);
+      const curve = new THREE.QuadraticBezierCurve3(anchors[from], mid, anchors[g.key]);
+      const l = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(curve.getPoints(48)),
+        new THREE.LineBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: .3, depthWrite: false })
+      );
+      trunkGroup.add(l);
+      const flow = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: glowTex, color: 0x9beaf7, transparent: true, opacity: .8,
+        blending: THREE.AdditiveBlending, depthWrite: false,
+      }));
+      flow.scale.setScalar(.55);
+      trunkGroup.add(flow);
+      trunks.push({ curve, flow, t: Math.random(), line: l, from, to: g.key });
+    });
+  });
+
+  /* ---------------- 取景 ---------------- */
+  function fitDistance(R = 30) {
+    const vfov = THREE.MathUtils.degToRad(camera.fov);
+    return R / (Math.tan(vfov / 2) * Math.min(camera.aspect, 1.7));
+  }
+  function fitAll() {
+    const d = fitDistance();
+    camera.position.set(-2, d * 0.16, d);
+    controls.target.set(-2, 0, 0);
+    state.camGoal = null;
+  }
+  function flyToGroup(k: string, dist?: number) {
+    const a = anchors[k]; if (!a) return;
+    const d = dist || (isMobile() ? 30 : 26);
+    const look = a.clone();
+    camera.position.copy(look).add(new THREE.Vector3(0.36, 0.3, 1).normalize().multiplyScalar(d));
+    controls.target.copy(look);
+    state.camGoal = null;
+  }
+  function flyToNode(n: any) {
+    const d = isMobile() ? 20 : 38;
+    // 右侧详情面板会压住节点：把视点往右挪，节点就落在面板左边
+    const look = n.pos.clone();
+    if (isMobile()) look.y -= 1.6; else look.x += 3.4;
+    camera.position.copy(look).add(new THREE.Vector3(0.3, 0.25, 1).normalize().multiplyScalar(d));
+    controls.target.copy(look);
+    state.camGoal = null;
+  }
+  function fitViewport() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if (!w || !h) return;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  fitViewport();
+  fitAll();
+
+  /* ---------------- 样式/筛选 ---------------- */
+  function visibleByFilter(n: any) {
+    if (state.groupFilter && n.group !== state.groupFilter) return false;
+    if (state.route) {
+      const r = state.routes.find((x: any) => x.key === state.route);
+      if (r && !r.groups.includes(n.group)) return false;
+    }
+    if (state.query) {
+      const q = state.query.toLowerCase();
+      if (!(`${n.label} ${n.title} ${n.tags.join(' ')}`.toLowerCase().includes(q))) return false;
+    }
+    return true;
+  }
+
+  function applyStyles() {
+    nodes.forEach((n: any) => {
+      const on = visibleByFilter(n);
+      const sel = state.selected === n;
+      const onGroupPath = state.showGroupPath && state.selected && n.group === state.selected.group;
+      n.mesh.material.opacity = on ? .96 : .06;
+      n.halo.material.opacity = on ? (sel ? .95 : .4) : .012;
+      n.mesh.scale.setScalar(baseR(n) * (sel ? 1.7 : 1));
+      n.ring.visible = state.learned.has(n.id) && on;
+      n.ring.scale.setScalar(sel ? 1.7 : 1);
+      if (onGroupPath) n.halo.material.opacity = Math.max(n.halo.material.opacity, .55);
+    });
+    links.forEach((l: any) => {
+      const on = visibleByFilter(l.a) && visibleByFilter(l.b);
+      if (l.kind === 'order') {
+        l.obj.material.opacity = on ? (state.showGroupPath && state.selected && l.a.group === state.selected.group ? .85 : .2) : .015;
+        l.obj.material.color.set(state.showGroupPath && state.selected && l.a.group === state.selected.group ? 0xf5a524 : 0x3a6c85);
+      } else {
+        const touches = state.selected && (l.a === state.selected || l.b === state.selected);
+        l.obj.material.opacity = touches && on ? .55 : 0;
+      }
+    });
+    trunkGroup.children.filter((o: any) => o.isLine).forEach((o: any) => {
+      o.material.opacity = state.groupFilter || state.route ? .06 : .3;
+    });
+    trunks.forEach((tr: any) => { tr.flow.visible = !state.groupFilter && !state.route; });
+  }
+  applyStyles();
+
+  /* ---------------- 面板 ---------------- */
+  const panel = $('cgPanel');
+  function openPanel(n: any) {
+    state.selected = n;
+    state.showGroupPath = false;
+    const pathBtn = $('cgPath');
+    pathBtn.classList.remove('primary');
+    pathBtn.textContent = '高亮本组顺序';
+    const g = data.groups.find((x: any) => x.key === n.group);
+    $('cgPanelGroup').textContent = g ? `${g.key} · ${g.name}` : 'UNGROUPED';
+    $('cgPanelOrder').textContent = `#${String(n.n).padStart(2, '0')}`;
+    $('cgPanelTitle').textContent = n.title;
+    $('cgPanelMeta').innerHTML = [
+      { beginner: '入门', intermediate: '进阶', advanced: '高级' }[n.difficulty as 'beginner'],
+      `${n.minutes} MIN`,
+      n.code ? '含代码' : '概念篇',
+      ...n.tags.slice(0, 2),
+    ].map((t, i) => `<span class="tag${i === 2 && n.code ? ' c' : ''}">${esc(String(t))}</span>`).join('');
+    $('cgPanelDesc').textContent = n.desc || '';
+    const pre = g?.prereq || [];
+    $('cgPanelPre').textContent = pre.length
+      ? pre.map((k: string) => `${k} ${data.groups.find((x: any) => x.key === k)?.name || ''}`).join(' · ')
+      : (n.group === 'A' ? '无（入门起点）' : '见学习路径');
+    $('cgPanelCode').textContent = n.code ? '可复现实验' + (n.demo ? ' / 公开脚本' : '') : '文内说明';
+    ($('cgOpen') as HTMLAnchorElement).href = n.url;
+    const demo = $('cgDemo') as HTMLAnchorElement;
+    if (n.demo) { demo.href = n.demo; demo.hidden = false; } else { demo.hidden = true; }
+    updateLearnBtn();
+    panel.classList.add('show');
+    if (!isMobile()) flyToNode(n);
+    applyStyles();
+  }
+  function closePanel() {
+    state.selected = null;
+    state.showGroupPath = false;
+    $('cgPath').classList.remove('primary');
+    $('cgPath').textContent = '高亮本组顺序';
+    panel.classList.remove('show');
+    applyStyles();
+  }
+  function updateLearnBtn() {
+    const n = state.selected;
+    const b = $('cgLearn');
+    const on = n && state.learned.has(n.id);
+    b.textContent = on ? '✓ 已学' : '标记已学';
+    b.classList.toggle('on', !!on);
+    updateStats();
+  }
+  function updateStats() {
+    const learned = nodes.filter((n: any) => state.learned.has(n.id)).length;
+    $('cgStats').textContent = `${nodes.length} NODES · ${data.groups.length} GROUPS · 已学 ${learned}`;
+  }
+
+  $('cgClose').addEventListener('click', closePanel);
+  $('cgLearn').addEventListener('click', () => {
+    if (!state.selected) return;
+    const id = state.selected.id;
+    if (state.learned.has(id)) state.learned.delete(id); else state.learned.add(id);
+    renderList();
+    try { localStorage.setItem('aqi-cg-learned', JSON.stringify([...state.learned])); } catch {}
+    updateLearnBtn();
+    applyStyles();
+  });
+  $('cgPath').addEventListener('click', () => {
+    state.showGroupPath = !state.showGroupPath;
+    $('cgPath').classList.toggle('primary', state.showGroupPath);
+    $('cgPath').textContent = state.showGroupPath ? '关闭顺序高亮' : '高亮本组顺序';
+    applyStyles();
+  });
+
+  /* ---------------- 图例 / 路线 ---------------- */
+  const legendItems = $('cgLegendItems');
+  data.groups.forEach((g: any) => {
+    const el = document.createElement('div');
+    el.className = 'cg-g';
+    el.dataset.k = g.key;
+    el.innerHTML = `<b style="background:${g.color};box-shadow:0 0 8px ${g.color}"></b><span class="k">${g.key}</span><span>${g.name}</span><span class="n">${g.count}</span>`;
+    el.addEventListener('click', () => {
+      state.groupFilter = state.groupFilter === g.key ? null : g.key;
+      document.querySelectorAll('.cg-g[data-k]').forEach(x => x.classList.toggle('on', (x as HTMLElement).dataset.k === state.groupFilter));
+      ($('cgClear') as HTMLElement).classList.toggle('show', !!state.groupFilter);
+      if (state.groupFilter) flyToGroup(state.groupFilter); else fitAll();
+      applyStyles();
+    });
+    legendItems.appendChild(el);
+  });
+  const clearEl = document.createElement('div');
+  clearEl.className = 'cg-g clear';
+  clearEl.id = 'cgClear';
+  clearEl.textContent = '清除分组筛选 ×';
+  clearEl.addEventListener('click', () => {
+    state.groupFilter = null;
+    document.querySelectorAll('.cg-g[data-k]').forEach(x => x.classList.remove('on'));
+    clearEl.classList.remove('show');
+    fitAll(); applyStyles();
+  });
+  legendItems.appendChild(clearEl);
+
+  const routeSel = $('cgRoute') as HTMLSelectElement;
+  data.routes.forEach((r: any) => {
+    const o = document.createElement('option');
+    o.value = r.key;
+    o.textContent = `${r.name} · ${r.count} 篇`;
+    o.title = r.who;
+    routeSel.appendChild(o);
+  });
+  routeSel.addEventListener('change', () => {
+    state.route = routeSel.value;
+    state.groupFilter = null;
+    document.querySelectorAll('.cg-g[data-k]').forEach(x => x.classList.remove('on'));
+    clearEl.classList.remove('show');
+    renderList();
+    if (state.route) {
+      const r = data.routes.find((x: any) => x.key === state.route);
+      $('cgHint').textContent = `${r.name}：${r.groups.join(' → ')} · ${r.who}`;
+    } else {
+      $('cgHint').textContent = '拖拽旋转 · 滚轮缩放 · 点击节点';
+    }
+    fitAll(); applyStyles();
+  });
+
+  /* ---------------- 搜索 ---------------- */
+  const search = $('cgSearch') as HTMLInputElement;
+  search.addEventListener('input', () => {
+    state.query = search.value.trim();
+    applyStyles();
+    renderList();
+  });
+  search.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const hit = nodes.find((n: any) => visibleByFilter(n));
+      if (hit) { openPanel(hit); flyToNode(hit); }
+    }
+    if (e.key === 'Escape') { search.value = ''; state.query = ''; applyStyles(); search.blur(); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== search) { e.preventDefault(); search.focus(); }
+  });
+
+  $('cgReset').addEventListener('click', () => {
+    state.groupFilter = null; state.route = ''; state.query = ''; search.value = '';
+    routeSel.value = '';
+    document.querySelectorAll('.cg-g').forEach(x => x.classList.remove('on'));
+    clearEl.classList.remove('show');
+    closePanel(); fitAll(); applyStyles();
+  });
+
+  /* ---------------- 拾取 ---------------- */
+  const ray = new THREE.Raycaster();
+  const pointer = new THREE.Vector2(-10, -10);
+  const tip = $('cgTip');
+  let hovered: any = null;
+  let down: any = null;
+
+  function setHover(n: any) {
+    if (hovered === n) return;
+    hovered = n;
+    if (n) {
+      tip.textContent = `${String(n.n).padStart(2, '0')} · ${n.title}`;
+      tip.classList.add('show');
+      renderer.domElement.style.cursor = 'pointer';
+    } else {
+      tip.classList.remove('show');
+      renderer.domElement.style.cursor = 'grab';
+    }
+  }
+  renderer.domElement.addEventListener('pointermove', (e) => {
+    const r = renderer.domElement.getBoundingClientRect();
+    pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+    pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+    tip.style.left = Math.min(e.clientX + 14, innerWidth - 330) + 'px';
+    tip.style.top = (e.clientY + 16) + 'px';
+  });
+  renderer.domElement.addEventListener('pointerleave', () => setHover(null));
+  renderer.domElement.addEventListener('pointerdown', (e) => { down = { x: e.clientX, y: e.clientY }; });
+  renderer.domElement.addEventListener('pointerup', (e) => {
+    if (!down) return;
+    const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
+    down = null;
+    if (moved > 6) return;
+    // 用画布矩形归一化：画布不在页面原点（顶栏 64px），用 innerWidth/innerHeight 会点偏
+    const rect = renderer.domElement.getBoundingClientRect();
+    const ndc = new THREE.Vector2(
+      ((e.clientX - rect.left) / rect.width) * 2 - 1,
+      -((e.clientY - rect.top) / rect.height) * 2 + 1
+    );
+    ray.setFromCamera(ndc, camera);
+    const hit = ray.intersectObjects(hitGroup.children, false)[0];
+    if (hit) { const n = nodes[hit.object.userData.idx]; openPanel(n); }
+    else closePanel();
+  });
+
+  /* ---------------- 组标签 ---------------- */
+  data.groups.forEach((g: any) => {
+    const el = document.createElement('div');
+    el.className = 'cg-tag';
+    el.style.color = g.color;
+    el.textContent = `${g.key} · ${g.count}`;
+    document.body.appendChild(el);
+    g.el = el;
+  });
+
+  /* ---------------- 手机列表 ---------------- */
+  function renderList() {
+    if (!isMobile()) return;
+    const box = $('cgList');
+    box.innerHTML = '';
+    data.groups.forEach((g: any) => {
+      const items = nodes.filter((n: any) => n.group === g.key && visibleByFilter(n));
+      if (!items.length) return;
+      const h = document.createElement('h3');
+      h.textContent = `${g.key} · ${g.name} · ${items.length}`;
+      h.style.color = g.color;
+      box.appendChild(h);
+      items.forEach((n: any) => {
+        const a = document.createElement('a');
+        a.className = 'cg-item' + (state.learned.has(n.id) ? ' learned' : '');
+        a.href = n.url;
+        a.innerHTML = `<b>${String(n.n).padStart(2, '0')}</b><span>${esc(n.title)}</span>`;
+        box.appendChild(a);
+      });
+    });
+    if (!box.children.length) {
+      box.innerHTML = '<p class="cg-empty">没有匹配的概念。清掉搜索或路线筛选再试。</p>';
+    }
+  }
+
+  $('cgToggle').addEventListener('click', () => {
+    const show = page.classList.toggle('show-graph');
+    $('cgToggle').textContent = show ? '看列表' : '看图谱';
+    if (show) {
+      fitViewport();
+      if (isMobile()) flyToGroup(state.selected?.group || 'D');
+      else fitAll();
+      applyStyles();
+    }
+  });
+
+  /* ---------------- 每帧 ---------------- */
+  const clock = new THREE.Clock();
+  const tmp = new THREE.Vector3();
+  function tick() {
+    requestAnimationFrame(tick);
+    const t = clock.getElapsedTime();
+
+    if (page.classList.contains('show-graph') || !isMobile()) {
+      ray.setFromCamera(pointer, camera);
+      const hits = ray.intersectObjects(hitGroup.children, false);
+      setHover(hits.length ? nodes[hits[0].object.userData.idx] : null);
+
+      if (!reduced) {
+        nodes.forEach((n: any) => {
+          const on = visibleByFilter(n);
+          n.halo.scale.setScalar(n.mesh.scale.x * (6.4 + Math.sin(t * 1.1 + n.idx) * .45) * (on ? 1 : .6));
+        });
+        trunks.forEach((tr: any) => {
+          tr.t = (tr.t + .0016) % 1;
+          tr.flow.position.copy(tr.curve.getPoint(tr.t));
+          tr.flow.material.opacity = .25 + Math.sin(tr.t * Math.PI) * .6;
+        });
+      }
+      controls.update();
+      renderer.render(scene, camera);
+
+      data.groups.forEach((g: any) => {
+        if (!g.el) return;
+        let cx = 0, cy = 0, cz = 0, k = 0;
+        nodes.forEach((n: any) => { if (n.group === g.key) { cx += n.pos.x; cy += n.pos.y; cz += n.pos.z; k++; } });
+        if (!k) { g.el.style.display = 'none'; return; }
+        tmp.set(cx / k, cy / k, cz / k).project(camera);
+        const sx = (tmp.x * .5 + .5) * innerWidth, sy = (-tmp.y * .5 + .5) * innerHeight;
+        const hidden = tmp.z > 1 || sx < 290 && sy > 60 && sy < 340 || (isMobile() && sy < 120);
+        g.el.style.display = hidden ? 'none' : 'block';
+        g.el.style.left = sx + 'px';
+        g.el.style.top = sy + 'px';
+        g.el.style.opacity = visibleByFilter({ group: g.key, label: '', title: '', tags: [] }) ? '.8' : '.15';
+      });
+    }
+  }
+  tick();
+
+  addEventListener('resize', () => {
+    fitViewport();
+    renderList();
+    if (!state.groupFilter && !state.selected) fitAll();
+  });
+
+  // 调试钩子（无副作用，方便自动化验收）
+  (window as any).__cg = { nodes, camera, state };
+
+  // 初始化
+  updateStats();
+  renderList();
+  if (isMobile()) {
+    page.classList.remove('show-graph');
+    $('cgToggle').textContent = '看图谱';
+  }
+</script>

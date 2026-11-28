@@ -208,13 +208,13 @@ const first = items[0];
         }
       </div>
 
-      <div class="hc-next">
-        <span class="hc-next-tag">ROADMAP · <b>规划中</b></span>
-        <p>交互式概念图谱：把核心概念连成一张可点开的依赖网络，点任意节点直接跳到对应文章与 Demo。</p>
+      <a class="hc-next" href={`${base}concepts/graph/`}>
+        <span class="hc-next-tag">INTERACTIVE · <b>已上线</b></span>
+        <p>交互式概念图谱：96 个概念按 8 组铺在三维空间里，可按路线筛选、搜索、高亮本组顺序，点任意节点直达文章与 Demo。</p>
         <div class="hc-chips">
-          <span>概念依赖图</span><span>点击跳转</span><span>离线可用</span><span>全站搜索已上线 ⌘K</span>
+          <span>三维依赖图</span><span>三条读法</span><span>标记已学</span><span>打开图谱 →</span>
         </div>
-      </div>
+      </a>
 
       <div class="hc-cta">
         <div class="hc-nums">
@@ -489,6 +489,10 @@ const first = items[0];
 
   /* ---------- 即将上线 ---------- */
   .hc-next {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s var(--ease);
     margin-top: 1.1rem;
     position: relative;
     border: 1px dashed rgba(120, 160, 190, 0.28);
@@ -496,6 +500,7 @@ const first = items[0];
     padding: 0.85rem 1rem 0.8rem;
     background: linear-gradient(180deg, rgba(17, 27, 37, 0.45), rgba(11, 17, 25, 0.15));
   }
+  .hc-next:hover { border-color: rgba(34, 211, 238, 0.46); }
   .hc-next-tag {
     position: absolute;
     top: -0.46rem;

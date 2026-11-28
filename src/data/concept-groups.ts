@@ -66,3 +66,15 @@ export const CONCEPT_GROUPS: ConceptGroup[] = [
     nums: [18, 19, 33, 52, 57, 66, 84, 93],
   },
 ];
+
+// 组级前置：图上只画这 8 条主干，不臆造节点级依赖
+export const GROUP_PREREQ: Record<string, string[]> = {
+  A: [], B: ['A'], C: ['A'], D: ['C'], E: ['C'], F: ['B'], G: ['C', 'D'], H: ['B'],
+};
+
+// 三条读法，与 /posts/ai-concepts-study-path/ 一致
+export const CONCEPT_ROUTES = [
+  { key: 'practical', name: '实用派', groups: ['A', 'B', 'F', 'H'], who: '产品 / 运营 / 独立开发者，想把 AI 用好' },
+  { key: 'engineering', name: '工程派', groups: ['A', 'C', 'D', 'F', 'H'], who: '做推理部署、要压成本' },
+  { key: 'research', name: '研究派', groups: ['A', 'C', 'D', 'G', 'E'], who: '读论文、做机制实验' },
+];
